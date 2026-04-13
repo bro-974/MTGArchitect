@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README" />
+  </Folder>
+  <Project Path="MTGArchitectServices.ApiService/MTGArchitectServices.ApiService.csproj" />
+  <Project Path="MTGArchitectServices.AppHost/MTGArchitectServices.AppHost.csproj" />
+  <Project Path="MTGArchitectServices.ServiceDefaults/MTGArchitectServices.ServiceDefaults.csproj" />
+</Solution>
