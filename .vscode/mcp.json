@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "spec-reader": {
+      "type": "stdio",
+      "command": "podman",
+      "args": [
+        "run", "--rm", "-i",
+        "-v", "C:\\Repository\\bro974\\MTGArchitect\\MCP\\spec-mcp\\specs:/app/specs:ro,Z",
+        "spec-mcp"
+      ]
+    }
+  }
+}
