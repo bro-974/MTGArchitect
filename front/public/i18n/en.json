@@ -1,0 +1,15 @@
+{
+  "app": {
+    "title": "Visual UI"
+  },
+  "navbar": {
+    "home": "Home",
+    "darkMode": "Dark mode",
+    "lightMode": "Light mode",
+    "language": "Language",
+    "languages": {
+      "en": "EN",
+      "fr": "FR"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<header class="navbar-shadow p-3 mb-4">
+  <div class="w-full flex justify-content-between align-items-center">
+    <p-button severity="secondary"
+      type="button"
+      [icon]="'pi pi-home'"
+      class="p-button-rounded p-button-text"
+      (click)="goHome()"
+      [title]="'navbar.home' | transloco"
+      [ariaLabel]="'navbar.home' | transloco">
+    </p-button>
+
+    <div class="navbar-actions flex align-items-center gap-2">
+      <p-select
+        class="language-select"
+        [options]="i18nService.languageOptions()"
+        [formControl]="languageControl"
+        optionValue="value"
+        [placeholder]="'navbar.language' | transloco"
+        [ariaLabel]="'navbar.language' | transloco">
+        <ng-template #selectedItem let-selectedOption>
+          @if (selectedOption) {
+            {{ selectedOption.labelKey | transloco }}
+          }
+        </ng-template>
+        <ng-template #item let-option>
+          {{ option.labelKey | transloco }}
+        </ng-template>
+      </p-select>
+
+      <p-button
+        severity="secondary"
+        type="button"
+        [icon]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
+        class="p-button-rounded p-button-text"
+        (click)="toggleTheme()"
+        [title]="isDarkMode() ? ('navbar.lightMode' | transloco) : ('navbar.darkMode' | transloco)"
+        [ariaLabel]="isDarkMode() ? ('navbar.lightMode' | transloco) : ('navbar.darkMode' | transloco)">
+      </p-button>
+    </div>
+  </div>
+</header>
