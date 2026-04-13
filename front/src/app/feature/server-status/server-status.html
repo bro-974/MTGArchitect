@@ -1,0 +1,27 @@
+<section class="surface-card border-round p-4">
+  <h1 class="m-0 mb-3">{{ 'serverStatus.title' | transloco }}</h1>
+
+  @if (state() === 'loading') {
+    <p class="m-0">{{ 'serverStatus.loading' | transloco }}</p>
+  } @else if (state() === 'online' && response(); as status) {
+    <p class="m-0 mb-2">
+      {{ 'serverStatus.online' | transloco }}
+    </p>
+    <p class="m-0 text-color-secondary">
+      {{ 'serverStatus.lastChecked' | transloco }}: {{ status.checkedAt | date: 'medium' }}
+    </p>
+  } @else if (state() === 'error') {
+    <p class="m-0 mb-2">{{ 'serverStatus.offline' | transloco }}</p>
+  } @else {
+    <p class="m-0">{{ 'serverStatus.idle' | transloco }}</p>
+  }
+
+  <div class="mt-4">
+    <p-button
+      type="button"
+      icon="pi pi-refresh"
+      [label]="'serverStatus.refresh' | transloco"
+      (onClick)="refreshStatus()">
+    </p-button>
+  </div>
+</section>

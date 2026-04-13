@@ -44,6 +44,10 @@ export class Navbar {
     this.router.navigate(['/']);
   }
 
+  goServerStatus(): void {
+    this.router.navigate(['/feature/server-status']);
+  }
+
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }

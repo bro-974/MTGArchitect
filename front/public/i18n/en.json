@@ -4,6 +4,7 @@
   },
   "navbar": {
     "home": "Home",
+    "serverStatus": "Server status",
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
     "language": "Language",
@@ -11,5 +12,14 @@
       "en": "EN",
       "fr": "FR"
     }
+  },
+  "serverStatus": {
+    "title": "Server status",
+    "loading": "Checking server status...",
+    "online": "Server is online.",
+    "offline": "Server is unreachable.",
+    "idle": "Press refresh to check server status.",
+    "lastChecked": "Last checked",
+    "refresh": "Refresh"
   }
 }

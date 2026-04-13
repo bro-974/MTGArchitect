@@ -59,7 +59,8 @@
               "buildTarget": "visualui-front:build:production"
             },
             "development": {
-              "buildTarget": "visualui-front:build:development"
+              "buildTarget": "visualui-front:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

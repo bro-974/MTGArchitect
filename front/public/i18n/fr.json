@@ -4,6 +4,7 @@
   },
   "navbar": {
     "home": "Accueil",
+    "serverStatus": "Etat du serveur",
     "darkMode": "Mode sombre",
     "lightMode": "Mode clair",
     "language": "Langue",
@@ -11,5 +12,14 @@
       "en": "EN",
       "fr": "FR"
     }
+  },
+  "serverStatus": {
+    "title": "Etat du serveur",
+    "loading": "Verification du serveur...",
+    "online": "Le serveur est en ligne.",
+    "offline": "Le serveur est inaccessible.",
+    "idle": "Appuyez sur actualiser pour verifier le serveur.",
+    "lastChecked": "Derniere verification",
+    "refresh": "Actualiser"
   }
 }
