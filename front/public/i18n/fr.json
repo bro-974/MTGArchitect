@@ -4,6 +4,7 @@
   },
   "navbar": {
     "home": "Accueil",
+    "cardExplorer": "Explorateur de cartes",
     "serverStatus": "Etat du serveur",
     "darkMode": "Mode sombre",
     "lightMode": "Mode clair",
@@ -21,5 +22,20 @@
     "idle": "Appuyez sur actualiser pour verifier le serveur.",
     "lastChecked": "Derniere verification",
     "refresh": "Actualiser"
+  },
+  "cardExplorer": {
+    "eyebrow": "Explorateur Scryfall",
+    "title": "Rechercher et visualiser les cartes Magic",
+    "intro": "Utilisez la recherche Scryfall en direct pour parcourir les cartes, voir l'illustration, le cout de mana et le type au meme endroit.",
+    "searchLabel": "Rechercher des cartes",
+    "searchPlaceholder": "Essayez : black lotus, type:dragon, o:flying",
+    "searchHint": "La recherche se met a jour pendant la saisie avec un court delai.",
+    "searchLoading": "Recherche des cartes...",
+    "emptyTitle": "Commencez par une recherche",
+    "emptyBody": "Saisissez un nom de carte, un code d'edition ou une requete Scryfall pour charger des resultats.",
+    "noResultsTitle": "Aucune carte trouvee",
+    "noResultsBody": "Aucune carte ne correspond a \"{{ query }}\". Essayez un autre nom ou une requete Scryfall plus large.",
+    "errorTitle": "Recherche indisponible",
+    "errorBody": "Le service de cartes ne peut pas retourner de resultats pour le moment. Reessayez dans un instant."
   }
 }

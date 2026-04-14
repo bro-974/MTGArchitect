@@ -48,6 +48,10 @@ export class Navbar {
     this.router.navigate(['/feature/server-status']);
   }
 
+  goCardExplorer(): void {
+    this.router.navigate(['/feature/card-explorer']);
+  }
+
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }

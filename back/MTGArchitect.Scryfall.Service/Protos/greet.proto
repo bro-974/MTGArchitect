@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "MTGArchitect.Scryfall.Service.Contracts";
+
+package scryfall;
+
+service CardSearch {
+  rpc SearchCards (SearchCardsRequest) returns (SearchCardsReply);
+}
+
+message SearchCardsRequest {
+  string query = 1;
+  int32 page_size = 2;
+}
+
+message SearchCardsReply {
+  repeated CardItem cards = 1;
+}
+
+message CardItem {
+  string id = 1;
+  string name = 2;
+  string mana_cost = 3;
+  string type_line = 4;
+  string set_code = 5;
+  string image_url = 6;
+}

@@ -1,3 +1,5 @@
+using MTGArchitect.Scryfall.Service.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -19,6 +21,10 @@ builder.Services.AddCors(options =>
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddGrpcClient<CardSearch.CardSearchClient>(options =>
+{
+    options.Address = new Uri("https://scryfallservice");
+});
 
 var app = builder.Build();
 

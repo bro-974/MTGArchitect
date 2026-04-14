@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MTGArchitectServices.ApiService\MTGArchitectServices.ApiService.csproj" />
+    <ProjectReference Include="..\MTGArchitect.Scryfall.Service\MTGArchitect.Scryfall.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

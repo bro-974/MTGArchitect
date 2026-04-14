@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MTGArchitect.Scryfall.Service.Contracts;
 
 public static class EndpointExtensions
 {
@@ -48,6 +49,37 @@ public static class EndpointExtensions
             });
         })
         .WithName("GetServerStatus");
+
+        app.MapGet("/api/cards/search", async (
+            string q,
+            int? pageSize,
+            CardSearch.CardSearchClient cardSearchClient,
+            CancellationToken cancellationToken) =>
+        {
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                return Results.BadRequest(new { message = "Query parameter q is required." });
+            }
+
+            var searchReply = await cardSearchClient.SearchCardsAsync(new SearchCardsRequest
+            {
+                Query = q,
+                PageSize = pageSize.GetValueOrDefault(20)
+            }, cancellationToken: cancellationToken);
+
+            var cards = searchReply.Cards.Select(card => new
+            {
+                id = card.Id,
+                name = card.Name,
+                manaCost = card.ManaCost,
+                typeLine = card.TypeLine,
+                setCode = card.SetCode,
+                imageUrl = card.ImageUrl
+            });
+
+            return Results.Ok(cards);
+        })
+        .WithName("SearchCards");
 
         app.MapDefaultEndpoints();
 

@@ -4,6 +4,7 @@
   },
   "navbar": {
     "home": "Home",
+    "cardExplorer": "Card explorer",
     "serverStatus": "Server status",
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
@@ -21,5 +22,20 @@
     "idle": "Press refresh to check server status.",
     "lastChecked": "Last checked",
     "refresh": "Refresh"
+  },
+  "cardExplorer": {
+    "eyebrow": "Scryfall Explorer",
+    "title": "Search and explore Magic cards",
+    "intro": "Use live Scryfall search to browse cards, inspect artwork, mana cost, and type information in one place.",
+    "searchLabel": "Search cards",
+    "searchPlaceholder": "Try: black lotus, type:dragon, o:flying",
+    "searchHint": "Search updates as you type with a short debounce.",
+    "searchLoading": "Searching cards...",
+    "emptyTitle": "Start with a card search",
+    "emptyBody": "Type a card name, set code, or Scryfall query to load results.",
+    "noResultsTitle": "No cards found",
+    "noResultsBody": "No cards matched \"{{ query }}\". Try another name or a broader Scryfall query.",
+    "errorTitle": "Search unavailable",
+    "errorBody": "The card service could not return results right now. Try again in a moment."
   }
 }

@@ -1,0 +1,93 @@
+:host {
+  display: block;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card-shell,
+.state-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(110, 79, 42, 0.14);
+}
+
+:host-context(.app-dark) .card-shell,
+:host-context(.app-dark) .state-panel {
+  background: rgba(26, 30, 37, 0.94);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.card-shell {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.card-shell:hover {
+  transform: translateY(-2px);
+}
+
+.card-art,
+.card-art-placeholder {
+  aspect-ratio: 5 / 7;
+  width: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(95, 61, 36, 0.08), rgba(216, 174, 95, 0.18));
+}
+
+.placeholder-name {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.card-name {
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.card-type,
+.card-cost {
+  color: var(--p-text-muted-color);
+}
+
+.set-chip {
+  flex-shrink: 0;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(95, 61, 36, 0.1);
+}
+
+.line-placeholder {
+  height: 0.8rem;
+  background: linear-gradient(90deg, rgba(95, 61, 36, 0.08), rgba(216, 174, 95, 0.18), rgba(95, 61, 36, 0.08));
+}
+
+.line-placeholder-title {
+  width: 75%;
+  height: 1rem;
+}
+
+.line-placeholder-short {
+  width: 48%;
+}
+
+.card-art-placeholder,
+.line-placeholder {
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.explorer-shell {
+  padding-top: 0.75rem;
+}
+
+.explorer-header {
+  padding: 1rem 0 0.5rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8e5c14;
+}
+
+.intro {
+  max-width: 42rem;
+  color: var(--p-text-muted-color);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+:host-context(.app-dark) .eyebrow {
+  color: #f4c165;
+}

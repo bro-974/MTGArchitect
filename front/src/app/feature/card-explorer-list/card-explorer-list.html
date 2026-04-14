@@ -1,0 +1,56 @@
+@if (loading()) {
+  <section class="cards-grid" aria-live="polite">
+    @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
+      <article class="card-shell border-round-2xl p-3 shadow-1" aria-hidden="true">
+        <div class="card-art-placeholder border-round-xl"></div>
+        <div class="flex flex-column gap-2 mt-3">
+          <div class="line-placeholder line-placeholder-title border-round"></div>
+          <div class="line-placeholder border-round"></div>
+          <div class="line-placeholder line-placeholder-short border-round"></div>
+        </div>
+      </article>
+    }
+  </section>
+} @else if (error()) {
+  <section class="state-panel border-round-2xl p-5 shadow-1" aria-live="polite">
+    <h2 class="mt-0 mb-2">{{ 'cardExplorer.errorTitle' | transloco }}</h2>
+    <p class="m-0">{{ 'cardExplorer.errorBody' | transloco }}</p>
+  </section>
+} @else if (!query()) {
+  <section class="state-panel border-round-2xl p-5 shadow-1" aria-live="polite">
+    <h2 class="mt-0 mb-2">{{ 'cardExplorer.emptyTitle' | transloco }}</h2>
+    <p class="m-0">{{ 'cardExplorer.emptyBody' | transloco }}</p>
+  </section>
+} @else if (cards().length === 0) {
+  <section class="state-panel border-round-2xl p-5 shadow-1" aria-live="polite">
+    <h2 class="mt-0 mb-2">{{ 'cardExplorer.noResultsTitle' | transloco }}</h2>
+    <p class="m-0">{{ 'cardExplorer.noResultsBody' | transloco: { query: query() } }}</p>
+  </section>
+} @else {
+  <section class="cards-grid" aria-live="polite">
+    @for (card of cards(); track card.id) {
+      <article class="card-shell border-round-2xl p-3 shadow-2">
+        @if (card.imageUrl) {
+          <img class="card-art border-round-xl" [src]="card.imageUrl" [alt]="card.name" loading="lazy" />
+        } @else {
+          <div class="card-art-placeholder border-round-xl flex align-items-center justify-content-center">
+            <span class="placeholder-name">{{ card.name }}</span>
+          </div>
+        }
+
+        <div class="flex flex-column gap-2 mt-3">
+          <div class="flex justify-content-between align-items-start gap-2">
+            <h3 class="card-name m-0">{{ card.name }}</h3>
+            @if (card.setCode) {
+              <span class="set-chip">{{ card.setCode }}</span>
+            }
+          </div>
+          <p class="card-type m-0">{{ card.typeLine }}</p>
+          @if (card.manaCost) {
+            <p class="card-cost m-0">{{ card.manaCost }}</p>
+          }
+        </div>
+      </article>
+    }
+  </section>
+}

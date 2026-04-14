@@ -1,0 +1,19 @@
+<section class="explorer-shell flex flex-column gap-4 pb-6">
+  <header class="explorer-header">
+    <p class="eyebrow mb-2">{{ 'cardExplorer.eyebrow' | transloco }}</p>
+    <h1 class="m-0">{{ 'cardExplorer.title' | transloco }}</h1>
+    <p class="intro mt-3 mb-0">{{ 'cardExplorer.intro' | transloco }}</p>
+  </header>
+
+  <app-card-explorer-search
+    [loading]="state() === 'loading'"
+    (search)="handleSearch($event)"
+  />
+
+  <app-card-explorer-list
+    [cards]="cards()"
+    [query]="query()"
+    [loading]="state() === 'loading'"
+    [error]="state() === 'error'"
+  />
+</section>

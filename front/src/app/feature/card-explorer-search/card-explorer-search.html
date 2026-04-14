@@ -1,0 +1,23 @@
+<section class="explorer-search surface-card border-round-2xl p-4 shadow-3">
+  <div class="flex flex-column gap-2">
+    <label class="font-semibold text-lg" for="card-explorer-query">
+      {{ 'cardExplorer.searchLabel' | transloco }}
+    </label>
+    <span class="p-input-icon-left w-full">
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <input
+        id="card-explorer-query"
+        pInputText
+        class="w-full"
+        type="search"
+        [formControl]="searchControl"
+        [placeholder]="'cardExplorer.searchPlaceholder' | transloco"
+        [attr.aria-describedby]="'card-explorer-search-hint'"
+        [attr.aria-busy]="loading()"
+      />
+    </span>
+    <p class="search-hint m-0" id="card-explorer-search-hint">
+      {{ loading() ? ('cardExplorer.searchLoading' | transloco) : ('cardExplorer.searchHint' | transloco) }}
+    </p>
+  </div>
+</section>
