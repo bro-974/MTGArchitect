@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using MTGArchitect.Scryfall.Contracts;
+using MTGArchitect.Scryfall.Service.Core;
+using System.Text.Json;
 
 namespace MTGArchitect.Scryfall.Service;
 
@@ -16,9 +18,24 @@ public class CardController(
 
     public record SearchCardsResult(List<CardItem> Cards);
 
+    public async Task<SearchCardsResult> AdvanceSearchCards(CardQuerySearch query, int pageSize = 20, CancellationToken cancellationToken = default)
+    {
+        var search = new CardQueryBuilder().SetFromQuery(query).Build();
+        if (string.IsNullOrWhiteSpace(search))
+            search = "type:creature";
+        var resolvedPageSize = query.PageSize > 0 ? query.PageSize : pageSize;
+        return await Search(search, resolvedPageSize, cancellationToken);
+    }
+
     public async Task<SearchCardsResult> SearchCards(string query, int pageSize = 20, CancellationToken cancellationToken = default)
     {
         var searchQuery = string.IsNullOrWhiteSpace(query) ? "type:creature" : query.Trim();
+        return await Search(searchQuery, pageSize, cancellationToken);
+    }
+
+
+    private async Task<SearchCardsResult> Search(string searchQuery, int pageSize = 20, CancellationToken cancellationToken = default)
+    {
         var validatedPageSize = pageSize <= 0 ? 20 : Math.Min(pageSize, 50);
         var apiQuery = Uri.EscapeDataString(searchQuery);
         var apiPath = $"cards/search?q={apiQuery}&unique=cards&order=name";
@@ -45,7 +62,6 @@ public class CardController(
             return new SearchCardsResult([]);
         }
     }
-
     private static CardItem MapCard(JsonElement source)
     {
         return new CardItem(

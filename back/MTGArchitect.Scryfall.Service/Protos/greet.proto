@@ -6,7 +6,92 @@ package scryfall;
 
 service CardSearch {
   rpc SearchCards (SearchCardsRequest) returns (SearchCardsReply);
+  rpc AdvanceSearchCards (AdvanceSearchCardsRequest) returns (SearchCardsReply);
 }
+
+// ── Shared enums ─────────────────────────────────────────────────────────────
+
+enum ComparisonOperator {
+  EQUAL = 0;
+  NOT_EQUAL = 1;
+  GREATER_THAN = 2;
+  GREATER_THAN_OR_EQUAL = 3;
+  LESS_THAN = 4;
+  LESS_THAN_OR_EQUAL = 5;
+}
+
+enum CardRarity {
+  COMMON = 0;
+  UNCOMMON = 1;
+  RARE = 2;
+  SPECIAL = 3;
+  MYTHIC = 4;
+  BONUS = 5;
+}
+
+enum CardGame {
+  PAPER = 0;
+  MTGO = 1;
+  ARENA = 2;
+}
+
+// Prefixed FORMAT_ to avoid value-name collisions with other enums in the package
+enum CardFormat {
+  FORMAT_STANDARD = 0;
+  FORMAT_FUTURE = 1;
+  FORMAT_HISTORIC = 2;
+  FORMAT_TIMELESS = 3;
+  FORMAT_GLADIATOR = 4;
+  FORMAT_PIONEER = 5;
+  FORMAT_MODERN = 6;
+  FORMAT_LEGACY = 7;
+  FORMAT_PAUPER = 8;
+  FORMAT_VINTAGE = 9;
+  FORMAT_PENNY = 10;
+  FORMAT_COMMANDER = 11;
+  FORMAT_OATHBREAKER = 12;
+  FORMAT_STANDARD_BRAWL = 13;
+  FORMAT_BRAWL = 14;
+  FORMAT_ALCHEMY = 15;
+  FORMAT_PAUPER_COMMANDER = 16;
+  FORMAT_DUEL = 17;
+  FORMAT_OLD_SCHOOL = 18;
+  FORMAT_PREMODERN = 19;
+  FORMAT_PREDH = 20;
+}
+
+enum UniqueStrategy {
+  UNIQUE_CARDS = 0;
+  UNIQUE_PRINTS = 1;
+  UNIQUE_ART = 2;
+}
+
+// Prefixed SORT_ to avoid value-name collisions (e.g. PENNY exists in CardFormat)
+enum SortOrder {
+  SORT_NAME = 0;
+  SORT_SET = 1;
+  SORT_RELEASED = 2;
+  SORT_RARITY = 3;
+  SORT_COLOR = 4;
+  SORT_USD = 5;
+  SORT_TIX = 6;
+  SORT_EUR = 7;
+  SORT_CMC = 8;
+  SORT_POWER = 9;
+  SORT_TOUGHNESS = 10;
+  SORT_EDHREC = 11;
+  SORT_PENNY = 12;
+  SORT_ARTIST = 13;
+  SORT_SPOILED = 14;
+  SORT_REVIEW = 15;
+}
+
+enum SortDirection {
+  ASC = 0;
+  DESC = 1;
+}
+
+// ── Existing messages ─────────────────────────────────────────────────────────
 
 message SearchCardsRequest {
   string query = 1;
@@ -24,4 +109,118 @@ message CardItem {
   string type_line = 4;
   string set_code = 5;
   string image_url = 6;
+}
+
+// ── AdvanceSearchCards ────────────────────────────────────────────────────────
+
+message AdvanceSearchCardsRequest {
+  // Name
+  optional string name = 1;
+  optional bool exact_name = 2;
+
+  // Colors
+  optional string color = 3;
+  ComparisonOperator color_operator = 4;
+  optional string color_identity = 5;
+  ComparisonOperator color_identity_operator = 6;
+
+  // Types
+  repeated string included_types = 7;
+  repeated string excluded_types = 8;
+
+  // Card text
+  optional string oracle_text = 9;
+  optional string full_oracle_text = 10;
+  optional string keyword = 11;
+
+  // Mana
+  optional string mana_cost = 12;
+  optional int32 mana_value = 13;
+  ComparisonOperator mana_value_operator = 14;
+  optional string produces = 15;
+
+  // Power / Toughness / Loyalty
+  optional string power = 16;
+  ComparisonOperator power_operator = 17;
+  optional string toughness = 18;
+  ComparisonOperator toughness_operator = 19;
+  optional int32 loyalty = 20;
+  ComparisonOperator loyalty_operator = 21;
+
+  // Rarity
+  optional CardRarity rarity = 22;
+  ComparisonOperator rarity_operator = 23;
+
+  // Sets & Blocks
+  optional string set_code = 24;
+  optional string block = 25;
+  optional string collector_number = 26;
+
+  // Format legality
+  optional CardFormat format = 27;
+  optional CardFormat banned_in = 28;
+  optional CardFormat restricted_in = 29;
+
+  // Prices
+  optional double usd_price = 30;
+  ComparisonOperator usd_price_operator = 31;
+  optional double eur_price = 32;
+  ComparisonOperator eur_price_operator = 33;
+  optional double tix_price = 34;
+  ComparisonOperator tix_price_operator = 35;
+
+  // Artist / Flavor / Watermark
+  optional string artist = 36;
+  optional string flavor_text = 37;
+  optional string watermark = 38;
+
+  // Border / Frame
+  optional string border = 39;
+  optional string frame = 40;
+
+  // Game
+  optional CardGame game = 41;
+
+  // Year / Date
+  optional int32 year = 42;
+  ComparisonOperator year_operator = 43;
+  optional string date = 44;
+  ComparisonOperator date_operator = 45;
+
+  // Language
+  optional string language = 46;
+
+  // Tagger tags
+  optional string art_tag = 47;
+  optional string oracle_tag = 48;
+
+  // Is flags
+  optional bool is_reprint = 49;
+  optional bool is_foil = 50;
+  optional bool is_non_foil = 51;
+  optional bool is_full_art = 52;
+  optional bool is_promo = 53;
+  optional bool is_digital = 54;
+  optional bool is_funny = 55;
+  optional bool is_reserved = 56;
+  optional bool is_commander = 57;
+  optional bool is_partner = 58;
+  optional bool is_hires = 59;
+  optional bool is_spell = 60;
+  optional bool is_permanent = 61;
+  optional bool is_split = 62;
+  optional bool is_transform = 63;
+  optional bool is_mdfc = 64;
+  optional bool is_fetchland = 65;
+  optional bool is_shockland = 66;
+  optional bool is_dual_land = 67;
+
+  // Display options
+  optional UniqueStrategy unique = 68;
+  optional SortOrder order = 69;
+  optional SortDirection direction = 70;
+  optional string prefer = 71;
+
+  // Pagination
+  int32 page_size = 72;
 }
