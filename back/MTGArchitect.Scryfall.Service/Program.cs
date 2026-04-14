@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddGrpc();
-builder.Services.AddScoped<CardController>();
+builder.Services.AddScoped<ICardController,CardController>();
 builder.Services.AddHttpClient("scryfall", client =>
 {
 	client.BaseAddress = new Uri("https://api.scryfall.com/");

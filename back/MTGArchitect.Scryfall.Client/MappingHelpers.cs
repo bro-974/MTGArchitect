@@ -1,7 +1,7 @@
 ﻿using ProtoContracts = MTGArchitect.Scryfall.Service.Contracts;
 using ScryfallContracts = MTGArchitect.Scryfall.Contracts;
 
-namespace MTGArchitectServices.ApiService.Core;
+namespace MTGArchitectServices.Scryfall.Client;
 
     public static class MappingHelpers
     {

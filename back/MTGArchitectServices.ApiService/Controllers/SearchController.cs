@@ -1,5 +1,5 @@
 ﻿using MTGArchitect.Scryfall.Contracts;
-using MTGArchitectServices.ApiService.Core;
+using MTGArchitectServices.Scryfall.Client;
 using ProtoContracts = MTGArchitect.Scryfall.Service.Contracts;
 
 namespace MTGArchitectServices.ApiService.Controllers;

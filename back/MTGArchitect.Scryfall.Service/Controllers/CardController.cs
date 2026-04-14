@@ -1,20 +1,21 @@
 ﻿using MTGArchitect.Scryfall.Contracts;
 using MTGArchitect.Scryfall.Service.Core;
+using MTGArchitect.Scryfall.Service.Models;
 using System.Text.Json;
 
 namespace MTGArchitect.Scryfall.Service;
 
-public class CardController(
-    IHttpClientFactory httpClientFactory,
-    ILogger<CardController> logger)
+public class CardController : ICardController
 {
-    public record CardItem(
-        string Id,
-        string Name,
-        string ManaCost,
-        string TypeLine,
-        string SetCode,
-        string ImageUrl);
+    private readonly IHttpClientFactory httpClientFactory;
+    private readonly ILogger<CardController> logger;
+
+    public CardController(IHttpClientFactory httpClientFactory,
+    ILogger<CardController> logger)
+    {
+        this.httpClientFactory = httpClientFactory;
+        this.logger = logger;
+    }
 
     public record SearchCardsResult(List<CardItem> Cards);
 
@@ -62,6 +63,7 @@ public class CardController(
             return new SearchCardsResult([]);
         }
     }
+
     private static CardItem MapCard(JsonElement source)
     {
         return new CardItem(

@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Scryfall/">
+    <Project Path="MTGArchitect.Scryfall.Client/MTGArchitect.Scryfall.Client.csproj" Id="ccc6c26b-59d9-48b9-82fa-0a09a3bc23dd" />
     <Project Path="MTGArchitect.Scryfall.Contracts/MTGArchitect.Scryfall.Contracts.csproj" Id="2877f3d2-d478-4e95-bc2c-cca04dbc3a95" />
     <Project Path="MTGArchitect.Scryfall.Service/MTGArchitect.Scryfall.Service.csproj" />
   </Folder>
