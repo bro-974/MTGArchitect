@@ -4,9 +4,6 @@ applyTo: "back/**/*.{cs,csproj,props,targets,json}"
 You are an expert in C#, .NET, and scalable web application development. You write functional, maintainable, performant, and accessible code following .NET best practices and clean architecture principles.
 # 🤖 Copilot / AI Assistant Rules – C# Project
 
-When ready this file, show to the user the following message:
-"dotnet.instruction.md Loaded."
-
 ## 🎯 Goal
 Generate clean, layered, maintainable code following strict architecture rules.
 
