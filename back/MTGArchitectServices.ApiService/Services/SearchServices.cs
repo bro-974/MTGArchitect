@@ -3,11 +3,11 @@ using MTGArchitect.Scryfall.Contracts;
 
 namespace MTGArchitectServices.ApiService.Controllers;
 
-public class SearchController
+public class SearchServices
 {
     private readonly IScryfallClient cardSearchClient;
 
-    public SearchController(IScryfallClient cardSearchClient)
+    public SearchServices(IScryfallClient cardSearchClient)
     {
         this.cardSearchClient = cardSearchClient;
     }

@@ -21,7 +21,7 @@ public static class EndpointExtensions
         app.MapGet("/api/cards/search", async (
             string q,
             int? pageSize,
-            [FromServices] SearchController searchController,
+            [FromServices] SearchServices searchController,
             CancellationToken cancellationToken) =>
         {
             return await searchController.QuerySearch(q, pageSize, cancellationToken); 
@@ -30,7 +30,7 @@ public static class EndpointExtensions
 
         app.MapPost("/api/cards/search/advanced", async (
             CardQuerySearch body,
-            [FromServices] SearchController searchController,
+            [FromServices] SearchServices searchController,
             CancellationToken cancellationToken) =>
         {
             return await searchController.AdvancedSearch(body, cancellationToken);

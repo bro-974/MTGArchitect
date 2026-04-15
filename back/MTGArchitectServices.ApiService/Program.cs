@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
-builder.Services.AddScoped<SearchController>();
+builder.Services.AddScoped<SearchServices>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
