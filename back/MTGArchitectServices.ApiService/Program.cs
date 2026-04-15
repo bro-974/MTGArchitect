@@ -1,5 +1,6 @@
 using MTGArchitect.Scryfall.Client;
 using MTGArchitectServices.ApiService.Controllers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,11 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+});
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

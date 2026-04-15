@@ -5,15 +5,15 @@ namespace MTGArchitectServices.Scryfall.Client;
 
     public static class MappingHelpers
     {
-        public static IEnumerable<object> MapCards(IEnumerable<ProtoContracts.CardItem> cards) =>
-        cards.Select(card => new
+        public static IEnumerable<ScryfallContracts.Card> MapCards(IEnumerable<ProtoContracts.CardItem> cards) =>
+        cards.Select(card => new ScryfallContracts.Card()
         {
-            id = card.Id,
-            name = card.Name,
-            manaCost = card.ManaCost,
-            typeLine = card.TypeLine,
-            setCode = card.SetCode,
-            imageUrl = card.ImageUrl
+            Id = card.Id,
+            Name = card.Name,
+            ManaCost = card.ManaCost,
+            TypeLine = card.TypeLine,
+            SetCode = card.SetCode,
+            ImageUrl = card.ImageUrl
         });
 
         public static ProtoContracts.AdvanceSearchCardsRequest ToProtoRequest(ScryfallContracts.CardQuerySearch q)

@@ -5,6 +5,7 @@
   "navbar": {
     "home": "Home",
     "cardExplorer": "Card explorer",
+    "cardExplorerAdvanced": "Advanced card search",
     "serverStatus": "Server status",
     "darkMode": "Dark mode",
     "lightMode": "Light mode",
@@ -37,5 +38,55 @@
     "noResultsBody": "No cards matched \"{{ query }}\". Try another name or a broader Scryfall query.",
     "errorTitle": "Search unavailable",
     "errorBody": "The card service could not return results right now. Try again in a moment."
+  },
+  "cardExplorerAdvanced": {
+    "eyebrow": "Advanced Search",
+    "title": "Advanced card search",
+    "intro": "Build a structured query using Scryfall syntax filters. Only filled-in fields are sent to the API.",
+    "formLabel": "Advanced card search form",
+    "search": "Search",
+    "reset": "Reset",
+    "section": {
+      "name": "Name",
+      "color": "Colors",
+      "types": "Types",
+      "text": "Card text",
+      "mana": "Mana",
+      "stats": "Power / Toughness",
+      "rarityFormat": "Rarity & Format"
+    },
+    "field": {
+      "name": "Card name",
+      "namePlaceholder": "e.g. Lightning Bolt",
+      "exactName": "Exact name match",
+      "color": "Color (c:)",
+      "colorHint": "Select one or more colors. Sent value is concatenated (example: W + G => WG).",
+      "colorIdentity": "Color identity (id:)",
+      "operator": "Comparison operator",
+      "types": "Include types (t:)",
+      "typesPlaceholder": "e.g. elf, warrior",
+      "excludedTypes": "Exclude types (-t:)",
+      "excludedTypesPlaceholder": "e.g. artifact, enchantment",
+      "oracleText": "Oracle text (o:)",
+      "oracleTextPlaceholder": "e.g. flying",
+      "keyword": "Keyword (kw:)",
+      "keywordPlaceholder": "e.g. trample",
+      "manaCost": "Mana cost (m:)",
+      "manaValue": "Mana value (mv:)",
+      "power": "Power (pow:)",
+      "toughness": "Toughness (tou:)",
+      "rarity": "Rarity (r:)",
+      "rarityPlaceholder": "Any rarity",
+      "format": "Legal in format (f:)",
+      "formatPlaceholder": "Any format"
+    },
+    "color": {
+      "white": "White",
+      "blue": "Blue",
+      "black": "Black",
+      "red": "Red",
+      "green": "Green",
+      "gray": "Gray"
+    }
   }
 }

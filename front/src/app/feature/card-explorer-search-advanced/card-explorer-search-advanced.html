@@ -1,0 +1,316 @@
+<section class="advanced-search-shell flex flex-column gap-4 pb-6">
+  <header class="advanced-search-header">
+    <p class="eyebrow mb-2">{{ 'cardExplorerAdvanced.eyebrow' | transloco }}</p>
+    <h1 class="m-0">{{ 'cardExplorerAdvanced.title' | transloco }}</h1>
+    <p class="intro mt-3 mb-0">{{ 'cardExplorerAdvanced.intro' | transloco }}</p>
+  </header>
+
+  <form
+    class="advanced-search-form surface-card border-round-2xl p-4 shadow-3"
+    [formGroup]="form"
+    (ngSubmit)="handleSubmit()"
+    aria-label="{{ 'cardExplorerAdvanced.formLabel' | transloco }}"
+  >
+    <!-- Name -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.name' | transloco }}</legend>
+      <div class="flex flex-column gap-2">
+        <label for="adv-name" class="text-sm">{{ 'cardExplorerAdvanced.field.name' | transloco }}</label>
+        <input
+          id="adv-name"
+          pInputText
+          type="text"
+          formControlName="name"
+          [placeholder]="'cardExplorerAdvanced.field.namePlaceholder' | transloco"
+          class="w-full"
+        />
+        <div class="flex align-items-center gap-2 mt-1">
+          <p-checkbox
+            formControlName="exactName"
+            [binary]="true"
+            inputId="adv-exact-name"
+          />
+          <label for="adv-exact-name" class="text-sm cursor-pointer">
+            {{ 'cardExplorerAdvanced.field.exactName' | transloco }}
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Colors -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.color' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label class="text-sm">{{ 'cardExplorerAdvanced.field.color' | transloco }}</label>
+          <div class="color-pastille-wrapper flex-1">
+            <div class="mana-pastilles" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.color' | transloco">
+              @for (color of manaColorOptions; track color.value) {
+                <button
+                  type="button"
+                  class="mana-pastille"
+                  [style.--pastille-bg]="color.background"
+                  [style.--pastille-border]="color.border"
+                  [style.--pastille-color]="color.color"
+                  [class.is-selected]="isManaColorSelected(color.value)"
+                  [attr.aria-pressed]="isManaColorSelected(color.value)"
+                  [attr.aria-label]="color.labelKey | transloco"
+                  [title]="color.labelKey | transloco"
+                  (click)="toggleManaColor(color.value)"
+                >
+                  <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
+                  <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                </button>
+              }
+            </div>
+            <p-select
+              formControlName="colorOperator"
+              [options]="colorOperatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="operator-select color-operator-select"
+              [ariaLabel]="'cardExplorerAdvanced.field.operator' | transloco"
+            />
+          </div>
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label class="text-sm">{{ 'cardExplorerAdvanced.field.colorIdentity' | transloco }}</label>
+          <div class="color-pastille-wrapper flex-1">
+            <div class="mana-pastilles" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.colorIdentity' | transloco">
+              @for (color of manaColorOptions; track color.value) {
+                <button
+                  type="button"
+                  class="mana-pastille"
+                  [style.--pastille-bg]="color.background"
+                  [style.--pastille-border]="color.border"
+                  [style.--pastille-color]="color.color"
+                  [class.is-selected]="isManaIdentityColorSelected(color.value)"
+                  [attr.aria-pressed]="isManaIdentityColorSelected(color.value)"
+                  [attr.aria-label]="color.labelKey | transloco"
+                  [title]="color.labelKey | transloco"
+                  (click)="toggleManaIdentityColor(color.value)"
+                >
+                  <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
+                  <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Types -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.types' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-types" class="text-sm">{{ 'cardExplorerAdvanced.field.types' | transloco }}</label>
+          <input
+            id="adv-types"
+            pInputText
+            type="text"
+            formControlName="types"
+            [placeholder]="'cardExplorerAdvanced.field.typesPlaceholder' | transloco"
+            class="w-full"
+          />
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-excluded-types" class="text-sm">{{ 'cardExplorerAdvanced.field.excludedTypes' | transloco }}</label>
+          <input
+            id="adv-excluded-types"
+            pInputText
+            type="text"
+            formControlName="excludedTypes"
+            [placeholder]="'cardExplorerAdvanced.field.excludedTypesPlaceholder' | transloco"
+            class="w-full"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Card Text -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.text' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-oracle" class="text-sm">{{ 'cardExplorerAdvanced.field.oracleText' | transloco }}</label>
+          <input
+            id="adv-oracle"
+            pInputText
+            type="text"
+            formControlName="oracleText"
+            [placeholder]="'cardExplorerAdvanced.field.oracleTextPlaceholder' | transloco"
+            class="w-full"
+          />
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-keyword" class="text-sm">{{ 'cardExplorerAdvanced.field.keyword' | transloco }}</label>
+          <input
+            id="adv-keyword"
+            pInputText
+            type="text"
+            formControlName="keyword"
+            [placeholder]="'cardExplorerAdvanced.field.keywordPlaceholder' | transloco"
+            class="w-full"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Mana -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.mana' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-mana-cost" class="text-sm">{{ 'cardExplorerAdvanced.field.manaCost' | transloco }}</label>
+          <input
+            id="adv-mana-cost"
+            pInputText
+            type="text"
+            formControlName="manaCost"
+            placeholder="{2}{G} / GG / 1WW"
+            class="w-full"
+          />
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-mana-value" class="text-sm">{{ 'cardExplorerAdvanced.field.manaValue' | transloco }}</label>
+          <div class="flex gap-2">
+            <p-select
+              formControlName="manaValueOperator"
+              [options]="operatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="operator-select"
+              [ariaLabel]="'cardExplorerAdvanced.field.operator' | transloco"
+            />
+            <input
+              id="adv-mana-value"
+              pInputText
+              type="number"
+              formControlName="manaValue"
+              min="0"
+              class="flex-1"
+            />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Power / Toughness -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.stats' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-power" class="text-sm">{{ 'cardExplorerAdvanced.field.power' | transloco }}</label>
+          <div class="flex gap-2">
+            <p-select
+              formControlName="powerOperator"
+              [options]="operatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="operator-select"
+              [ariaLabel]="'cardExplorerAdvanced.field.operator' | transloco"
+            />
+            <input
+              id="adv-power"
+              pInputText
+              type="text"
+              formControlName="power"
+              placeholder="2 / tou / *"
+              class="flex-1"
+            />
+          </div>
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-toughness" class="text-sm">{{ 'cardExplorerAdvanced.field.toughness' | transloco }}</label>
+          <div class="flex gap-2">
+            <p-select
+              formControlName="toughnessOperator"
+              [options]="operatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="operator-select"
+              [ariaLabel]="'cardExplorerAdvanced.field.operator' | transloco"
+            />
+            <input
+              id="adv-toughness"
+              pInputText
+              type="text"
+              formControlName="toughness"
+              placeholder="2 / pow / *"
+              class="flex-1"
+            />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Rarity & Format -->
+    <fieldset class="form-group border-none p-0 m-0 mb-4">
+      <legend class="font-semibold text-base mb-3">{{ 'cardExplorerAdvanced.section.rarityFormat' | transloco }}</legend>
+      <div class="grid">
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-rarity" class="text-sm">{{ 'cardExplorerAdvanced.field.rarity' | transloco }}</label>
+          <div class="flex gap-2">
+            <p-select
+              formControlName="rarityOperator"
+              [options]="operatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="operator-select"
+              [ariaLabel]="'cardExplorerAdvanced.field.operator' | transloco"
+            />
+            <p-select
+              inputId="adv-rarity"
+              formControlName="rarity"
+              [options]="rarityOptions"
+              optionLabel="label"
+              optionValue="value"
+              [showClear]="true"
+              [placeholder]="'cardExplorerAdvanced.field.rarityPlaceholder' | transloco"
+              class="flex-1"
+            />
+          </div>
+        </div>
+        <div class="col-12 md:col-6 flex flex-column gap-2">
+          <label for="adv-format" class="text-sm">{{ 'cardExplorerAdvanced.field.format' | transloco }}</label>
+          <p-select
+            inputId="adv-format"
+            formControlName="format"
+            [options]="formatOptions"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+            [placeholder]="'cardExplorerAdvanced.field.formatPlaceholder' | transloco"
+            class="w-full"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Actions -->
+    <div class="flex gap-2 justify-content-end flex-wrap">
+      <p-button
+        type="button"
+        severity="secondary"
+        [label]="'cardExplorerAdvanced.reset' | transloco"
+        icon="pi pi-times"
+        (click)="handleReset()"
+      />
+      <p-button
+        type="submit"
+        [label]="'cardExplorerAdvanced.search' | transloco"
+        icon="pi pi-search"
+        [loading]="state() === 'loading'"
+      />
+    </div>
+  </form>
+
+  <app-card-explorer-list
+    [cards]="cards()"
+    [query]="queryLabel"
+    [loading]="state() === 'loading'"
+    [error]="state() === 'error'"
+  />
+</section>

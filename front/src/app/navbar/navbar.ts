@@ -52,6 +52,10 @@ export class Navbar {
     this.router.navigate(['/feature/card-explorer']);
   }
 
+  goCardExplorerAdvanced(): void {
+    this.router.navigate(['/feature/card-explorer-search-advanced']);
+  }
+
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }

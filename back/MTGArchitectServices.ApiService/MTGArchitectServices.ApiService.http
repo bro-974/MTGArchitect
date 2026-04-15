@@ -13,7 +13,5 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "types":["elf"],
-  "ManaValue":1,
-  "ManaCost": "G"
+  "types": ["elf"], "manaCost": "G", "manaValue": 3
 }

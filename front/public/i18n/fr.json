@@ -5,6 +5,7 @@
   "navbar": {
     "home": "Accueil",
     "cardExplorer": "Explorateur de cartes",
+    "cardExplorerAdvanced": "Recherche avancée de cartes",
     "serverStatus": "Etat du serveur",
     "darkMode": "Mode sombre",
     "lightMode": "Mode clair",
@@ -37,5 +38,55 @@
     "noResultsBody": "Aucune carte ne correspond a \"{{ query }}\". Essayez un autre nom ou une requete Scryfall plus large.",
     "errorTitle": "Recherche indisponible",
     "errorBody": "Le service de cartes ne peut pas retourner de resultats pour le moment. Reessayez dans un instant."
+  },
+  "cardExplorerAdvanced": {
+    "eyebrow": "Recherche avancée",
+    "title": "Recherche avancée de cartes",
+    "intro": "Construisez une requête structurée avec les filtres de syntaxe Scryfall. Seuls les champs renseignés sont envoyés à l'API.",
+    "formLabel": "Formulaire de recherche avancée de cartes",
+    "search": "Rechercher",
+    "reset": "Réinitialiser",
+    "section": {
+      "name": "Nom",
+      "color": "Couleurs",
+      "types": "Types",
+      "text": "Texte de la carte",
+      "mana": "Mana",
+      "stats": "Force / Endurance",
+      "rarityFormat": "Rareté & Format"
+    },
+    "field": {
+      "name": "Nom de la carte",
+      "namePlaceholder": "ex. Lightning Bolt",
+      "exactName": "Correspondance exacte du nom",
+      "color": "Couleur (c:)",
+      "colorHint": "Selectionnez une ou plusieurs couleurs. La valeur envoyee est concatenee (exemple: W + G => WG).",
+      "colorIdentity": "Identité de couleur (id:)",
+      "operator": "Opérateur de comparaison",
+      "types": "Inclure les types (t:)",
+      "typesPlaceholder": "ex. elfe, guerrier",
+      "excludedTypes": "Exclure les types (-t:)",
+      "excludedTypesPlaceholder": "ex. artefact, enchantement",
+      "oracleText": "Texte Oracle (o:)",
+      "oracleTextPlaceholder": "ex. vol",
+      "keyword": "Mot-clé (kw:)",
+      "keywordPlaceholder": "ex. piétinement",
+      "manaCost": "Coût de mana (m:)",
+      "manaValue": "Valeur de mana (mv:)",
+      "power": "Force (pow:)",
+      "toughness": "Endurance (tou:)",
+      "rarity": "Rareté (r:)",
+      "rarityPlaceholder": "Toute rareté",
+      "format": "Légal dans le format (f:)",
+      "formatPlaceholder": "Tout format"
+    },
+    "color": {
+      "white": "Blanc",
+      "blue": "Bleu",
+      "black": "Noir",
+      "red": "Rouge",
+      "green": "Vert",
+      "gray": "Gris"
+    }
   }
 }

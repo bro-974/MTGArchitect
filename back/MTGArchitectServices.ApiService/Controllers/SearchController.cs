@@ -1,36 +1,31 @@
-﻿using MTGArchitect.Scryfall.Contracts;
-using MTGArchitectServices.Scryfall.Client;
-using ProtoContracts = MTGArchitect.Scryfall.Service.Contracts;
+﻿using MTGArchitect.Scryfall.Client.Services;
+using MTGArchitect.Scryfall.Contracts;
 
 namespace MTGArchitectServices.ApiService.Controllers;
 
-    public class SearchController
+public class SearchController
+{
+    private readonly IScryfallClient cardSearchClient;
+
+    public SearchController(IScryfallClient cardSearchClient)
     {
-        private readonly ProtoContracts.CardSearch.CardSearchClient cardSearchClient;
+        this.cardSearchClient = cardSearchClient;
+    }
 
-        public SearchController(ProtoContracts.CardSearch.CardSearchClient cardSearchClient)
-        {
-            this.cardSearchClient = cardSearchClient;
-        }
+    public async Task<IResult> QuerySearch(string q, int? pageSize, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(q))
+            return Results.BadRequest(new { message = "Query parameter q is required." });
 
-        public async Task<IResult> QuerySearch(string q, int? pageSize,CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrWhiteSpace(q))
-                return Results.BadRequest(new { message = "Query parameter q is required." });
+        var reply = await cardSearchClient.SearchCardsAsync(q, pageSize.GetValueOrDefault(20),
+         cancellationToken: cancellationToken);
 
-            var reply = await cardSearchClient.SearchCardsAsync(new ProtoContracts.SearchCardsRequest
-            {
-                Query = q,
-                PageSize = pageSize.GetValueOrDefault(20)
-            }, cancellationToken: cancellationToken);
+        return Results.Ok(reply);
+    }
 
-            return Results.Ok(MappingHelpers.MapCards(reply.Cards));
-        }
-
-        public async Task<IResult> AdvancedSearch(CardQuerySearch body, CancellationToken cancellationToken)
-        {
-            var request = MappingHelpers.ToProtoRequest(body);
-            var reply = await cardSearchClient.AdvanceSearchCardsAsync(request, cancellationToken: cancellationToken);
-            return Results.Ok(MappingHelpers.MapCards(reply.Cards));
-        }
+    public async Task<IResult> AdvancedSearch(CardQuerySearch body, CancellationToken cancellationToken)
+    {
+        var reply = await cardSearchClient.AdvancedSearchAsync(body, cancellationToken: cancellationToken);
+        return Results.Ok(reply);
+    }
 }

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CardQuerySearch } from '../../core/models/card-query-search.model';
 
 export interface CardExplorerCard {
   id: string;
@@ -21,5 +22,10 @@ export class CardExplorerService {
       .set('pageSize', pageSize);
 
     return this.http.get<CardExplorerCard[]>('/api/cards/search', { params });
+  }
+
+  searchCardsAdvanced(query: CardQuerySearch, pageSize = 18): Observable<CardExplorerCard[]> {
+    query.pageSize = pageSize;
+    return this.http.post<CardExplorerCard[]>(`/api/cards/search/advanced`, query);
   }
 }

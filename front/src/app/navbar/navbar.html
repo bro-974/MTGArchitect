@@ -23,6 +23,16 @@
       <p-button
         severity="secondary"
         type="button"
+        [icon]="'pi pi-filter'"
+        class="p-button-rounded p-button-text"
+        (click)="goCardExplorerAdvanced()"
+        [title]="'navbar.cardExplorerAdvanced' | transloco"
+        [ariaLabel]="'navbar.cardExplorerAdvanced' | transloco">
+      </p-button>
+
+      <p-button
+        severity="secondary"
+        type="button"
         [icon]="'pi pi-server'"
         class="p-button-rounded p-button-text"
         (click)="goServerStatus()"

@@ -11,6 +11,13 @@ export const routes: Routes = [
 			import('./feature/card-explorer/card-explorer').then((module) => module.CardExplorer)
 	},
 	{
+		path: 'feature/card-explorer-search-advanced',
+		loadComponent: () =>
+			import('./feature/card-explorer-search-advanced/card-explorer-search-advanced').then(
+				(module) => module.CardExplorerSearchAdvanced
+			)
+	},
+	{
 		path: 'feature/server-status',
 		loadComponent: () =>
 			import('./feature/server-status/server-status').then((module) => module.ServerStatus)

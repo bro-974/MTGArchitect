@@ -12,7 +12,7 @@ public static class Module
         {
             options.Address = scryfallService;
         });
-        services.AddScoped<ScryfallClient>();
+        services.AddScoped<IScryfallClient, ScryfallClient>();
         return services;
     }
 }
