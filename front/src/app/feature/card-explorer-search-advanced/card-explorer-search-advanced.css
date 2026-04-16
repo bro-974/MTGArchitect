@@ -1,32 +1,6 @@
-.advanced-search-shell {
-  max-width: 960px;
-  margin-inline: auto;
-  padding-inline: 1rem;
-}
-
-.advanced-search-header .eyebrow {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
-
 .advanced-search-form fieldset + fieldset {
   border-top: 1px solid var(--surface-border);
   padding-top: 1.25rem;
-}
-
-.color-pastille-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.mana-pastilles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .mana-pastille {

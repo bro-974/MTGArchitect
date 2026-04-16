@@ -1,9 +1,20 @@
-<header class="navbar-shadow p-3 mb-4">
-  <div class="w-full flex justify-content-between align-items-center">
+<header class="p-3 mb-4 surface-card shadow-2">
+  <div class="flex justify-content-between align-items-center w-full">
+
+    <!-- Brand -->
     <div class="flex align-items-center gap-2">
-      <p-button severity="secondary"
+      <div class="gem bg-primary w-1rem h-1rem flex-shrink-0"></div>
+      <span class="font-bold text-sm white-space-nowrap">
+        MTG ARCHITECT
+      </span>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex align-items-center gap-2">
+      <p-button
+        severity="secondary"
         type="button"
-        [icon]="'pi pi-home'"
+        icon="pi pi-home"
         class="p-button-rounded p-button-text"
         (click)="goHome()"
         [title]="'navbar.home' | transloco"
@@ -13,7 +24,7 @@
       <p-button
         severity="secondary"
         type="button"
-        [icon]="'pi pi-images'"
+        icon="pi pi-images"
         class="p-button-rounded p-button-text"
         (click)="goCardExplorer()"
         [title]="'navbar.cardExplorer' | transloco"
@@ -23,7 +34,7 @@
       <p-button
         severity="secondary"
         type="button"
-        [icon]="'pi pi-filter'"
+        icon="pi pi-filter"
         class="p-button-rounded p-button-text"
         (click)="goCardExplorerAdvanced()"
         [title]="'navbar.cardExplorerAdvanced' | transloco"
@@ -33,7 +44,7 @@
       <p-button
         severity="secondary"
         type="button"
-        [icon]="'pi pi-server'"
+        icon="pi pi-server"
         class="p-button-rounded p-button-text"
         (click)="goServerStatus()"
         [title]="'navbar.serverStatus' | transloco"
@@ -41,19 +52,22 @@
       </p-button>
     </div>
 
-    <div class="navbar-actions flex align-items-center gap-2">
+    <!-- Actions -->
+    <div class="flex align-items-center gap-2">
       <p-select
-        class="language-select"
+        class="w-10rem"
         [options]="i18nService.languageOptions()"
         [formControl]="languageControl"
         optionValue="value"
         [placeholder]="'navbar.language' | transloco"
         [ariaLabel]="'navbar.language' | transloco">
+
         <ng-template #selectedItem let-selectedOption>
           @if (selectedOption) {
             {{ selectedOption.labelKey | transloco }}
           }
         </ng-template>
+
         <ng-template #item let-option>
           {{ option.labelKey | transloco }}
         </ng-template>
@@ -65,9 +79,10 @@
         [icon]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
         class="p-button-rounded p-button-text"
         (click)="toggleTheme()"
-        [title]="isDarkMode() ? ('navbar.lightMode' | transloco) : ('navbar.darkMode' | transloco)"
-        [ariaLabel]="isDarkMode() ? ('navbar.lightMode' | transloco) : ('navbar.darkMode' | transloco)">
+        [title]="(isDarkMode() ? 'navbar.lightMode' : 'navbar.darkMode') | transloco"
+        [ariaLabel]="(isDarkMode() ? 'navbar.lightMode' : 'navbar.darkMode') | transloco">
       </p-button>
     </div>
+
   </div>
 </header>

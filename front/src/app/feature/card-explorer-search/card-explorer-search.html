@@ -1,4 +1,4 @@
-<section class="explorer-search surface-card border-round-2xl p-4 shadow-3">
+<section class="surface-card border-round-2xl p-4 shadow-3">
   <div class="flex flex-column gap-2">
     <label class="font-semibold text-lg" for="card-explorer-query">
       {{ 'cardExplorer.searchLabel' | transloco }}
@@ -16,7 +16,7 @@
         [attr.aria-busy]="loading()"
       />
     </span>
-    <p class="search-hint m-0" id="card-explorer-search-hint">
+    <p class="m-0 text-color-secondary" id="card-explorer-search-hint">
       {{ loading() ? ('cardExplorer.searchLoading' | transloco) : ('cardExplorer.searchHint' | transloco) }}
     </p>
   </div>

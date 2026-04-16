@@ -1,8 +1,8 @@
-<section class="advanced-search-shell flex flex-column gap-4 pb-6">
-  <header class="advanced-search-header">
-    <p class="eyebrow mb-2">{{ 'cardExplorerAdvanced.eyebrow' | transloco }}</p>
+<section class="flex flex-column gap-4 pb-6 px-3 mx-auto" style="max-width: 60rem;">
+  <header>
+    <p class="mb-2 text-xs font-semibold uppercase text-color-secondary">{{ 'cardExplorerAdvanced.eyebrow' | transloco }}</p>
     <h1 class="m-0">{{ 'cardExplorerAdvanced.title' | transloco }}</h1>
-    <p class="intro mt-3 mb-0">{{ 'cardExplorerAdvanced.intro' | transloco }}</p>
+    <p class="mt-3 mb-0 text-color-secondary line-height-3">{{ 'cardExplorerAdvanced.intro' | transloco }}</p>
   </header>
 
   <form
@@ -43,8 +43,8 @@
       <div class="grid">
         <div class="col-12 md:col-6 flex flex-column gap-2">
           <label class="text-sm">{{ 'cardExplorerAdvanced.field.color' | transloco }}</label>
-          <div class="color-pastille-wrapper flex-1">
-            <div class="mana-pastilles" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.color' | transloco">
+          <div class="flex flex-column gap-2 flex-1">
+            <div class="flex flex-wrap gap-2" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.color' | transloco">
               @for (color of manaColorOptions; track color.value) {
                 <button
                   type="button"
@@ -75,8 +75,8 @@
         </div>
         <div class="col-12 md:col-6 flex flex-column gap-2">
           <label class="text-sm">{{ 'cardExplorerAdvanced.field.colorIdentity' | transloco }}</label>
-          <div class="color-pastille-wrapper flex-1">
-            <div class="mana-pastilles" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.colorIdentity' | transloco">
+          <div class="flex flex-column gap-2 flex-1">
+            <div class="flex flex-wrap gap-2" role="group" [attr.aria-label]="'cardExplorerAdvanced.field.colorIdentity' | transloco">
               @for (color of manaColorOptions; track color.value) {
                 <button
                   type="button"
