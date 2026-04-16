@@ -14,6 +14,16 @@
       <p-button
         severity="secondary"
         type="button"
+        icon="pi pi-briefcase"
+        class="p-button-rounded p-button-text"
+        (click)="goWorkspace()"
+        [title]="'navbar.workspace' | transloco"
+        [ariaLabel]="'navbar.workspace' | transloco">
+      </p-button>
+
+      <p-button
+        severity="secondary"
+        type="button"
         icon="pi pi-home"
         class="p-button-rounded p-button-text"
         (click)="goHome()"
@@ -82,6 +92,21 @@
         [title]="(isDarkMode() ? 'navbar.lightMode' : 'navbar.darkMode') | transloco"
         [ariaLabel]="(isDarkMode() ? 'navbar.lightMode' : 'navbar.darkMode') | transloco">
       </p-button>
+
+      @if (authService.user(); as currentUser) {
+        <span class="text-sm font-semibold white-space-nowrap">{{ currentUser.email }}</span>
+      } @else {
+        <p-button
+          severity="secondary"
+          type="button"
+          icon="pi pi-sign-in"
+          class="p-button-rounded p-button-text"
+          (click)="goLogin()"
+          [label]="'navbar.login' | transloco"
+          [title]="'navbar.login' | transloco"
+          [ariaLabel]="'navbar.login' | transloco">
+        </p-button>
+      }
     </div>
 
   </div>

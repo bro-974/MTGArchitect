@@ -6,6 +6,14 @@ export const routes: Routes = [
 		loadComponent: () => import('./feature/home/home').then((module) => module.Home)
 	},
 	{
+		path: 'feature/workspace',
+		loadComponent: () => import('./feature/workspace-layout/workspace-layout').then((module) => module.WorkspaceLayout)
+	},
+	{
+		path: 'feature/login',
+		loadComponent: () => import('./feature/login/login').then((module) => module.Login)
+	},
+	{
 		path: 'feature/card-explorer',
 		loadComponent: () =>
 			import('./feature/card-explorer/card-explorer').then((module) => module.CardExplorer)

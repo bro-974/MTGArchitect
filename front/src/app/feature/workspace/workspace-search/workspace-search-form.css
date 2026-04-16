@@ -1,0 +1,103 @@
+.workspace-search,
+.workspace-search-form,
+.workspace-search-fieldset {
+  min-width: 0;
+}
+
+.workspace-search {
+  width: 100%;
+}
+
+.workspace-search-fieldset + .workspace-search-fieldset {
+  border-top: 1px solid var(--surface-border);
+  padding-top: 1rem;
+}
+
+.workspace-search-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.workspace-search-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--surface-border);
+  border-radius: 0.85rem;
+  background: var(--surface-card);
+  flex-shrink: 0;
+}
+
+.workspace-search-form :is(input, .p-select) {
+  width: 100%;
+  min-width: 0;
+}
+
+.workspace-search-form .grid,
+.workspace-search-form .col-12,
+.workspace-search-summary {
+  min-width: 0;
+}
+
+.workspace-operator-select {
+  width: 5rem;
+  flex: 0 0 5rem;
+}
+
+.mana-pastille {
+  --pastille-bg: #e5e7eb;
+  --pastille-border: #9ca3af;
+  --pastille-color: #111827;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 2px solid var(--pastille-border);
+  background: var(--pastille-bg);
+  color: var(--pastille-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.mana-pastille:hover {
+  transform: translateY(-1px);
+}
+
+.mana-pastille:focus-visible {
+  outline: 3px solid var(--primary-300);
+  outline-offset: 2px;
+}
+
+.mana-pastille-label {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.mana-pastille-check {
+  position: absolute;
+  font-size: 0.95rem;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.mana-pastille.is-selected {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pastille-border) 55%, transparent);
+}
+
+.mana-pastille.is-selected .mana-pastille-label {
+  opacity: 0;
+}
+
+.mana-pastille.is-selected .mana-pastille-check {
+  opacity: 1;
+  transform: scale(1);
+}
+

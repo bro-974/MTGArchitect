@@ -30,6 +30,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -59,8 +65,7 @@
               "buildTarget": "visualui-front:build:production"
             },
             "development": {
-              "buildTarget": "visualui-front:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "buildTarget": "visualui-front:build:development"
             }
           },
           "defaultConfiguration": "development"

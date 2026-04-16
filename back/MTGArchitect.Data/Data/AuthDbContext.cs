@@ -17,6 +17,7 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
         builder.Entity<Deck>(entity =>
         {
             entity.HasKey(x => x.Id);
+            entity.Property(x => x.Name).HasMaxLength(150).IsRequired();
             entity.Property(x => x.Type).HasMaxLength(80).IsRequired();
             entity.Property(x => x.Note).HasColumnType("text");
 
@@ -46,6 +47,7 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
             entity.Property(x => x.Quantity).IsRequired();
             entity.Property(x => x.Type).HasMaxLength(80).IsRequired();
             entity.Property(x => x.Cost).HasMaxLength(50);
+            entity.Property(x => x.IsSideBoard).HasDefaultValue(false).IsRequired();
 
             entity.HasOne(x => x.Deck)
                 .WithMany(x => x.Cards)

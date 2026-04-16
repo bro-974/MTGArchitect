@@ -9,6 +9,7 @@ public class DeckCard
     public int Quantity { get; set; }
     public string Type { get; set; } = string.Empty;
     public string? Cost { get; set; }
+    public bool IsSideBoard { get; set; } = false;
 
     public Guid DeckId { get; set; }
     public Deck Deck { get; set; } = null!;

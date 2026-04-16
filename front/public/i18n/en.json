@@ -3,6 +3,8 @@
     "title": "Visual UI"
   },
   "navbar": {
+    "workspace": "Workspace",
+    "login": "Login",
     "home": "Home",
     "cardExplorer": "Card explorer",
     "cardExplorerAdvanced": "Advanced card search",
@@ -88,5 +90,93 @@
       "green": "Green",
       "gray": "Gray"
     }
+  },
+  "workspace": {
+    "eyebrow": "Deck workspace",
+    "title": "Build decks and review search criteria side by side",
+    "intro": "Keep your saved decks on the left and inspect the currently selected list in the center tabs.",
+    "loading": "Loading your decks...",
+    "loadError": "Could not load your decks. Verify your session and try again.",
+    "accordion": {
+      "deckList": "Your decks",
+      "advancedSearch": "Advanced search"
+    },
+    "deckList": {
+      "title": "Saved decks",
+      "count": "{{ count }} decks",
+      "type": "Type",
+      "lastUpdated": "Updated {{ date }}",
+      "mainboard": "Main",
+      "sideboard": "Sideboard",
+      "empty": "No deck selected"
+    },
+    "selected": {
+      "tabs": {
+        "overview": "Overview",
+        "mainboard": "Main deck",
+        "sideboard": "Sideboard"
+      },
+      "emptyTitle": "Choose a deck from the list",
+      "emptyBody": "Select a deck in the workspace menu to inspect its overview, main deck, and sideboard.",
+      "queries": "Saved queries",
+      "queryEmpty": "No saved query for this deck.",
+      "noteEmpty": "No deck note yet.",
+      "noCards": "No cards in the main deck yet.",
+      "updated": "Last updated",
+      "notes": "Deck notes",
+      "manaCurve": "Mana curve focus",
+      "colors": "Colors",
+      "format": "Format",
+      "tags": "Tags",
+      "quantity": "Qty",
+      "card": "Card",
+      "type": "Type",
+      "emptySideboard": "No sideboard cards for this deck yet."
+    },
+    "search": {
+      "formLabel": "Workspace advanced search form",
+      "hint": "Prepare a structured query while staying in your deck workspace.",
+      "search": "Save search",
+      "reset": "Reset",
+      "savedQuery": "Saved query",
+      "section": {
+        "identity": "Identity",
+        "cardRules": "Card rules",
+        "meta": "Meta"
+      },
+      "field": {
+        "name": "Card name",
+        "namePlaceholder": "e.g. Teferi",
+        "exactName": "Exact name",
+        "types": "Types",
+        "typesPlaceholder": "e.g. wizard, planeswalker",
+        "oracleText": "Rules text",
+        "oracleTextPlaceholder": "e.g. draw a card",
+        "color": "Colors",
+        "colorIdentity": "Color identity",
+        "operator": "Comparison operator",
+        "manaValue": "Mana value",
+        "format": "Format"
+      },
+      "color": {
+        "white": "White",
+        "blue": "Blue",
+        "black": "Black",
+        "red": "Red",
+        "green": "Green",
+        "gray": "Gray"
+      }
+    }
+  },
+  "login": {
+    "eyebrow": "Authentication",
+    "title": "Sign in",
+    "subtitle": "Use your account credentials to access protected features.",
+    "email": "Email",
+    "emailInvalid": "Enter a valid email address.",
+    "password": "Password",
+    "passwordRequired": "Password is required.",
+    "submit": "Log in",
+    "invalidCredentials": "Invalid email or password."
   }
 }

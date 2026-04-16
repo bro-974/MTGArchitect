@@ -8,6 +8,7 @@ import { SelectModule } from 'primeng/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AppLanguage, I18nService } from '../core/i18n/i18n.service';
 import { ThemeService } from '../core/theme/theme.service';
+import { AuthService } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,6 +19,7 @@ import { ThemeService } from '../core/theme/theme.service';
 export class Navbar {
   readonly i18nService = inject(I18nService);
   readonly themeService = inject(ThemeService);
+  readonly authService = inject(AuthService);
   readonly router = inject(Router);
   readonly languageControl = new FormControl<AppLanguage>(this.i18nService.activeLanguage(), {
     nonNullable: true
@@ -42,6 +44,14 @@ export class Navbar {
 
   goHome(): void {
     this.router.navigate(['/']);
+  }
+
+  goWorkspace(): void {
+    this.router.navigate(['/feature/workspace']);
+  }
+
+  goLogin(): void {
+    this.router.navigate(['/feature/login']);
   }
 
   goServerStatus(): void {

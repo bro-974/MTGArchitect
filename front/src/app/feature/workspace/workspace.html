@@ -1,0 +1,23 @@
+<p-accordion [value]="activeAccordionPanel()" (valueChange)="setAccordionPanel($event)">
+  <p-accordion-panel value="decks">
+    <p-accordion-header>{{ 'workspace.accordion.deckList' | transloco }}</p-accordion-header>
+    <p-accordion-content>
+      <app-workspace-deck-list
+        [decks]="decks()"
+        [selectedDeckId]="selectedDeckId()"
+        (selectDeck)="handleDeckSelection($event)"
+      />
+    </p-accordion-content>
+  </p-accordion-panel>
+
+  <p-accordion-panel value="search">
+    <p-accordion-header>{{ 'workspace.accordion.advancedSearch' | transloco }}</p-accordion-header>
+    <p-accordion-content>
+      <app-workspace-search-form
+        [saving]="isSavingSearch()"
+        (saveQuery)="handleSaveQuery($event)"
+      />
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+    

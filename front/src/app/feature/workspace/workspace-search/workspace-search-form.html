@@ -1,0 +1,166 @@
+<section class="workspace-search flex flex-column gap-3">
+  <form
+    class="workspace-search-form flex flex-column gap-4"
+    [formGroup]="form"
+    (ngSubmit)="handleSubmit()"
+    [attr.aria-label]="'workspace.search.formLabel' | transloco"
+  >
+    <fieldset class="workspace-search-fieldset border-none p-0 m-0">
+      <div class="flex flex-column gap-2">
+        <label for="workspace-name" class="text-sm">{{ 'workspace.search.field.name' | transloco }}</label>
+        <div class="workspace-search-name-row">
+          <input
+            id="workspace-name"
+            pInputText
+            type="text"
+            formControlName="name"
+            [placeholder]="'workspace.search.field.namePlaceholder' | transloco"
+            class="flex-1"
+          />
+          <div class="workspace-search-checkbox" [pTooltip]="'workspace.search.field.exactName' | transloco" tooltipPosition="top">
+            <p-checkbox
+              inputId="workspace-exact-name"
+              formControlName="exactName"
+              [binary]="true"
+              [ariaLabel]="'workspace.search.field.exactName' | transloco"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid mt-3">
+        <div class="col-12">
+          <label class="text-sm block mb-2">{{ 'workspace.search.field.color' | transloco }}</label>
+          <div class="flex flex-wrap gap-2 mb-2" role="group" [attr.aria-label]="'workspace.search.field.color' | transloco">
+            @for (color of manaColorOptions; track color.value) {
+              <button
+                type="button"
+                class="mana-pastille"
+                [style.--pastille-bg]="color.background"
+                [style.--pastille-border]="color.border"
+                [style.--pastille-color]="color.color"
+                [class.is-selected]="isColorSelected(color.value)"
+                [attr.aria-pressed]="isColorSelected(color.value)"
+                [attr.aria-label]="color.labelKey | transloco"
+                [title]="color.labelKey | transloco"
+                (click)="toggleColor(color.value)"
+              >
+                <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
+                <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+              </button>
+            }
+          </div>
+          <p-select
+            formControlName="colorOperator"
+            [options]="colorOperatorOptions"
+            optionLabel="label"
+            optionValue="value"
+            class="w-full"
+            [ariaLabel]="'workspace.search.field.operator' | transloco"
+          />
+        </div>
+
+        <div class="col-12 mt-3">
+          <label class="text-sm block mb-2">{{ 'workspace.search.field.colorIdentity' | transloco }}</label>
+          <div class="flex flex-wrap gap-2" role="group" [attr.aria-label]="'workspace.search.field.colorIdentity' | transloco">
+            @for (color of manaColorOptions; track color.value) {
+              <button
+                type="button"
+                class="mana-pastille"
+                [style.--pastille-bg]="color.background"
+                [style.--pastille-border]="color.border"
+                [style.--pastille-color]="color.color"
+                [class.is-selected]="isIdentityColorSelected(color.value)"
+                [attr.aria-pressed]="isIdentityColorSelected(color.value)"
+                [attr.aria-label]="color.labelKey | transloco"
+                [title]="color.labelKey | transloco"
+                (click)="toggleIdentityColor(color.value)"
+              >
+                <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
+                <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="workspace-search-fieldset border-none p-0 m-0">
+      <legend class="font-semibold mb-3">{{ 'workspace.search.section.cardRules' | transloco }}</legend>
+      <div class="flex flex-column gap-3">
+        <div class="flex flex-column gap-2">
+          <label for="workspace-types" class="text-sm">{{ 'workspace.search.field.types' | transloco }}</label>
+          <input
+            id="workspace-types"
+            pInputText
+            type="text"
+            formControlName="types"
+            [placeholder]="'workspace.search.field.typesPlaceholder' | transloco"
+          />
+        </div>
+        <div class="flex flex-column gap-2">
+          <label for="workspace-oracle" class="text-sm">{{ 'workspace.search.field.oracleText' | transloco }}</label>
+          <input
+            id="workspace-oracle"
+            pInputText
+            type="text"
+            formControlName="oracleText"
+            [placeholder]="'workspace.search.field.oracleTextPlaceholder' | transloco"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="workspace-search-fieldset border-none p-0 m-0">
+      <legend class="font-semibold mb-3">{{ 'workspace.search.section.meta' | transloco }}</legend>
+      <div class="flex flex-column gap-3">
+        <div class="flex flex-column gap-2">
+          <label for="workspace-mana-value" class="text-sm">{{ 'workspace.search.field.manaValue' | transloco }}</label>
+          <div class="flex gap-2">
+            <p-select
+              formControlName="manaValueOperator"
+              [options]="operatorOptions"
+              optionLabel="label"
+              optionValue="value"
+              class="workspace-operator-select"
+              [ariaLabel]="'workspace.search.field.operator' | transloco"
+            />
+            <input
+              id="workspace-mana-value"
+              pInputText
+              type="number"
+              min="0"
+              formControlName="manaValue"
+              class="flex-1"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-column gap-2">
+          <label for="workspace-format" class="text-sm">{{ 'workspace.search.field.format' | transloco }}</label>
+          <p-select
+            inputId="workspace-format"
+            formControlName="format"
+            [options]="formatOptions"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+            class="w-full"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="flex gap-2 justify-content-end flex-wrap">
+      <p-button type="button" severity="secondary" icon="pi pi-times" [label]="'workspace.search.reset' | transloco" (click)="handleReset()" />
+      <p-button type="submit" icon="pi pi-save" [label]="'workspace.search.search' | transloco" [loading]="saving()" />
+    </div>
+  </form>
+
+  @if (savedQueryLabel()) {
+    <div class="workspace-search-summary border-round-xl surface-ground p-3 text-sm line-height-3">
+      <span class="font-semibold">{{ 'workspace.search.savedQuery' | transloco }}:</span>
+      {{ savedQueryLabel() }}
+    </div>
+  }
+</section>

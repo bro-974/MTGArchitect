@@ -3,6 +3,8 @@
     "title": "Visual UI"
   },
   "navbar": {
+    "workspace": "Espace de travail",
+    "login": "Connexion",
     "home": "Accueil",
     "cardExplorer": "Explorateur de cartes",
     "cardExplorerAdvanced": "Recherche avancée de cartes",
@@ -88,5 +90,93 @@
       "green": "Vert",
       "gray": "Gris"
     }
+  },
+  "workspace": {
+    "eyebrow": "Atelier de deck",
+    "title": "Construisez vos decks et gardez les criteres de recherche a portee de main",
+    "intro": "Conservez vos decks sauvegardes a gauche et inspectez la liste selectionnee dans les onglets centraux.",
+    "loading": "Chargement de vos decks...",
+    "loadError": "Impossible de charger vos decks. Verifiez votre session puis reessayez.",
+    "accordion": {
+      "deckList": "Vos decks",
+      "advancedSearch": "Recherche avancee"
+    },
+    "deckList": {
+      "title": "Decks sauvegardes",
+      "count": "{{ count }} decks",
+      "type": "Type",
+      "lastUpdated": "Mis a jour {{ date }}",
+      "mainboard": "Principal",
+      "sideboard": "Reserve",
+      "empty": "Aucun deck selectionne"
+    },
+    "selected": {
+      "tabs": {
+        "overview": "Vue d'ensemble",
+        "mainboard": "Deck principal",
+        "sideboard": "Reserve"
+      },
+      "emptyTitle": "Choisissez un deck dans la liste",
+      "emptyBody": "Selectionnez un deck dans le menu de l'espace de travail pour voir sa vue d'ensemble, son deck principal et sa reserve.",
+      "queries": "Requetes enregistrees",
+      "queryEmpty": "Aucune requete enregistree pour ce deck.",
+      "noteEmpty": "Aucune note de deck pour le moment.",
+      "noCards": "Aucune carte dans le deck principal pour le moment.",
+      "updated": "Derniere mise a jour",
+      "notes": "Notes du deck",
+      "manaCurve": "Courbe de mana cible",
+      "colors": "Couleurs",
+      "format": "Format",
+      "tags": "Etiquettes",
+      "quantity": "Qté",
+      "card": "Carte",
+      "type": "Type",
+      "emptySideboard": "Aucune carte de reserve pour ce deck pour le moment."
+    },
+    "search": {
+      "formLabel": "Formulaire de recherche avancee de l'espace de travail",
+      "hint": "Preparez une requete structuree sans quitter votre espace deck.",
+      "search": "Enregistrer la recherche",
+      "reset": "Reinitialiser",
+      "savedQuery": "Requete enregistree",
+      "section": {
+        "identity": "Identite",
+        "cardRules": "Regles de carte",
+        "meta": "Meta"
+      },
+      "field": {
+        "name": "Nom de la carte",
+        "namePlaceholder": "ex. Teferi",
+        "exactName": "Nom exact",
+        "types": "Types",
+        "typesPlaceholder": "ex. sorcier, planeswalker",
+        "oracleText": "Texte des regles",
+        "oracleTextPlaceholder": "ex. piochez une carte",
+        "color": "Couleurs",
+        "colorIdentity": "Identite de couleur",
+        "operator": "Operateur de comparaison",
+        "manaValue": "Valeur de mana",
+        "format": "Format"
+      },
+      "color": {
+        "white": "Blanc",
+        "blue": "Bleu",
+        "black": "Noir",
+        "red": "Rouge",
+        "green": "Vert",
+        "gray": "Gris"
+      }
+    }
+  },
+  "login": {
+    "eyebrow": "Authentification",
+    "title": "Connexion",
+    "subtitle": "Utilisez vos identifiants pour acceder aux fonctionnalites protegees.",
+    "email": "Email",
+    "emailInvalid": "Entrez une adresse email valide.",
+    "password": "Mot de passe",
+    "passwordRequired": "Le mot de passe est requis.",
+    "submit": "Se connecter",
+    "invalidCredentials": "Email ou mot de passe invalide."
   }
 }

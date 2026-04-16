@@ -2,6 +2,7 @@ public sealed record UserSettingsResponse(string? DisplayName, string? Language,
 
 public sealed record DeckResponse(
     Guid Id,
+    string Name,
     string Type,
     string? Note,
     IReadOnlyCollection<QueryInfoResponse> QuerySearches,
@@ -18,9 +19,11 @@ public sealed record DeckCardResponse(
     string ScryFallId,
     int Quantity,
     string Type,
-    string? Cost);
+    string? Cost,
+    bool IsSideBoard);
 
 public sealed record DeckUpsertRequest(
+    string Name,
     string Type,
     string? Note,
     List<QueryInfoUpsertRequest>? QuerySearches,
@@ -36,4 +39,5 @@ public sealed record DeckCardUpsertRequest(
     string ScryFallId,
     int Quantity,
     string Type,
-    string? Cost);
+    string? Cost,
+    bool IsSideBoard);

@@ -1,0 +1,25 @@
+<section class="flex h-full w-full min-w-0 gap-2">
+  <aside class="workspace-layout-left workspace-layout-pane h-full surface-card border-round-lg border-1 surface-border p-3">
+    <app-workspace></app-workspace>
+  </aside>
+
+  <div class="flex-1 min-w-0 h-full">
+    <p-splitter
+      layout="vertical"
+      class="flex h-full w-full workspace-layout-splitter"
+      [panelSizes]="[75, 25]"
+      [minSizes]="[35, 15]"
+    >
+      <ng-template pTemplate>
+        <div class="w-full workspace-layout-pane h-full surface-card border-round-lg border-1 surface-border p-3">
+          Top
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="w-full workspace-layout-pane h-full surface-card border-round-lg border-1 surface-border p-3">
+          Bottom
+        </div>
+      </ng-template>
+    </p-splitter>
+  </div>
+</section>

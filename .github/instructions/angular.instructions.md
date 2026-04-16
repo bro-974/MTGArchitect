@@ -57,6 +57,17 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
 
+## Environment & API URL Rules
+
+- NEVER hardcode API base URLs (e.g. `http://localhost:51895`) directly in services, components, or interceptors.
+- ALL API root URLs MUST be read from `src/environments/environment.ts` (development) and `src/environments/environment.prod.ts` (production).
+- The `angular.json` production configuration MUST include a `fileReplacements` entry swapping `environment.ts` with `environment.prod.ts`.
+- Construct request URLs by interpolating the environment variable, e.g.:
+  ```typescript
+  import { environment } from '../../../environments/environment';
+  this.http.get(`${environment.authApiUrl}/api/auth/me`);
+  ```
+
 ## PrimeNG Theme Rules
 
 - Use PrimeNG theme configuration in `src/app/app.config.ts` with `providePrimeNG`.

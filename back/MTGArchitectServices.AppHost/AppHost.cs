@@ -30,11 +30,13 @@ builder.AddExecutable("frontend",
 var apiService = builder.AddProject<Projects.MTGArchitect_Api>("apiservice")
     .WithHttpHealthCheck("/health")
     .WithReference(scryfallService)
+    .WithReference(authDb)
     .WithEnvironment("Jwt__Issuer", jwtIssuer)
     .WithEnvironment("Jwt__Audience", jwtAudience)
     .WithEnvironment("Jwt__Key", jwtKey)
     .WaitFor(scryfallService)
     .WaitFor(authApiService)
+    .WaitFor(authDb)
     .WithHttpEndpoint(port: 4300, name: "api-http");
 
 builder.Build().Run();

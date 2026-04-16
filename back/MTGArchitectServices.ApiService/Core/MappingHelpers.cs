@@ -14,6 +14,7 @@ public static class MappingHelpers
     {
         return new DeckResponse(
             deck.Id,
+            deck.Name,
             deck.Type,
             deck.Note,
             deck.QuerySearches.Select(ToQueryInfoResponse).ToArray(),
@@ -36,7 +37,8 @@ public static class MappingHelpers
             card.ScryFallId,
             card.Quantity,
             card.Type,
-            card.Cost);
+            card.Cost,
+            card.IsSideBoard);
     }
 
     public static Deck ToDeck(DeckUpsertRequest request, string userId)
@@ -45,6 +47,7 @@ public static class MappingHelpers
         {
             Id = Guid.NewGuid(),
             UserId = userId,
+            Name = request.Name,
             Type = request.Type,
             Note = request.Note,
             QuerySearches = ToQueryInfos(request.QuerySearches),
@@ -54,6 +57,7 @@ public static class MappingHelpers
 
     public static void Apply(this Deck deck, DeckUpsertRequest request)
     {
+        deck.Name = request.Name;
         deck.Type = request.Type;
         deck.Note = request.Note;
         deck.QuerySearches = ToQueryInfos(request.QuerySearches);
@@ -82,7 +86,8 @@ public static class MappingHelpers
                 ScryFallId = x.ScryFallId,
                 Quantity = x.Quantity,
                 Type = x.Type,
-                Cost = x.Cost
+                Cost = x.Cost,
+                IsSideBoard = x.IsSideBoard
             })
             .ToList();
     }

@@ -1,0 +1,30 @@
+<section class="deck-list-panel flex flex-column gap-3">
+  <header class="flex flex-column gap-1">
+    <h2 class="m-0 text-lg">{{ 'workspace.deckList.title' | transloco }}</h2>
+    <p class="m-0 text-sm text-color-secondary">
+      {{ 'workspace.deckList.count' | transloco: { count: decks().length } }}
+    </p>
+  </header>
+
+  <div class="flex flex-column gap-2">
+    @for (deck of decks(); track trackDeck($index, deck)) {
+      @let mainboardCount = deck.cards.filter((card) => !card.isSideBoard).length;
+      @let sideboardCount = deck.cards.filter((card) => card.isSideBoard).length;
+      <button
+        type="button"
+        class="deck-list-item text-left"
+        [class.is-selected]="deck.id === selectedDeckId()"
+        [attr.aria-pressed]="deck.id === selectedDeckId()"
+        (click)="handleSelect(deck.id)"
+      >
+        <span class="deck-list-item__title">{{ deck.name }}</span>
+        <span class="deck-list-item__meta">{{ 'workspace.deckList.type' | transloco }}: {{ deck.type }}</span>
+        <span class="deck-list-item__meta">
+          {{ 'workspace.deckList.mainboard' | transloco }} {{ mainboardCount }}
+          ·
+          {{ 'workspace.deckList.sideboard' | transloco }} {{ sideboardCount }}
+        </span>
+      </button>
+    }
+  </div>
+</section>

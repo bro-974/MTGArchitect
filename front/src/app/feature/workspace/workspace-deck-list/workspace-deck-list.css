@@ -1,0 +1,40 @@
+.deck-list-panel {
+  min-width: 0;
+}
+
+.deck-list-item {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface-card) 88%, var(--primary-50));
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.deck-list-item:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--primary-color) 45%, var(--surface-border));
+}
+
+.deck-list-item:focus-visible {
+  outline: 3px solid var(--primary-300);
+  outline-offset: 3px;
+}
+
+.deck-list-item.is-selected {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-color) 45%, transparent);
+}
+
+.deck-list-item__title {
+  font-weight: 700;
+}
+
+.deck-list-item__meta {
+  font-size: 0.875rem;
+}
