@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MTGArchitect.Scryfall.Contracts\MTGArchitect.Scryfall.Contracts.csproj" />
-    <ProjectReference Include="..\MTGArchitectServices.ServiceDefaults\MTGArchitectServices.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\MTGArchitectServices.ServiceDefaults\MTGArchitect.ServiceDefaults.csproj" />
   </ItemGroup>
 
   <ItemGroup>

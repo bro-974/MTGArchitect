@@ -9,12 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MTGArchitectServices.ApiService\MTGArchitectServices.ApiService.csproj" />
     <ProjectReference Include="..\MTGArchitect.Scryfall.Service\MTGArchitect.Scryfall.Service.csproj" />
+    <ProjectReference Include="..\MTGArchitectServices.ApiService\MTGArchitect.Api.csproj" />
+    <ProjectReference Include="..\MTGArchitectServices.AuthApiService\MTGArchitect.Auth.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.Redis" Version="13.1.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.1.0" />
   </ItemGroup>
 
 </Project>

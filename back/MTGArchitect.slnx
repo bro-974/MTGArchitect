@@ -10,7 +10,9 @@
   <Folder Name="/Tests/">
     <Project Path="MTGArchitect.Scryfall.Service.Tests/MTGArchitect.Scryfall.Service.Tests.csproj" Id="b54fca13-497b-42c6-a9c2-d2806b194bd5" />
   </Folder>
-  <Project Path="MTGArchitectServices.ApiService/MTGArchitectServices.ApiService.csproj" />
-  <Project Path="MTGArchitectServices.AppHost/MTGArchitectServices.AppHost.csproj" />
-  <Project Path="MTGArchitectServices.ServiceDefaults/MTGArchitectServices.ServiceDefaults.csproj" />
+  <Project Path="MTGArchitect.Data/MTGArchitect.Data.csproj" />
+  <Project Path="MTGArchitectServices.ApiService/MTGArchitect.Api.csproj" />
+  <Project Path="MTGArchitectServices.AppHost/MTGArchitect.AppHost.csproj" />
+  <Project Path="MTGArchitectServices.AuthApiService/MTGArchitect.Auth.Api.csproj" />
+  <Project Path="MTGArchitectServices.ServiceDefaults/MTGArchitect.ServiceDefaults.csproj" />
 </Solution>
