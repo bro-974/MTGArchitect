@@ -6,7 +6,7 @@ public class Deck
 
     public string Type { get; set; } = string.Empty;
     public string? Note { get; set; }
-    public List<string> QuerySearches { get; set; } = [];
+    public ICollection<QueryInfo> QuerySearches { get; set; } = new List<QueryInfo>();
 
     public string UserId { get; set; } = string.Empty;
     public ApplicationUser User { get; set; } = null!;

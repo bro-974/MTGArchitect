@@ -37,7 +37,7 @@ public static class AuthSeedExtensions
             Email = DefaultUserEmail,
             DisplayName = DefaultUserName,
             EmailConfirmed = true,
-            IsEnabled = true
+            IsDeleted = false
         };
 
         var createResult = await userManager.CreateAsync(user);

@@ -8,6 +8,7 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
 {
     public DbSet<Deck> Decks => Set<Deck>();
     public DbSet<DeckCard> DeckCards => Set<DeckCard>();
+    public DbSet<QueryInfo> QueryInfos => Set<QueryInfo>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -18,11 +19,22 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Type).HasMaxLength(80).IsRequired();
             entity.Property(x => x.Note).HasColumnType("text");
-            entity.Property(x => x.QuerySearches).HasColumnType("text[]");
 
             entity.HasOne(x => x.User)
                 .WithMany(x => x.DeckWorkspace)
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<QueryInfo>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Query).HasColumnType("text").IsRequired();
+            entity.Property(x => x.SearchEngine).HasMaxLength(80).IsRequired();
+
+            entity.HasOne(x => x.Deck)
+                .WithMany(x => x.QuerySearches)
+                .HasForeignKey(x => x.DeckId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

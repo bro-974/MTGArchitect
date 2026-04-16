@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MTGArchitect.Scryfall.Contracts;
 using MTGArchitectServices.ApiService.Controllers;
+using System.Security.Claims;
 
 public static class EndpointExtensions
 {
@@ -12,9 +13,9 @@ public static class EndpointExtensions
         app.MapGet("/", () => "API service is running.");
 
         app.MapPublicHealth(api);
-
         app.MapPublicSearch(api);
         app.MapPrivatePing(api);
+        app.MapPrivateUserEndpoints(api);
 
         app.MapDefaultEndpoints();
 
@@ -35,6 +36,60 @@ public static class EndpointExtensions
         return app;
     }
 
+    private static WebApplication MapPrivateUserEndpoints(this WebApplication app, RouteGroupBuilder apiRoot)
+    {
+        var secured = apiRoot.MapGroup(string.Empty)
+            .RequireAuthorization();
+
+        secured.MapGet("/user/settings", (
+            ClaimsPrincipal principal,
+            UserService userService,
+            CancellationToken cancellationToken) =>
+            userService.GetSettingsAsync(principal, cancellationToken))
+        .WithName("GetLoggedUserSettings");
+
+        secured.MapGet("/decks/all", (
+            ClaimsPrincipal principal,
+            UserService userService,
+            CancellationToken cancellationToken) =>
+            userService.GetDecksAsync(principal, cancellationToken))
+        .WithName("GetLoggedUserDecks");
+
+        secured.MapGet("/deck/{id:guid}", (
+            Guid id,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.GetByIdAsync(id, principal, cancellationToken))
+        .WithName("GetDeckById");
+
+        secured.MapPost("/deck", (
+            DeckUpsertRequest request,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.CreateAsync(request, principal, cancellationToken))
+        .WithName("CreateDeck");
+
+        secured.MapPut("/deck/{id:guid}", (
+            Guid id,
+            DeckUpsertRequest request,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.UpdateAsync(id, request, principal, cancellationToken))
+        .WithName("UpdateDeckById");
+
+        secured.MapDelete("/deck/{id:guid}", (
+            Guid id,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.DeleteAsync(id, principal, cancellationToken))
+        .WithName("DeleteDeckById");
+
+        return app;
+    }
 
     private static WebApplication MapPublicSearch(this WebApplication app, RouteGroupBuilder apiRoot)
     {
@@ -65,7 +120,6 @@ public static class EndpointExtensions
     private static WebApplication MapPublicHealth(this WebApplication app, RouteGroupBuilder apiRoot)
     {
         app.MapGrpcHealthChecksService();
-
 
         apiRoot.MapGet("/server-status", async (HealthCheckService healthCheckService, CancellationToken cancellationToken) =>
         {

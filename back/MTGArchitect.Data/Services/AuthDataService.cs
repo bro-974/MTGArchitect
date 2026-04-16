@@ -27,7 +27,7 @@ internal sealed class AuthDataService(
     {
         var user = await userManager.FindByEmailAsync(email);
 
-        if (user is null || !user.IsEnabled)
+        if (user is null || user.IsDeleted)
             return null;
 
         var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);

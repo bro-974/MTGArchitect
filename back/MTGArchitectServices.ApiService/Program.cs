@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MTGArchitect.Data.Extensions;
 using MTGArchitect.Scryfall.Client;
 using MTGArchitectServices.ApiService.Controllers;
 using System.Text;
@@ -11,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddScoped<SearchServices>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<DeckService>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -35,6 +38,11 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddScryfallClient(new Uri("https://scryfallservice"));
+
+var authConnectionString = builder.Configuration.GetConnectionString("authdb")
+    ?? throw new InvalidOperationException("Connection string 'authdb' is missing.");
+
+builder.Services.AddAuthData(authConnectionString);
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]
     ?? throw new InvalidOperationException("JWT issuer is missing.");
