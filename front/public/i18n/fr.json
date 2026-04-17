@@ -104,11 +104,25 @@
     "deckList": {
       "title": "Decks sauvegardes",
       "count": "{{ count }} decks",
+      "createAction": "Creer un nouveau deck",
       "type": "Type",
       "lastUpdated": "Mis a jour {{ date }}",
       "mainboard": "Principal",
       "sideboard": "Reserve",
       "empty": "Aucun deck selectionne"
+    },
+    "createDeck": {
+      "title": "Creer un nouveau deck",
+      "subtitle": "Ajoutez un deck a votre liste sauvegardee et ouvrez-le immediatement.",
+      "nameLabel": "Nom du deck",
+      "namePlaceholder": "ex. Boros Aggro",
+      "typeLabel": "Type de deck",
+      "typePlaceholder": "ex. Commander",
+      "noteLabel": "Note du deck",
+      "notePlaceholder": "Note courte optionnelle",
+      "createAction": "Creer le deck",
+      "cancelAction": "Annuler",
+      "error": "Le deck n'a pas pu etre cree. Veuillez reessayer."
     },
     "selected": {
       "tabs": {

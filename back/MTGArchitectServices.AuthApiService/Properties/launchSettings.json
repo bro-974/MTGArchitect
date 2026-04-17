@@ -4,7 +4,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Jwt__Issuer": "MTGArchitect.Auth",
+        "Jwt__Audience": "MTGArchitect",
+        "Jwt__Key": "MTGArchitect-Dev-Shared-JWT-Key-2026-Use-Env-In-Prod"
       },
       "applicationUrl": "https://localhost:51894;http://localhost:51895"
     }

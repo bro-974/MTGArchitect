@@ -14,24 +14,8 @@ public static class EndpointExtensions
 
         app.MapPublicHealth(api);
         app.MapPublicSearch(api);
-        app.MapPrivatePing(api);
         app.MapPrivateUserEndpoints(api);
-
         app.MapDefaultEndpoints();
-
-        return app;
-    }
-
-    private static WebApplication MapPrivatePing(this WebApplication app, RouteGroupBuilder apiRoot)
-    {
-        var auth = apiRoot.MapGroup("/auth")
-            .RequireAuthorization();
-
-        auth.MapGet("/logged", async (CancellationToken cancellationToken) =>
-        {
-            return Results.Ok();
-        })
-        .WithName("IsLogged");
 
         return app;
     }
@@ -40,6 +24,13 @@ public static class EndpointExtensions
     {
         var secured = apiRoot.MapGroup(string.Empty)
             .RequireAuthorization();
+
+        secured.MapGet("/user/private", async (CancellationToken cancellationToken) =>
+        {
+            await Task.CompletedTask;
+            return Results.Ok();
+        })
+        .WithName("IsPrivate");
 
         secured.MapGet("/user/settings", (
             ClaimsPrincipal principal,

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
 	{
@@ -7,6 +8,7 @@ export const routes: Routes = [
 	},
 	{
 		path: 'feature/workspace',
+		canActivate: [authGuard],
 		loadComponent: () => import('./feature/workspace-layout/workspace-layout').then((module) => module.WorkspaceLayout)
 	},
 	{

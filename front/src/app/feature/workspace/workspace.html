@@ -3,9 +3,9 @@
     <p-accordion-header>{{ 'workspace.accordion.deckList' | transloco }}</p-accordion-header>
     <p-accordion-content>
       <app-workspace-deck-list
-        [decks]="decks()"
         [selectedDeckId]="selectedDeckId()"
         (selectDeck)="handleDeckSelection($event)"
+        (createDeck)="handleRequestCreateDeck()"
       />
     </p-accordion-content>
   </p-accordion-panel>

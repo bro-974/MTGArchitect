@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  output,
+  signal
+} from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AccordionModule } from 'primeng/accordion';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, Subscription } from 'rxjs';
 import { WorkspaceDeckList } from './workspace-deck-list/workspace-deck-list';
 import { WorkspaceSearchForm } from './workspace-search/workspace-search-form';
 import {
@@ -25,6 +33,10 @@ import { WorkspaceService } from './workspace.service';
 })
 export class Workspace {
   private readonly workspaceService = inject(WorkspaceService);
+  private readonly subscriptions = new Subscription();
+
+  readonly requestCreateDeck = output<void>();
+  readonly selectedDeckChange = output<WorkspaceDeck | null>();
 
   readonly decks = signal<readonly WorkspaceDeck[]>([]);
   readonly selectedDeckId = signal<string | null>(null);
@@ -38,6 +50,18 @@ export class Workspace {
   );
 
   constructor() {
+    effect(() => {
+      this.selectedDeckChange.emit(this.selectedDeck());
+    });
+
+    this.subscriptions.add(
+      this.workspaceService.deckCreated$.subscribe((createdDeck) => {
+        this.decks.update((decks) => [createdDeck, ...decks]);
+        this.selectedDeckId.set(createdDeck.id);
+        this.activeAccordionPanel.set('decks');
+      })
+    );
+
     this.workspaceService
       .getDecks()
       .pipe(
@@ -57,9 +81,17 @@ export class Workspace {
       });
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   handleDeckSelection(deckId: string): void {
     this.selectedDeckId.set(deckId);
     this.activeAccordionPanel.set('decks');
+  }
+
+  handleRequestCreateDeck(): void {
+    this.requestCreateDeck.emit();
   }
 
   handleSaveQuery(query: string): void {

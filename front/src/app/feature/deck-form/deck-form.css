@@ -1,0 +1,16 @@
+.deck-form {
+  padding: 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--surface-card) 90%, var(--primary-50));
+}
+
+.deck-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.deck-form__error {
+  color: var(--red-500);
+}

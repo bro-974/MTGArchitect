@@ -104,11 +104,25 @@
     "deckList": {
       "title": "Saved decks",
       "count": "{{ count }} decks",
+      "createAction": "Create a new deck",
       "type": "Type",
       "lastUpdated": "Updated {{ date }}",
       "mainboard": "Main",
       "sideboard": "Sideboard",
       "empty": "No deck selected"
+    },
+    "createDeck": {
+      "title": "Create a new deck",
+      "subtitle": "Add a deck to your saved list and open it right away.",
+      "nameLabel": "Deck name",
+      "namePlaceholder": "e.g. Boros Aggro",
+      "typeLabel": "Deck type",
+      "typePlaceholder": "e.g. Commander",
+      "noteLabel": "Deck note",
+      "notePlaceholder": "Optional short note",
+      "createAction": "Create deck",
+      "cancelAction": "Cancel",
+      "error": "The deck could not be created. Please try again."
     },
     "selected": {
       "tabs": {

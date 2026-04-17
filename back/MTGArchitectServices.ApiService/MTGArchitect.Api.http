@@ -1,19 +1,8 @@
 @ApiService_HostAddress = http://localhost:5321
 @AuthApiService_HostAddress = http://localhost:51895
 
-### Search a card with the name "Black Lotus" using simple query parameters
-GET {{ApiService_HostAddress}}/api/cards/search?q=Black%20Lotus
-Accept: application/json
-
-### Search a card with the name "Elf", mana cost equal to 1 using advanced query parameters
-POST {{ApiService_HostAddress}}/api/cards/search/advanced
-Content-Type: application/json
-Accept: application/json
-{
-  "types": ["elf"], "manaCost": "G", "manaValue": 3
-}
-
-### Authenticate default seeded user and get a JWT token
+### 1. Authenticate default seeded user and get a JWT token
+# @name login
 POST {{AuthApiService_HostAddress}}/api/auth/login
 Content-Type: application/json
 Accept: application/json
@@ -23,9 +12,31 @@ Accept: application/json
   "password": "Aqw1!"
 }
 
+### 2. Search a card with the name "Black Lotus"
+GET {{ApiService_HostAddress}}/api/cards/search?q=Black%20Lotus
+Accept: application/json
 
-### call api with the jwt
-GET {{ApiService_HostAddress}}/api/auth/logged
+### 3. Advanced search
+POST {{ApiService_HostAddress}}/api/cards/search/advanced
 Content-Type: application/json
 Accept: application/json
-Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjlkMTM2ZS0zMWFjLTRkNGMtOGM3YS03MmJiOGI1MDg4ZjkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjBiOWQxMzZlLTMxYWMtNGQ0Yy04YzdhLTcyYmI4YjUwODhmOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Im5vcmR5bkBob3RtYWlsLmZyIiwiZW1haWwiOiJub3JkeW5AaG90bWFpbC5mciIsImp0aSI6ImJlMjQxZmJiLWZmNDktNDhmYS04NWFhLTBkMmFmMzcxNzc1YiIsImV4cCI6MTc3NjI4NzgzNSwiaXNzIjoiTVRHQXJjaGl0ZWN0LkF1dGgiLCJhdWQiOiJNVEdBcmNoaXRlY3QifQ.ILpRYBq-NfI47-UtB6kN2Nl9a86B3SNm6hmFaZ7O67U
+
+{
+  "types": ["elf"],
+  "manaCost": "G",
+  "manaValue": 3
+}
+
+### 4. Call API with JWT - TEST 200
+GET {{ApiService_HostAddress}}/api/user/private
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 5. Call API without JWT - TEST 401
+GET {{ApiService_HostAddress}}/api/user/private
+Accept: application/json
+
+### 6. Test auth api
+GET {{AuthApiService_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}

@@ -3,6 +3,10 @@ import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
 export const authBearerInterceptor: HttpInterceptorFn = (request, next) => {
+  // return next(request.clone({
+  //   withCredentials: true
+  // }));
+
   const authService = inject(AuthService);
   const token = authService.token();
 

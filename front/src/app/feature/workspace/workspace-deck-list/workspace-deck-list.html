@@ -1,9 +1,20 @@
 <section class="deck-list-panel flex flex-column gap-3">
-  <header class="flex flex-column gap-1">
-    <h2 class="m-0 text-lg">{{ 'workspace.deckList.title' | transloco }}</h2>
-    <p class="m-0 text-sm text-color-secondary">
-      {{ 'workspace.deckList.count' | transloco: { count: decks().length } }}
-    </p>
+  <header class="deck-list-header">
+    <div class="flex flex-column gap-1">
+      <h2 class="m-0 text-lg">{{ 'workspace.deckList.title' | transloco }}</h2>
+      <p class="m-0 text-sm text-color-secondary">
+        {{ 'workspace.deckList.count' | transloco: { count: decks().length } }}
+      </p>
+    </div>
+    <p-button
+      icon="pi pi-plus"
+      [text]="true"
+      [rounded]="true"
+      [severity]="'secondary'"
+      [attr.aria-label]="'workspace.deckList.createAction' | transloco"
+      [attr.title]="'workspace.deckList.createAction' | transloco"
+      (click)="handleCreateDeck()"
+    />
   </header>
 
   <div class="flex flex-column gap-2">

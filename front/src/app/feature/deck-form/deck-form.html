@@ -1,0 +1,64 @@
+<section class="deck-form mb-3">
+  <header class="deck-form__header mb-3">
+    <h2 class="m-0 text-lg">{{ 'workspace.createDeck.title' | transloco }}</h2>
+    <p class="m-0 text-sm text-color-secondary">{{ 'workspace.createDeck.subtitle' | transloco }}</p>
+  </header>
+
+  <form [formGroup]="deckForm" (ngSubmit)="handleSubmit()">
+    <div class="field mb-3">
+      <label for="name" class="block mb-2">{{ 'workspace.createDeck.nameLabel' | transloco }}</label>
+      <input
+        id="name"
+        formControlName="name"
+        type="text"
+        pInputText
+        class="w-full"
+        [attr.placeholder]="'workspace.createDeck.namePlaceholder' | transloco"
+      />
+    </div>
+
+    <div class="field mb-3">
+      <label for="deck-type" class="block mb-2">{{ 'workspace.createDeck.typeLabel' | transloco }}</label>
+      <input
+        id="deck-type"
+        type="text"
+        pInputText
+        formControlName="type"
+        class="w-full"
+        [attr.placeholder]="'workspace.createDeck.typePlaceholder' | transloco"
+      />
+    </div>
+
+    <div class="field mb-3">
+      <label for="deck-note" class="block mb-2">{{ 'workspace.createDeck.noteLabel' | transloco }}</label>
+      <textarea
+        id="deck-note"
+        pTextarea
+        formControlName="note"
+        class="w-full"
+        [rows]="3"
+        [attr.placeholder]="'workspace.createDeck.notePlaceholder' | transloco"
+      ></textarea>
+    </div>
+
+    @if (hasError()) {
+      <p class="deck-form__error m-0 mb-3">{{ 'workspace.createDeck.error' | transloco }}</p>
+    }
+
+    <div class="flex align-items-center justify-content-end gap-2">
+      <p-button
+        type="button"
+        [text]="true"
+        [disabled]="submitting()"
+        [label]="'workspace.createDeck.cancelAction' | transloco"
+        (click)="handleCancel()"
+      />
+      <p-button
+        type="submit"
+        [icon]="'pi pi-check'"
+        [loading]="submitting()"
+        [label]="'workspace.createDeck.createAction' | transloco"
+      />
+    </div>
+  </form>
+</section>

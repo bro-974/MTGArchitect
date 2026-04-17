@@ -18,13 +18,14 @@ public static class ServiceCollectionExtensions
         });
 
         services
-            .AddIdentity<ApplicationUser, IdentityRole>(options =>
+            .AddIdentityCore<ApplicationUser>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AuthDbContext>()
             .AddSignInManager()
             .AddDefaultTokenProviders();

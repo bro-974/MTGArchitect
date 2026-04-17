@@ -1,0 +1,22 @@
+@AuthApiService_HostAddress = http://localhost:51895
+
+### 0. Test auth api 401
+GET {{AuthApiService_HostAddress}}/api/auth/me
+Accept: application/json
+
+
+### 1. Authenticate default seeded user and get a JWT token
+# @name login
+POST {{AuthApiService_HostAddress}}/api/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "nordyn@hotmail.fr",
+  "password": "Aqw1!"
+}
+
+### 2. Test auth api Authorized
+GET {{AuthApiService_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
