@@ -94,7 +94,18 @@
       </p-button>
 
       @if (authService.user(); as currentUser) {
-        <span class="text-sm font-semibold white-space-nowrap">{{ currentUser.email }}</span>
+        <div class="flex align-items-center gap-1">
+          <span class="text-sm font-semibold white-space-nowrap">{{ currentUser.email }}</span>
+          <p-button
+            severity="secondary"
+            type="button"
+            icon="pi pi-sign-out"
+            class="p-button-rounded p-button-text"
+            (click)="logout()"
+            [title]="'navbar.logout' | transloco"
+            [ariaLabel]="'navbar.logout' | transloco">
+          </p-button>
+        </div>
       } @else {
         <p-button
           severity="secondary"

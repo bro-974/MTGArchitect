@@ -54,6 +54,12 @@ export class Navbar {
     this.router.navigate(['/feature/login']);
   }
 
+  logout(): void {
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/feature/login']);
+    });
+  }
+
   goServerStatus(): void {
     this.router.navigate(['/feature/server-status']);
   }

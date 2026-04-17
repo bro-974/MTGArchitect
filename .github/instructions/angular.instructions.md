@@ -28,6 +28,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ### Components
 
 - Keep components small and focused on a single responsibility
+- When creating a component that requires data, ask the user whether the data should come from component inputs or from an injected service.
 - Use `input()` and `output()` functions instead of decorators
 - Use `computed()` for derived state
 - Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
@@ -70,12 +71,14 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 ## PrimeNG Theme Rules
 
+- Use PrimeNG design as the default visual system for all frontend UI work.
 - Use PrimeNG theme configuration in `src/app/app.config.ts` with `providePrimeNG`.
 - Keep Aura as the default preset unless explicitly requested otherwise.
 - Use CSS class based dark mode with `.app-dark` on `document.documentElement`.
 - Persist theme choice in `localStorage` and restore it at startup.
 - For global utility classes, use PrimeFlex (`primeflex/primeflex.css`) instead of custom layout helpers when possible.
 - Prefer PrimeNG components (`p-button`, `p-select`, etc.) for UI consistency.
+- Ask the user for approval before customizing PrimeNG component visuals or behavior beyond default theme capabilities.
 
 ## Transloco i18n Rules
 

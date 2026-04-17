@@ -17,25 +17,12 @@
     />
   </header>
 
-  <div class="flex flex-column gap-2">
-    @for (deck of decks(); track trackDeck($index, deck)) {
-      @let mainboardCount = deck.cards.filter((card) => !card.isSideBoard).length;
-      @let sideboardCount = deck.cards.filter((card) => card.isSideBoard).length;
-      <button
-        type="button"
-        class="deck-list-item text-left"
-        [class.is-selected]="deck.id === selectedDeckId()"
-        [attr.aria-pressed]="deck.id === selectedDeckId()"
-        (click)="handleSelect(deck.id)"
-      >
-        <span class="deck-list-item__title">{{ deck.name }}</span>
-        <span class="deck-list-item__meta">{{ 'workspace.deckList.type' | transloco }}: {{ deck.type }}</span>
-        <span class="deck-list-item__meta">
-          {{ 'workspace.deckList.mainboard' | transloco }} {{ mainboardCount }}
-          ·
-          {{ 'workspace.deckList.sideboard' | transloco }} {{ sideboardCount }}
-        </span>
-      </button>
-    }
-  </div>
+  <p-tree
+    [value]="treeNodes()"
+    selectionMode="single"
+    [selection]="selectedNode()"
+    [metaKeySelection]="true"
+    [attr.aria-label]="'workspace.deckList.title' | transloco"
+    (onNodeSelect)="handleNodeSelect($event)"
+  />
 </section>

@@ -69,6 +69,10 @@ public static class EndpointExtensions
         .RequireAuthorization()
         .WithName("GetCurrentUser");
 
+        app.MapPost("/api/auth/logout", () => Results.NoContent())
+        .RequireAuthorization()
+        .WithName("LogoutUser");
+
         return app;
     }
 

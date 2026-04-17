@@ -5,6 +5,7 @@
   "navbar": {
     "workspace": "Espace de travail",
     "login": "Connexion",
+    "logout": "Deconnexion",
     "home": "Accueil",
     "cardExplorer": "Explorateur de cartes",
     "cardExplorerAdvanced": "Recherche avancée de cartes",
@@ -102,7 +103,7 @@
       "advancedSearch": "Recherche avancee"
     },
     "deckList": {
-      "title": "Decks sauvegardes",
+      "title": "Decks",
       "count": "{{ count }} decks",
       "createAction": "Creer un nouveau deck",
       "type": "Type",

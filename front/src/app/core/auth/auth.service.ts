@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 interface LoginRequest {
@@ -40,6 +40,15 @@ export class AuthService {
           userId: response.userId,
           email: response.email
         });
+      })
+    );
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>(`${environment.authApiUrl}/api/auth/logout`, {}).pipe(
+      catchError(() => of(void 0)),
+      tap(() => {
+        this.clearAuth();
       })
     );
   }
