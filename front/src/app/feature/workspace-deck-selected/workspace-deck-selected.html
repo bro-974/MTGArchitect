@@ -5,9 +5,6 @@
       <div class="flex flex-column md:flex-row md:align-items-start md:justify-content-between gap-3">
         <div>
           <h1 class="m-0">{{ selectedDeck.name }}</h1>
-          <p class="m-0 mt-2 text-color-secondary line-height-3">
-            {{ selectedDeck.note || ('workspace.selected.noteEmpty' | transloco) }}
-          </p>
         </div>
         <div class="workspace-selected__meta text-sm text-color-secondary">
           <span>{{ 'workspace.selected.type' | transloco }}: {{ selectedDeck.type }}</span>
@@ -20,7 +17,6 @@
       <p-tablist>
         <p-tab value="overview">{{ 'workspace.selected.tabs.overview' | transloco }}</p-tab>
         <p-tab value="mainboard">{{ 'workspace.selected.tabs.mainboard' | transloco }}</p-tab>
-        <p-tab value="sideboard">{{ 'workspace.selected.tabs.sideboard' | transloco }}</p-tab>
       </p-tablist>
 
       <p-tabpanels>
@@ -50,10 +46,6 @@
                   <h2 class="m-0 text-base">{{ 'workspace.selected.tabs.mainboard' | transloco }}</h2>
                   <p class="m-0 mt-2 text-color-secondary">{{ mainboard().length }}</p>
                 </div>
-                <div>
-                  <h2 class="m-0 text-base">{{ 'workspace.selected.tabs.sideboard' | transloco }}</h2>
-                  <p class="m-0 mt-2 text-color-secondary">{{ sideboard().length }}</p>
-                </div>
               </div>
             </div>
           </div>
@@ -77,27 +69,6 @@
             </div>
           } @else {
             <p class="m-0 text-color-secondary">{{ 'workspace.selected.noCards' | transloco }}</p>
-          }
-        </p-tabpanel>
-
-        <p-tabpanel value="sideboard">
-          @if (sideboard().length > 0) {
-            <div class="workspace-card-table">
-              <div class="workspace-card-table__header">
-                <span>{{ 'workspace.selected.quantity' | transloco }}</span>
-                <span>{{ 'workspace.selected.card' | transloco }}</span>
-                <span>{{ 'workspace.selected.type' | transloco }}</span>
-              </div>
-              @for (card of sideboard(); track trackCard($index, card)) {
-                <div class="workspace-card-table__row">
-                  <span>{{ card.quantity }}</span>
-                  <span>{{ card.cardName }}</span>
-                  <span>{{ card.type }}</span>
-                </div>
-              }
-            </div>
-          } @else {
-            <p class="m-0 text-color-secondary">{{ 'workspace.selected.emptySideboard' | transloco }}</p>
           }
         </p-tabpanel>
       </p-tabpanels>

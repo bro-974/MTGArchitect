@@ -16,9 +16,6 @@ export class WorkspaceDeckSelected {
   readonly mainboard = computed(() =>
     (this.deck()?.cards ?? []).filter((card) => !card.isSideBoard)
   );
-  readonly sideboard = computed(() =>
-    (this.deck()?.cards ?? []).filter((card) => card.isSideBoard)
-  );
 
   trackCard(index: number, card: WorkspaceDeckCard): string {
     return card.id;
