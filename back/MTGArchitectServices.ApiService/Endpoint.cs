@@ -79,6 +79,24 @@ public static class EndpointExtensions
             deckService.DeleteAsync(id, principal, cancellationToken))
         .WithName("DeleteDeckById");
 
+        secured.MapPost("/deck/{deckId:guid}/query-search", (
+            Guid deckId,
+            QueryInfoUpsertRequest request,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.AddQuerySearchToDeckAsync(deckId, request, principal, cancellationToken))
+        .WithName("AddQuerySearchToDeck");
+
+        secured.MapDelete("/deck/{deckId:guid}/query-search/{queryId:guid}", (
+            Guid deckId,
+            Guid queryId,
+            ClaimsPrincipal principal,
+            DeckService deckService,
+            CancellationToken cancellationToken) =>
+            deckService.RemoveQuerySearchAsync(deckId, queryId, principal, cancellationToken))
+        .WithName("RemoveQuerySearchFromDeck");
+
         return app;
     }
 

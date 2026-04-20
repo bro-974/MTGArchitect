@@ -129,8 +129,12 @@
       "tabs": {
         "overview": "Overview",
         "mainboard": "Main deck",
-        "sideboard": "Sideboard"
+        "sideboard": "Sideboard",
+        "search": "Search results"
       },
+      "closeSearch": "Close search",
+      "searchEmpty": "No cards found for this query.",
+      "searchError": "Search failed. Please try again.",
       "emptyTitle": "Choose a deck from the list",
       "emptyBody": "Select a deck in the workspace menu to inspect its overview, main deck, and sideboard.",
       "queries": "Saved queries",

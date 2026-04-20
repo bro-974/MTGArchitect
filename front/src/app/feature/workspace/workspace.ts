@@ -14,8 +14,7 @@ import { WorkspaceDeckList } from './workspace-deck-list/workspace-deck-list';
 import { WorkspaceSearchForm } from './workspace-search/workspace-search-form';
 import {
   WorkspaceDeck,
-  WorkspaceDeckUpsert,
-  WorkspaceQuerySearchUpsert
+  WorkspaceDeckUpsert
 } from './workspace.models';
 import { WorkspaceService } from './workspace.service';
 
@@ -102,23 +101,32 @@ export class Workspace {
 
     this.isSavingSearch.set(true);
 
-    const request = this.toDeckUpsertRequest(selectedDeck, {
-      id: null,
-      query: query.trim(),
-      searchEngine: 'scryfall'
-    });
-
     this.workspaceService
-      .updateDeck(selectedDeck.id, request)
+      .addQuerySearch(selectedDeck.id, query.trim(), 'scryfall')
       .pipe(
         catchError(() => {
           this.isSavingSearch.set(false);
           return EMPTY;
         })
       )
-      .subscribe((updatedDeck) => {
+      .subscribe((queryResponse) => {
         this.decks.update((decks) =>
-          decks.map((deck) => (deck.id === updatedDeck.id ? updatedDeck : deck))
+          decks.map((deck) => {
+            if (deck.id === selectedDeck.id) {
+              return {
+                ...deck,
+                querySearches: [
+                  ...deck.querySearches,
+                  {
+                    id: queryResponse.id,
+                    query: queryResponse.query,
+                    searchEngine: queryResponse.searchEngine
+                  }
+                ]
+              };
+            }
+            return deck;
+          })
         );
         this.isSavingSearch.set(false);
       });
@@ -126,29 +134,5 @@ export class Workspace {
 
   setAccordionPanel(value: string | number | string[] | number[] | null | undefined): void {
     this.activeAccordionPanel.set(typeof value === 'string' ? value : 'decks');
-  }
-
-  private toDeckUpsertRequest(
-    deck: WorkspaceDeck,
-    extraQuery: WorkspaceQuerySearchUpsert
-  ): WorkspaceDeckUpsert {
-    return {
-      name: deck.name,
-      type: deck.type,
-      note: deck.note,
-      querySearches: [...deck.querySearches, extraQuery].map((query) => ({
-        id: query.id,
-        query: query.query,
-        searchEngine: query.searchEngine
-      })),
-      cards: deck.cards.map((card) => ({
-        cardName: card.cardName,
-        scryFallId: card.scryFallId,
-        quantity: card.quantity,
-        type: card.type,
-        cost: card.cost,
-        isSideBoard: card.isSideBoard
-      }))
-    };
   }
 }

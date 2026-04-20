@@ -1,0 +1,38 @@
+.search-show-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.search-show-card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.search-show-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.75rem;
+  aspect-ratio: 488 / 680;
+  object-fit: cover;
+}
+
+.search-show-card__img--missing {
+  aspect-ratio: 488 / 680;
+  background: var(--surface-ground);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.75rem;
+}
+
+.search-show-card--skeleton {
+  aspect-ratio: 488 / 680;
+  background: var(--surface-ground);
+  border-radius: 0.75rem;
+  animation: search-show-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes search-show-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

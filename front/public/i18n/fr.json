@@ -129,8 +129,12 @@
       "tabs": {
         "overview": "Vue d'ensemble",
         "mainboard": "Deck principal",
-        "sideboard": "Reserve"
+        "sideboard": "Reserve",
+        "search": "Resultats de recherche"
       },
+      "closeSearch": "Fermer la recherche",
+      "searchEmpty": "Aucune carte trouvee pour cette requete.",
+      "searchError": "La recherche a echoue. Veuillez reessayer.",
       "emptyTitle": "Choisissez un deck dans la liste",
       "emptyBody": "Selectionnez un deck dans le menu de l'espace de travail pour voir sa vue d'ensemble, son deck principal et sa reserve.",
       "queries": "Requetes enregistrees",

@@ -32,6 +32,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IAuthDataService, AuthDataService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IDeckRepository, DeckRepository>();
 
         return services;
     }

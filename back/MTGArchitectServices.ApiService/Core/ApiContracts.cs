@@ -29,9 +29,15 @@ public sealed record DeckUpsertRequest(
     List<QueryInfoUpsertRequest>? QuerySearches,
     List<DeckCardUpsertRequest>? Cards);
 
+/// <summary>
+/// Request to add or update a query search for a deck.
+/// </summary>
+/// <param name="Id">Optional query ID. If null or empty, a new ID will be generated.</param>
+/// <param name="QueryJson">Serialized JSON string representing a CardQuerySearch object, containing all filter parameters for card search. This allows frontend to serialize the query form and reuse it with the advanced search API.</param>
+/// <param name="SearchEngine">Search engine identifier (e.g., "Scryfall").</param>
 public sealed record QueryInfoUpsertRequest(
     Guid? Id,
-    string Query,
+    string QueryJson,
     string SearchEngine);
 
 public sealed record DeckCardUpsertRequest(

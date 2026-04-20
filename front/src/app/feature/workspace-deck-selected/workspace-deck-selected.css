@@ -25,6 +25,38 @@
   background: color-mix(in srgb, var(--primary-color) 12%, var(--surface-card));
   border: 1px solid color-mix(in srgb, var(--primary-color) 20%, var(--surface-border));
   font-size: 0.875rem;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+.workspace-tag:hover {
+  background: color-mix(in srgb, var(--primary-color) 20%, var(--surface-card));
+}
+
+.workspace-search-tab-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.4rem;
+  padding: 0.15rem;
+  border: none;
+  background: transparent;
+  border-radius: 9999px;
+  cursor: pointer;
+  color: inherit;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.workspace-search-tab-close:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.workspace-search-tab-close:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .workspace-card-table {

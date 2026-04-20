@@ -17,6 +17,19 @@
       <p-tablist>
         <p-tab value="overview">{{ 'workspace.selected.tabs.overview' | transloco }}</p-tab>
         <p-tab value="mainboard">{{ 'workspace.selected.tabs.mainboard' | transloco }}</p-tab>
+        @for (searchTab of openSearchTabs(); track trackSearchTab($index, searchTab)) {
+          <p-tab [value]="searchTab.id">
+            <span>{{ searchTab.query.query }}</span>
+            <button
+              type="button"
+              class="workspace-search-tab-close"
+              (click)="closeSearch(searchTab.id, $event)"
+              [attr.aria-label]="'workspace.selected.closeSearch' | transloco"
+            >
+              <i class="pi pi-times" aria-hidden="true"></i>
+            </button>
+          </p-tab>
+        }
       </p-tablist>
 
       <p-tabpanels>
@@ -35,7 +48,12 @@
                   @if (selectedDeck.querySearches.length > 0) {
                     <div class="workspace-tags mt-2">
                       @for (querySearch of selectedDeck.querySearches; track querySearch.id) {
-                        <span class="workspace-tag" [title]="querySearch.searchEngine">{{ querySearch.query }}</span>
+                        <button
+                          type="button"
+                          class="workspace-tag"
+                          [title]="querySearch.searchEngine"
+                          (click)="openSearch(querySearch)"
+                        >{{ querySearch.query }}</button>
                       }
                     </div>
                   } @else {
@@ -71,6 +89,12 @@
             <p class="m-0 text-color-secondary">{{ 'workspace.selected.noCards' | transloco }}</p>
           }
         </p-tabpanel>
+
+        @for (searchTab of openSearchTabs(); track trackSearchTab($index, searchTab)) {
+          <p-tabpanel [value]="searchTab.id">
+            <app-search-show [queryText]="searchTab.query.query" [isActive]="activeTab() === searchTab.id" />
+          </p-tabpanel>
+        }
       </p-tabpanels>
     </p-tabs>
   </section>

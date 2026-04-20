@@ -65,6 +65,10 @@ For protected routes, send:
 }
 ```
 
+#### `POST /api/auth/logout`
+- Description: Logout current authenticated user.
+- Response: `204 No Content`
+
 ---
 
 ## MTGArchitect.Api
@@ -99,7 +103,7 @@ For protected routes, send:
 
 ### Endpoints requiring authentication
 
-#### `GET /api/auth/logged`
+#### `GET /api/user/private`
 - Description: Check if JWT is valid for current user.
 - Response: `200 OK`
 
@@ -127,7 +131,7 @@ For protected routes, send:
     "querySearches": [
       {
         "id": "query-guid",
-        "query": "t:elf mv=1",
+        "query": "serialized CardQuerySearch JSON",
         "searchEngine": "scryfall"
       }
     ],
@@ -161,7 +165,7 @@ For protected routes, send:
   "querySearches": [
     {
       "id": null,
-      "query": "t:elf",
+      "queryJson": "{\"filters\": {...}, \"limits\": {...}}",
       "searchEngine": "scryfall"
     }
   ],
@@ -187,3 +191,25 @@ For protected routes, send:
 #### `DELETE /api/deck/{id}`
 - Description: Delete a deck (owned by logged user).
 - Response: `204 No Content`
+
+#### `POST /api/deck/{deckId}/query-search`
+- Description: Add a query search to a deck (owned by logged user).
+- Request body:
+```json
+{
+  "id": null,
+  "queryJson": "{\"filters\": {...}, \"limits\": {...}}",
+  "searchEngine": "scryfall"
+}
+```
+- Response: `201 Created` with `QueryInfoResponse`
+
+#### `DELETE /api/deck/{deckId}/query-search/{queryId}`
+- Description: Remove a query search from a deck (owned by logged user).
+- Response: `204 No Content`
+
+## Documentation validation skill
+
+Run this command from repository root to validate README endpoint contracts against source endpoints:
+
+`powershell -ExecutionPolicy Bypass -File .\scripts\Check-EndpointContracts.ps1`

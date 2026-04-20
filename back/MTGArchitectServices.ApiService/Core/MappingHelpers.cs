@@ -70,7 +70,7 @@ public static class MappingHelpers
             .Select(x => new QueryInfo
             {
                 Id = x.Id.GetValueOrDefault() == Guid.Empty ? Guid.NewGuid() : x.Id.Value,
-                Query = x.Query,
+                Query = x.QueryJson,
                 SearchEngine = x.SearchEngine
             })
             .ToList();
