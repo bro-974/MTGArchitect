@@ -34,10 +34,12 @@ interface WorkspaceSavedQuery {
   name?: string;
   exactName?: true;
   color?: string;
+  colorOperator?: ComparisonOperator;
   colorIdentity?: string;
   types?: string;
   oracleText?: string;
-  manaValue?: string;
+  manaValue?: number;
+  manaValueOperator?: ComparisonOperator;
   format?: CardFormat;
 }
 
@@ -125,6 +127,7 @@ export class WorkspaceSearchForm {
     }
 
     return Object.entries(query)
+      .filter(([key]) => key !== 'colorOperator' && key !== 'manaValueOperator' && key !== 'exactName')
       .map(([key, value]) => `${key}: ${value}`)
       .join(' · ');
   });
@@ -141,7 +144,8 @@ export class WorkspaceSearchForm {
     }
 
     if (value.color) {
-      query.color = `${value.colorOperator}:${value.color}`;
+      query.color = value.color;
+      query.colorOperator = value.colorOperator;
     }
 
     if (value.colorIdentity) {
@@ -157,7 +161,8 @@ export class WorkspaceSearchForm {
     }
 
     if (value.manaValue !== null) {
-      query.manaValue = `${value.manaValueOperator}:${value.manaValue}`;
+      query.manaValue = value.manaValue;
+      query.manaValueOperator = value.manaValueOperator;
     }
 
     if (value.format) {
@@ -229,7 +234,8 @@ export class WorkspaceSearchForm {
     }
 
     if (query.color) {
-      tokens.push(`c:${query.color}`);
+      const op = this.colorOperatorToScryfall(query.colorOperator ?? 'Equal');
+      tokens.push(`c${op}${query.color}`);
     }
 
     if (query.colorIdentity) {
@@ -244,8 +250,9 @@ export class WorkspaceSearchForm {
       tokens.push(`o:${query.oracleText}`);
     }
 
-    if (query.manaValue) {
-      tokens.push(`mv${query.manaValue}`);
+    if (query.manaValue !== undefined) {
+      const op = this.mvOperatorToScryfall(query.manaValueOperator ?? 'Equal');
+      tokens.push(`mv${op}${query.manaValue}`);
     }
 
     if (query.format) {
@@ -253,5 +260,24 @@ export class WorkspaceSearchForm {
     }
 
     return tokens.join(' ').trim();
+  }
+
+  private colorOperatorToScryfall(op: ComparisonOperator): string {
+    switch (op) {
+      case 'GreaterThanOrEqual': return '>=';
+      case 'LessThanOrEqual': return '<=';
+      default: return ':';
+    }
+  }
+
+  private mvOperatorToScryfall(op: ComparisonOperator): string {
+    switch (op) {
+      case 'NotEqual': return '!=';
+      case 'GreaterThan': return '>';
+      case 'GreaterThanOrEqual': return '>=';
+      case 'LessThan': return '<';
+      case 'LessThanOrEqual': return '<=';
+      default: return '=';
+    }
   }
 }
