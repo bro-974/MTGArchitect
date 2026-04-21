@@ -6,7 +6,7 @@ import {
   inject,
   signal
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -214,8 +214,14 @@ export class DeckForm {
     return this.formatOptions.find((f) => f.value === fmt)?.label ?? fmt;
   });
 
+  // ── Form validity as a signal (statusChanges is an Observable, not a signal,
+  //    so we bridge it with toSignal to keep computed() reactive)
+  private readonly formStatus = toSignal(this.deckForm.statusChanges, {
+    initialValue: this.deckForm.status
+  });
+
   // ── Submit / Cancel ───────────────────────────────────
-  readonly isSubmitDisabled = computed(() => this.deckForm.invalid || this.submitting());
+  readonly isSubmitDisabled = computed(() => this.formStatus() !== 'VALID' || this.submitting());
 
   handleSubmit(): void {
     this.deckForm.markAllAsTouched();
