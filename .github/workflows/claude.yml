@@ -23,14 +23,13 @@ jobs:
       pull-requests: write
       issues: write
       id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      actions: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
-      # ── .NET 10 + Aspire ────────────────────────────────────────────────
       - name: Set up .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
@@ -50,7 +49,6 @@ jobs:
       - name: Restore .NET solution
         run: dotnet restore back/MTGArchitect.slnx
 
-      # ── Node.js 22 + Angular 21 ─────────────────────────────────────────
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
@@ -62,27 +60,13 @@ jobs:
         working-directory: front
         run: npm ci
 
-      # ── Claude Code ──────────────────────────────────────────────────────
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
-          additional_permissions: |
-            actions: read
-            mcp__playwright: read
-
           claude_args: >-
             --allowedTools
-            "Bash(npm run *),Bash(npm test *),Bash(dotnet build *),Bash(dotnet test *),Bash(dotnet restore *),Bash(git *),Bash(gh *),
-            mcp__playwright__browser_navigate,mcp__playwright__browser_snapshot,mcp__playwright__browser_screenshot,
-            mcp__playwright__browser_click,mcp__playwright__browser_type,mcp__playwright__browser_hover,
-            mcp__playwright__browser_scroll,mcp__playwright__browser_select_option,mcp__playwright__browser_wait_for,
-            mcp__playwright__browser_evaluate,mcp__playwright__browser_console_messages,mcp__playwright__browser_network_requests,
-            mcp__playwright__browser_tab_new,mcp__playwright__browser_tab_list,mcp__playwright__browser_close"
+            "Bash(npm run *),Bash(npm test *),Bash(dotnet build *),Bash(dotnet test *),Bash(dotnet restore *),Bash(git *),Bash(gh *)"
             --system-prompt
-            "The project is already set up with all dependencies installed.
-            The server is already running at localhost:4200. If needed, use the mcp__playwright
-            set of tools to launch a browser and interact with the app."
-
+            "The project is a .NET 10 + Aspire backend (back/MTGArchitect.slnx) and Angular 21 frontend (front/). All dependencies are already installed."
