@@ -69,15 +69,36 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
-          # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
+            mcp__playwright: read
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
+          allowed_tools: >-
+            Bash(npm run *),
+            Bash(npm test *),
+            Bash(dotnet build *),
+            Bash(dotnet test *),
+            Bash(dotnet restore *),
+            Bash(git *),
+            Bash(gh *),
+            mcp__playwright__browser_navigate,
+            mcp__playwright__browser_snapshot,
+            mcp__playwright__browser_screenshot,
+            mcp__playwright__browser_click,
+            mcp__playwright__browser_type,
+            mcp__playwright__browser_hover,
+            mcp__playwright__browser_scroll,
+            mcp__playwright__browser_select_option,
+            mcp__playwright__browser_wait_for,
+            mcp__playwright__browser_evaluate,
+            mcp__playwright__browser_console_messages,
+            mcp__playwright__browser_network_requests,
+            mcp__playwright__browser_tab_new,
+            mcp__playwright__browser_tab_list,
+            mcp__playwright__browser_close
 
-          # Optional: Add claude_args to customize behavior and configuration
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr *)'
+          custom_instructions: |
+            The project is already set up with all dependencies installed.
+            The server is already running at localhost:4200. If needed, use the mcp__playwright
+            set of tools to launch a browser and interact with the app.
 
