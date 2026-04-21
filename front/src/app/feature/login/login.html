@@ -1,39 +1,76 @@
-<section class="login-page surface-card border-round-2xl p-4 md:p-5 shadow-2">
-  <header class="mb-4">
-    <p class="m-0 text-xs font-bold uppercase text-primary">{{ 'login.eyebrow' | transloco }}</p>
-    <h1 class="m-0 mt-2">{{ 'login.title' | transloco }}</h1>
-    <p class="m-0 mt-2 text-color-secondary line-height-3">{{ 'login.subtitle' | transloco }}</p>
-  </header>
+<div class="login-layout">
 
-  <form class="login-form flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()">
-    <div class="flex flex-column gap-2">
-      <label for="login-email" class="text-sm">{{ 'login.email' | transloco }}</label>
-      <input id="login-email" type="email" pInputText formControlName="email" autocomplete="email" />
-      @if (form.controls.email.invalid && form.controls.email.touched) {
-        <small class="p-error">{{ 'login.emailInvalid' | transloco }}</small>
-      }
+  <!-- Left: feature highlights -->
+  <div class="login-hero flex flex-column justify-content-center gap-4 p-5">
+    <div class="flex align-items-center gap-3">
+      <div class="gem bg-primary flex-shrink-0" style="width:2rem;height:2rem"></div>
+      <span class="font-bold text-xl white-space-nowrap text-primary" style="letter-spacing:.1em">MTG ARCHITECT</span>
     </div>
-
-    <div class="flex flex-column gap-2">
-      <label for="login-password" class="text-sm">{{ 'login.password' | transloco }}</label>
-      <input
-        id="login-password"
-        type="password"
-        pInputText
-        formControlName="password"
-        autocomplete="current-password"
-      />
-      @if (form.controls.password.invalid && form.controls.password.touched) {
-        <small class="p-error">{{ 'login.passwordRequired' | transloco }}</small>
-      }
+    <div>
+      <h1 class="m-0 mt-2 line-height-2">{{ 'login.heroTitle' | transloco }}</h1>
+      <p class="m-0 mt-3 text-color-secondary line-height-3">{{ 'login.heroSubtitle' | transloco }}</p>
     </div>
+    <ul class="list-none p-0 m-0 flex flex-column gap-3 mt-2">
+      <li class="flex align-items-center gap-3">
+        <span class="login-hero-icon flex-shrink-0"><i class="pi pi-folder-open"></i></span>
+        <span class="text-sm text-color-secondary">{{ 'login.feature1' | transloco }}</span>
+      </li>
+      <li class="flex align-items-center gap-3">
+        <span class="login-hero-icon flex-shrink-0"><i class="pi pi-search"></i></span>
+        <span class="text-sm text-color-secondary">{{ 'login.feature2' | transloco }}</span>
+      </li>
+      <li class="flex align-items-center gap-3">
+        <span class="login-hero-icon flex-shrink-0"><i class="pi pi-sparkles"></i></span>
+        <span class="text-sm text-color-secondary">{{ 'login.feature3' | transloco }}</span>
+      </li>
+      <li class="flex align-items-center gap-3">
+        <span class="login-hero-icon flex-shrink-0"><i class="pi pi-chart-bar"></i></span>
+        <span class="text-sm text-color-secondary">{{ 'login.feature4' | transloco }}</span>
+      </li>
+    </ul>
+  </div>
 
-    @if (hasInvalidCredentials()) {
-      <p class="m-0 p-error">{{ 'login.invalidCredentials' | transloco }}</p>
-    }
+  <!-- Right: sign-in form -->
+  <div class="login-form-col flex flex-column justify-content-center p-4 md:p-5">
+    <section class="login-page surface-card border-round-2xl p-4 md:p-5 shadow-2">
+      <header class="mb-4">
+        <p class="m-0 text-xs font-bold uppercase text-primary">{{ 'login.eyebrow' | transloco }}</p>
+        <h2 class="m-0 mt-2">{{ 'login.title' | transloco }}</h2>
+        <p class="m-0 mt-2 text-color-secondary line-height-3">{{ 'login.subtitle' | transloco }}</p>
+      </header>
 
-    <div class="flex justify-content-end mt-2">
-      <p-button type="submit" icon="pi pi-sign-in" [loading]="isSubmitting()" [label]="'login.submit' | transloco" />
-    </div>
-  </form>
-</section>
+      <form class="login-form flex flex-column gap-3" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="flex flex-column gap-2">
+          <label for="login-email" class="text-sm">{{ 'login.email' | transloco }}</label>
+          <input id="login-email" type="email" pInputText formControlName="email" autocomplete="email" />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <small class="p-error">{{ 'login.emailInvalid' | transloco }}</small>
+          }
+        </div>
+
+        <div class="flex flex-column gap-2">
+          <label for="login-password" class="text-sm">{{ 'login.password' | transloco }}</label>
+          <input
+            id="login-password"
+            type="password"
+            pInputText
+            formControlName="password"
+            autocomplete="current-password"
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <small class="p-error">{{ 'login.passwordRequired' | transloco }}</small>
+          }
+        </div>
+
+        @if (hasInvalidCredentials()) {
+          <p class="m-0 p-error">{{ 'login.invalidCredentials' | transloco }}</p>
+        }
+
+        <div class="flex justify-content-end mt-2">
+          <p-button type="submit" icon="pi pi-sign-in" [loading]="isSubmitting()" [label]="'login.submit' | transloco" />
+        </div>
+      </form>
+    </section>
+  </div>
+
+</div>

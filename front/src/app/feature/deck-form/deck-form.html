@@ -1,64 +1,236 @@
 <section class="deck-form mb-3">
-  <header class="deck-form__header mb-3">
+  <header class="deck-form__header mb-4">
     <h2 class="m-0 text-lg">{{ 'workspace.createDeck.title' | transloco }}</h2>
     <p class="m-0 text-sm text-color-secondary">{{ 'workspace.createDeck.subtitle' | transloco }}</p>
   </header>
 
-  <form [formGroup]="deckForm" (ngSubmit)="handleSubmit()">
-    <div class="field mb-3">
-      <label for="name" class="block mb-2">{{ 'workspace.createDeck.nameLabel' | transloco }}</label>
-      <input
-        id="name"
-        formControlName="name"
-        type="text"
-        pInputText
-        class="w-full"
-        [attr.placeholder]="'workspace.createDeck.namePlaceholder' | transloco"
-      />
-    </div>
+  <div class="deck-form__body">
 
-    <div class="field mb-3">
-      <label for="deck-type" class="block mb-2">{{ 'workspace.createDeck.typeLabel' | transloco }}</label>
-      <input
-        id="deck-type"
-        type="text"
-        pInputText
-        formControlName="type"
-        class="w-full"
-        [attr.placeholder]="'workspace.createDeck.typePlaceholder' | transloco"
-      />
-    </div>
+    <!-- Left column: form fields -->
+    <form
+      class="deck-form__fields flex flex-column gap-4"
+      [formGroup]="deckForm"
+      (ngSubmit)="handleSubmit()"
+    >
 
-    <div class="field mb-3">
-      <label for="deck-note" class="block mb-2">{{ 'workspace.createDeck.noteLabel' | transloco }}</label>
-      <textarea
-        id="deck-note"
-        pTextarea
-        formControlName="note"
-        class="w-full"
-        [rows]="3"
-        [attr.placeholder]="'workspace.createDeck.notePlaceholder' | transloco"
-      ></textarea>
-    </div>
+      <!-- Name -->
+      <div class="field">
+        <label for="deck-name" class="block mb-2 text-sm font-medium">
+          {{ 'workspace.createDeck.nameLabel' | transloco }}
+          <span class="deck-form__required" aria-hidden="true">*</span>
+        </label>
+        <input
+          id="deck-name"
+          formControlName="name"
+          type="text"
+          pInputText
+          class="w-full"
+          [attr.placeholder]="'workspace.createDeck.namePlaceholder' | transloco"
+        />
+        @if (deckForm.controls.name.invalid && deckForm.controls.name.touched) {
+          <small class="p-error mt-1">{{ 'workspace.createDeck.nameRequired' | transloco }}</small>
+        }
+      </div>
 
-    @if (hasError()) {
-      <p class="deck-form__error m-0 mb-3">{{ 'workspace.createDeck.error' | transloco }}</p>
-    }
+      <!-- Format -->
+      <div class="field">
+        <label for="deck-format" class="block mb-2 text-sm font-medium">
+          {{ 'workspace.createDeck.formatLabel' | transloco }}
+        </label>
+        <p-select
+          inputId="deck-format"
+          formControlName="format"
+          [options]="formatOptions"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="true"
+          [placeholder]="'workspace.createDeck.formatPlaceholder' | transloco"
+          class="w-full"
+        />
+      </div>
 
-    <div class="flex align-items-center justify-content-end gap-2">
-      <p-button
-        type="button"
-        [text]="true"
-        [disabled]="submitting()"
-        [label]="'workspace.createDeck.cancelAction' | transloco"
-        (click)="handleCancel()"
-      />
-      <p-button
-        type="submit"
-        [icon]="'pi pi-check'"
-        [loading]="submitting()"
-        [label]="'workspace.createDeck.createAction' | transloco"
-      />
-    </div>
-  </form>
+      <!-- Commander (conditional) -->
+      @if (needsCommander()) {
+        <div class="field">
+          <label for="deck-commander" class="block mb-2 text-sm font-medium">
+            {{ 'workspace.createDeck.commanderLabel' | transloco }}
+          </label>
+
+          @if (selectedCommander(); as commander) {
+            <!-- Selected chip -->
+            <div class="deck-form__commander-chip flex align-items-center justify-content-between">
+              <span class="text-sm font-medium">{{ commander.name }}</span>
+              <button
+                type="button"
+                class="deck-form__chip-remove"
+                (click)="clearCommander()"
+                [attr.aria-label]="'workspace.createDeck.clearCommander' | transloco"
+              >
+                <i class="pi pi-times" aria-hidden="true"></i>
+              </button>
+            </div>
+          } @else {
+            <!-- Typeahead input -->
+            <div class="deck-form__commander-wrap">
+              <div class="p-inputgroup">
+                <input
+                  id="deck-commander"
+                  formControlName="commander"
+                  type="text"
+                  pInputText
+                  class="w-full"
+                  [attr.placeholder]="'workspace.createDeck.commanderPlaceholder' | transloco"
+                  autocomplete="off"
+                  (focus)="onCommanderInputFocus()"
+                  (blur)="hideSuggestions()"
+                />
+                @if (commanderSearching()) {
+                  <span class="p-inputgroup-addon">
+                    <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+                  </span>
+                }
+              </div>
+              @if (showSuggestions() && commanderSuggestions().length > 0) {
+                <ul class="deck-form__suggestions" role="listbox">
+                  @for (suggestion of commanderSuggestions(); track suggestion.name) {
+                    <li
+                      class="deck-form__suggestion"
+                      role="option"
+                      (mousedown)="selectCommander(suggestion)"
+                    >
+                      <span class="deck-form__suggestion-name">{{ suggestion.name }}</span>
+                      <span class="deck-form__suggestion-type">{{ suggestion.typeLine }}</span>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Color identity -->
+      <div class="field">
+        <label class="block mb-2 text-sm font-medium">
+          {{ 'workspace.createDeck.colorIdentityLabel' | transloco }}
+        </label>
+        <div
+          class="flex flex-wrap gap-2"
+          role="group"
+          [attr.aria-label]="'workspace.createDeck.colorIdentityLabel' | transloco"
+        >
+          @for (color of manaColorOptions; track color.value) {
+            <button
+              type="button"
+              class="mana-pastille"
+              [style.--pastille-bg]="color.background"
+              [style.--pastille-border]="color.border"
+              [style.--pastille-color]="color.color"
+              [class.is-selected]="isManaColorSelected(color.value)"
+              [attr.aria-pressed]="isManaColorSelected(color.value)"
+              [attr.aria-label]="color.labelKey | transloco"
+              [title]="color.labelKey | transloco"
+              (click)="toggleManaColor(color.value)"
+            >
+              <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
+              <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="field flex-1">
+        <label for="deck-note" class="block mb-2 text-sm font-medium">
+          {{ 'workspace.createDeck.noteLabel' | transloco }}
+        </label>
+        <textarea
+          id="deck-note"
+          pTextarea
+          formControlName="note"
+          class="w-full"
+          [rows]="3"
+          [attr.placeholder]="'workspace.createDeck.notePlaceholder' | transloco"
+        ></textarea>
+      </div>
+
+      @if (hasError()) {
+        <p class="deck-form__error m-0">{{ 'workspace.createDeck.error' | transloco }}</p>
+      }
+
+      <!-- Actions -->
+      <div class="flex align-items-center justify-content-end gap-2 pt-2" style="border-top: 1px solid var(--surface-border)">
+        <p-button
+          type="button"
+          [text]="true"
+          severity="secondary"
+          [disabled]="submitting()"
+          [label]="'workspace.createDeck.cancelAction' | transloco"
+          (click)="handleCancel()"
+        />
+        <p-button
+          type="submit"
+          icon="pi pi-check"
+          [loading]="submitting()"
+          [disabled]="isSubmitDisabled()"
+          [label]="'workspace.createDeck.createAction' | transloco"
+        />
+      </div>
+
+    </form>
+
+    <!-- Right column: live preview -->
+    <aside class="deck-form__preview surface-ground border-round-xl p-3 flex flex-column gap-3">
+      <div>
+        <p class="m-0 text-xs font-semibold uppercase text-color-secondary mb-2">{{ 'workspace.createDeck.previewLabel' | transloco }}</p>
+        <h3 class="m-0 text-base" [class.text-color-secondary]="!previewName()">
+          {{ previewName() ?? ('workspace.createDeck.previewNamePlaceholder' | transloco) }}
+        </h3>
+        <p class="m-0 mt-1 text-sm text-color-secondary">
+          {{ previewFormat() ?? ('workspace.createDeck.previewFormatPlaceholder' | transloco) }}
+        </p>
+
+        @if (selectedCommander(); as commander) {
+          <p class="m-0 mt-1 text-sm">
+            <span class="text-color-secondary">{{ 'workspace.createDeck.commanderLabel' | transloco }}: </span>
+            {{ commander.name }}
+          </p>
+        }
+
+        @if (selectedColors().length > 0) {
+          <div class="flex flex-wrap gap-1 mt-2">
+            @for (color of selectedColors(); track color) {
+              <span class="deck-form__preview-pip">{{ color }}</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div style="border-top: 1px solid var(--surface-border)"></div>
+
+      <div class="flex flex-column gap-2">
+        <div class="flex justify-content-between text-sm">
+          <span class="text-color-secondary">{{ 'workspace.createDeck.previewCards' | transloco }}</span>
+          <span>0</span>
+        </div>
+        <div class="flex justify-content-between text-sm">
+          <span class="text-color-secondary">{{ 'workspace.createDeck.previewStatus' | transloco }}</span>
+          <span class="text-green-500">{{ 'workspace.createDeck.previewStatusDraft' | transloco }}</span>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--surface-border)"></div>
+
+      <!-- Tips -->
+      <div class="flex flex-column gap-2">
+        <p class="m-0 text-xs font-semibold uppercase text-color-secondary">{{ 'workspace.createDeck.tipsLabel' | transloco }}</p>
+        <ul class="m-0 p-0 list-none flex flex-column gap-2">
+          <li class="text-xs text-color-secondary line-height-3">🃏 {{ 'workspace.createDeck.tip1' | transloco }}</li>
+          <li class="text-xs text-color-secondary line-height-3">💧 {{ 'workspace.createDeck.tip2' | transloco }}</li>
+          <li class="text-xs text-color-secondary line-height-3">✨ {{ 'workspace.createDeck.tip3' | transloco }}</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
 </section>

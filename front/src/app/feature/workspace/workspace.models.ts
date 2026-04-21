@@ -41,6 +41,9 @@ export interface WorkspaceDeckCardUpsert {
 export interface WorkspaceDeckUpsert {
   readonly name: string;
   readonly type: string;
+  readonly format: string | null;
+  readonly commander: string | null;
+  readonly colorIdentity: string | null;
   readonly note: string | null;
   readonly querySearches: readonly WorkspaceQuerySearchUpsert[];
   readonly cards: readonly WorkspaceDeckCardUpsert[];

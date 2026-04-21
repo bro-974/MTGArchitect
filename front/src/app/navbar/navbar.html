@@ -2,11 +2,9 @@
   <div class="flex justify-content-between align-items-center w-full">
 
     <!-- Brand -->
-    <div class="flex align-items-center gap-2">
+    <div class="flex align-items-center gap-2" style="cursor:pointer" (click)="goHome()">
       <div class="gem bg-primary w-1rem h-1rem flex-shrink-0"></div>
-      <span class="font-bold text-sm white-space-nowrap">
-        MTG ARCHITECT
-      </span>
+      <span class="font-bold text-sm white-space-nowrap">MTG ARCHITECT</span>
     </div>
 
     <!-- Navigation -->
@@ -71,13 +69,11 @@
         optionValue="value"
         [placeholder]="'navbar.language' | transloco"
         [ariaLabel]="'navbar.language' | transloco">
-
         <ng-template #selectedItem let-selectedOption>
           @if (selectedOption) {
             {{ selectedOption.labelKey | transloco }}
           }
         </ng-template>
-
         <ng-template #item let-option>
           {{ option.labelKey | transloco }}
         </ng-template>
@@ -93,31 +89,85 @@
         [ariaLabel]="(isDarkMode() ? 'navbar.lightMode' : 'navbar.darkMode') | transloco">
       </p-button>
 
-      @if (authService.user(); as currentUser) {
-        <div class="flex align-items-center gap-1">
-          <span class="text-sm font-semibold white-space-nowrap">{{ currentUser.email }}</span>
-          <p-button
-            severity="secondary"
-            type="button"
-            icon="pi pi-sign-out"
-            class="p-button-rounded p-button-text"
-            (click)="logout()"
-            [title]="'navbar.logout' | transloco"
-            [ariaLabel]="'navbar.logout' | transloco">
-          </p-button>
-        </div>
-      } @else {
-        <p-button
-          severity="secondary"
-          type="button"
-          icon="pi pi-sign-in"
-          class="p-button-rounded p-button-text"
-          (click)="goLogin()"
-          [label]="'navbar.login' | transloco"
-          [title]="'navbar.login' | transloco"
-          [ariaLabel]="'navbar.login' | transloco">
-        </p-button>
-      }
+      <!-- Profile popover trigger -->
+      <p-button
+        #profileBtn
+        type="button"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        icon="pi pi-user"
+        (click)="profilePopover.toggle($event)"
+        [title]="'navbar.profile' | transloco"
+        [ariaLabel]="'navbar.profile' | transloco">
+      </p-button>
+
+      <!-- Profile popover panel -->
+      <p-popover #profilePopover>
+        @if (authService.isLoggedIn()) {
+          <!-- Logged-in state -->
+          <div class="navbar-profile-panel">
+            <div class="navbar-profile-header flex align-items-center gap-3 pb-3 mb-2" style="border-bottom: 1px solid var(--surface-border)">
+              <p-avatar
+                [label]="getUserInitial()"
+                shape="circle"
+                size="large"
+                styleClass="bg-primary text-primary-contrast font-bold">
+              </p-avatar>
+              <div class="flex flex-column gap-1 min-w-0">
+                <span class="font-semibold text-sm white-space-nowrap overflow-hidden text-overflow-ellipsis" style="max-width: 14rem">
+                  {{ authService.user()?.email }}
+                </span>
+                <span class="text-xs text-color-secondary">{{ 'navbar.profileLoggedIn' | transloco }}</span>
+              </div>
+            </div>
+
+            <ul class="list-none p-0 m-0 flex flex-column gap-1">
+              <li>
+                <a
+                  class="navbar-profile-item flex align-items-center gap-2 p-2 border-round cursor-pointer text-color no-underline"
+                  (click)="goPreferences(); profilePopover.hide()">
+                  <i class="pi pi-cog text-sm"></i>
+                  <span class="text-sm">{{ 'navbar.preferences' | transloco }}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="navbar-profile-item flex align-items-center gap-2 p-2 border-round cursor-pointer text-color no-underline"
+                  (click)="goCollection(); profilePopover.hide()">
+                  <i class="pi pi-book text-sm"></i>
+                  <span class="text-sm">{{ 'navbar.collection' | transloco }}</span>
+                </a>
+              </li>
+              <li class="mt-1" style="border-top: 1px solid var(--surface-border); padding-top: 0.5rem">
+                <a
+                  class="navbar-profile-item navbar-profile-item--danger flex align-items-center gap-2 p-2 border-round cursor-pointer no-underline"
+                  (click)="logout(); profilePopover.hide()">
+                  <i class="pi pi-sign-out text-sm"></i>
+                  <span class="text-sm">{{ 'navbar.logout' | transloco }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        } @else {
+          <!-- Guest state -->
+          <div class="navbar-profile-panel navbar-profile-panel--guest flex flex-column align-items-center gap-3 text-center">
+            <div class="flex flex-column align-items-center gap-2">
+              <i class="pi pi-lock text-3xl text-color-secondary" style="opacity: 0.4"></i>
+              <p class="m-0 text-sm text-color-secondary line-height-3" style="max-width: 16rem">
+                {{ 'navbar.guestMessage' | transloco }}
+              </p>
+            </div>
+            <p-button
+              type="button"
+              [label]="'navbar.login' | transloco"
+              icon="pi pi-sign-in"
+              class="w-full"
+              (click)="goLogin(); profilePopover.hide()">
+            </p-button>
+          </div>
+        }
+      </p-popover>
     </div>
 
   </div>

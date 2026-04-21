@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
+import { AvatarModule } from 'primeng/avatar';
+import { PopoverModule } from 'primeng/popover';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AppLanguage, I18nService } from '../core/i18n/i18n.service';
 import { ThemeService } from '../core/theme/theme.service';
@@ -12,7 +14,7 @@ import { AuthService } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [ButtonModule, CommonModule, SelectModule, ReactiveFormsModule, TranslocoPipe],
+  imports: [ButtonModule, CommonModule, SelectModule, ReactiveFormsModule, TranslocoPipe, AvatarModule, PopoverModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -70,6 +72,20 @@ export class Navbar {
 
   goCardExplorerAdvanced(): void {
     this.router.navigate(['/feature/card-explorer-search-advanced']);
+  }
+
+  goPreferences(): void {
+    // placeholder — preferences route to be added
+  }
+
+  goCollection(): void {
+    // placeholder — collection route to be added
+  }
+
+  getUserInitial(): string {
+    const user = this.authService.user();
+    if (!user?.email) return '?';
+    return user.email[0].toUpperCase();
   }
 
   toggleTheme(): void {

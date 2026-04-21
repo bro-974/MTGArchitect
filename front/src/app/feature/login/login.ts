@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,6 +17,7 @@ import { AuthService } from '../../core/auth/auth.service';
 export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly isSubmitting = signal(false);
   readonly hasInvalidCredentials = signal(false);
@@ -53,7 +54,8 @@ export class Login {
       )
       .subscribe(() => {
         this.isSubmitting.set(false);
-        this.router.navigate(['/']);
+        const redirectTo = this.route.snapshot.queryParamMap.get('redirectTo');
+        this.router.navigateByUrl(redirectTo ?? '/feature/workspace');
       });
   }
 }

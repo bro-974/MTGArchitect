@@ -1,0 +1,313 @@
+MTGArchitect — Pure UI Specification (for a coding agent)
+=========================================================
+
+Scope
+-----
+This document describes ONLY the user interface of MTGArchitect. It contains
+no backend, no data access, no HTTP calls. A coding agent must be able to
+build a working SPA from this document, wired to stub/mock data. All real
+data calls (Scryfall search, deck persistence, auth) must live behind
+injectable services that return signals/observables of well-typed mock data
+so the UI can be developed and reviewed independently.
+
+Stack constraints
+-----------------
+- Angular 21 (standalone components; do NOT set `standalone: true`).
+- PrimeNG 21 (Aura preset) + PrimeFlex utilities + primeicons.
+- `@jsverse/transloco` for i18n; supported languages `en` and `fr`;
+  translation files at `public/i18n/{lang}.json`. No hardcoded user-facing
+  strings — every label/placeholder/aria-label uses a Transloco key.
+- State via Angular signals (`signal`, `computed`, `update`/`set`).
+  RxJS/async pipe only where the source is genuinely async.
+- `ChangeDetectionStrategy.OnPush` on every component.
+- Reactive forms (never template-driven).
+- Native control flow (`@if`, `@for`, `@switch`) — never `*ngIf`/`*ngFor`.
+- `class` / `style` bindings — never `ngClass` / `ngStyle`.
+- `input()` / `output()` functions — never `@Input()` / `@Output()`.
+- `inject()` for DI — never constructor injection.
+- `NgOptimizedImage` for static images (not for base64).
+- AXE clean. WCAG AA: focus, contrast, ARIA.
+- Prettier: print width 100, single quotes.
+
+Global URL rule: no hardcoded hosts/ports anywhere. Base URLs must be read
+from `src/environments/environment.ts` (and `environment.prod.ts` via
+`angular.json` fileReplacements) by the service stubs.
+
+Theme & language
+----------------
+- Dark mode is a CSS class `.app-dark` on `document.documentElement`.
+  Toggle stored in `localStorage`, restored at app start.
+- Current language stored in `localStorage`, applied to
+  `document.documentElement.lang`, and kept in sync with the PrimeNG locale
+  via a dedicated service.
+
+Routing
+-------
+- `/`                                           → Home
+- `/feature/login`                              → Login
+- `/feature/card-explorer`                      → Card Explorer (simple search)
+- `/feature/card-explorer-search-advanced`      → Card Explorer (advanced search)
+- `/feature/server-status`                      → Server Status
+- `/feature/workspace`                          → Workspace (auth-guarded)
+
+All feature routes are lazy-loaded via `loadComponent`. The Workspace route
+is protected by an `authGuard` that redirects to `/feature/login` when the
+user is not authenticated.
+
+Shell layout
+------------
+The app shell is `<app-navbar>` at the top, followed by `<router-outlet>` in
+a centered content container.
+
+Navbar (sticky header, `surface-card shadow-2`, 3 clusters left / middle / right):
+  LEFT:
+    - Brand: small square "gem" accent + text "MTG ARCHITECT".
+  MIDDLE (icon-only PrimeNG rounded text buttons, with `title` + `ariaLabel`):
+    - `pi pi-briefcase` → Workspace
+    - `pi pi-home`      → Home
+    - `pi pi-images`    → Card Explorer
+    - `pi pi-filter`    → Card Explorer Advanced
+    - `pi pi-server`    → Server Status
+  RIGHT:
+    - `p-select` language picker (fixed width ~10rem), options come from the
+      i18n service. Option label is rendered via Transloco.
+    - Theme toggle button: icon `pi pi-sun` in dark mode, `pi pi-moon` in
+      light mode. Tooltip + aria-label flip accordingly.
+    - If signed in: user email + `pi pi-sign-out` button.
+    - If anonymous: `pi pi-sign-in` button labelled "Login".
+
+Pages
+-----
+
+### Home (`/`)
+- Centered marketing-style panel inside `surface-card border-round-2xl
+  shadow-2`. Eyebrow + H1 + intro paragraph + a few CTA buttons (Workspace,
+  Card Explorer). All strings via Transloco.
+
+### Login (`/feature/login`)
+- A single `surface-card border-round-2xl p-4 md:p-5 shadow-2` panel.
+- Header: uppercase primary-color eyebrow, H1 title, muted subtitle.
+- Reactive form (`email` + `password`), both fields as `pInputText`.
+- Validation:
+    - `email`: required + email → inline `p-error` "emailInvalid" on
+      touched+invalid.
+    - `password`: required → inline `p-error` "passwordRequired".
+- On submit failure from auth stub, show a `p-error` "invalidCredentials".
+- Submit button: `p-button type="submit"` with `pi pi-sign-in`, `loading`
+  bound to an `isSubmitting` signal.
+
+### Workspace (`/feature/workspace`) — the main app view
+Three-region layout inside a full-height section:
+
+  LEFT aside (fixed ~280-320px, `surface-card border-round-lg border-1
+  surface-border p-3`)
+    → `<app-workspace>` with two accordion panels:
+       1. `deckList` panel: contains `<app-workspace-deck-list>`
+          - Header: title + deck count label + rounded "+" icon button
+            to request deck creation.
+          - Body: `<p-tree>` with single selection of deck nodes; root
+            nodes are decks, children can be deck sections (mainboard,
+            sideboard) or saved queries.
+          - Emits `selectDeck(deckId)` and `createDeck()`.
+       2. `advancedSearch` panel: contains `<app-workspace-search-form>`
+          - Reactive form with:
+            * Name row: `pInputText` + `p-checkbox` "exact name" (binary,
+              with tooltip).
+            * Color group ("color" + "color identity"), each a row of
+              clickable "mana pastille" buttons (W/U/B/R/G/C), pressed
+              state via `aria-pressed` and `.is-selected`. Pastille
+              colors/backgrounds are driven by `--pastille-*` CSS vars.
+              Below the color row, a `p-select` for the color operator
+              (exactly / at least / at most …).
+            * Card rules fieldset: `types` input, `oracleText` input.
+            * Meta fieldset: mana value (operator `p-select` + numeric
+              input), format `p-select` (with clear).
+            * Footer: "Reset" secondary button + "Search" submit with
+              `pi pi-save`, `loading` bound to `saving` input.
+          - Shows a "saved query" summary block after a successful save.
+          - Emits `saveQuery(value)`.
+
+  RIGHT region is a vertical `p-splitter` with two stacked panes
+  (`panelSizes=[75, 25]`, `minSizes=[35, 15]`):
+
+    TOP pane:
+      - When a "create deck" request is active, render `<app-deck-form>`
+        above the selected deck view.
+      - `<app-workspace-deck-selected [deck]="selectedDeck()">`:
+        * Header with uppercase primary eyebrow, deck name as H1, and
+          meta row (type, query count).
+        * `<p-tabs>` with three kinds of tabs:
+          - `overview`: two cards side-by-side (lg: 7/5 split):
+              LEFT: "Notes" card showing `deck.note` or empty-state.
+              RIGHT: "Saved queries" list rendered as clickable
+                     `workspace-tag` buttons (each opens a new search tab)
+                     + a small "mainboard count" line.
+          - `mainboard`: a simple 3-column card table (quantity / name /
+            type), or an empty-state paragraph.
+          - Dynamic per-saved-query tabs: each tab label is the query text
+            plus a close `pi pi-times` button. Panel renders
+            `<app-search-show [queryText] [isActive]>`.
+        * Empty state (no deck selected): a `surface-card
+          border-round-2xl p-5 shadow-2` panel with a localized title +
+          body explaining how to pick a deck.
+
+    BOTTOM pane: reserved placeholder surface for future content (e.g. AI
+    assistant / logs). Render an empty `surface-card border-round-lg
+    border-1 surface-border p-3`.
+
+### Deck form (`<app-deck-form>`)
+- Inline section with header (H2 title + muted subtitle).
+- Reactive form: `name` (pInputText), `type` (pInputText), `note`
+  (pTextarea, 3 rows). All placeholders via Transloco.
+- On error: show `deck-form__error` paragraph with localized message.
+- Footer: text "Cancel" button + primary "Create" submit with `pi pi-check`
+  and `loading` bound to a `submitting` signal. Emits `cancel` and
+  `submit(value)`.
+
+### Card Explorer (`/feature/card-explorer`)
+- Page header: eyebrow + H1 + intro paragraph.
+- `<app-card-explorer-search>`: simple search bar (single `pInputText`
+  bound via reactive form + submit `p-button` with `pi pi-search`). Emits
+  `search(query)` with `loading` input bound to a page-level state signal.
+- `<app-card-explorer-list>`: displays results for the current query.
+    * States: `idle` (empty prompt), `loading` (PrimeNG `p-skeleton`
+      placeholders in a grid), `error` (inline `p-message severity="error"`
+      with retry), `results` (responsive grid of card tiles).
+    * Card tile: card image via `NgOptimizedImage` (with intrinsic width
+      and alt = card name), name, mana cost as small chips, type line.
+
+### Card Explorer Advanced (`/feature/card-explorer-search-advanced`)
+- Same page scaffolding as Card Explorer but the search area is the
+  advanced form (structurally the same as the workspace advanced search,
+  so extract a shared `<app-card-query-form>` presentational component).
+- Submitting the form updates the results list below (reuse
+  `<app-card-explorer-list>`).
+
+### Search Show (`<app-search-show>`)
+- Receives `queryText` (string) and `isActive` (boolean) inputs.
+- When `isActive` is true, render a header showing the query text and a
+  results grid identical to `<app-card-explorer-list>`.
+- When inactive, render nothing (the tab is hidden).
+
+### Server Status (`/feature/server-status`)
+- Page header (eyebrow + title).
+- A card with:
+    * A big status badge (`p-tag`) colored by status: green "Healthy",
+      amber "Degraded", red "Down", grey "Unknown".
+    * `checkedAt` timestamp, formatted through Transloco locale.
+    * A "Refresh now" `p-button` with `pi pi-refresh` and a `loading`
+      binding tied to the request signal.
+- Polling cadence is provided by the status service; the UI only binds to
+  the exposed signal. No timers in the component.
+
+Shared presentational components
+--------------------------------
+Create these as dumb, OnPush, signal-driven components with typed inputs
+and outputs:
+
+- `<app-mana-pastille>`: a selectable color pip with `aria-pressed`,
+  CSS-var driven palette, keyboard activation, and a `pressed` output.
+- `<app-card-tile>`: card image + name + cost + type, with a `selected`
+  input and `click` output.
+- `<app-card-grid>`: responsive grid wrapper around card tiles; takes an
+  `items` input and a `loading` input.
+- `<app-empty-state>`: icon + title + body + optional CTA button.
+- `<app-query-chip>`: rounded button that renders a saved query label;
+  emits `activate` and `remove`.
+
+Forms & validation
+------------------
+- All forms are reactive (`FormGroup`/`FormControl`).
+- Error messages render in `<small class="p-error">` below the field,
+  shown only when `control.touched && control.invalid`.
+- Submit buttons expose a `loading` binding tied to an `isSubmitting` or
+  `saving` signal — never a boolean `[disabled]` flag for the loading
+  state.
+- All text (labels, placeholders, errors, tooltips, aria-labels) goes
+  through Transloco with stable namespaced keys
+  (e.g. `workspace.search.field.name`, `login.emailInvalid`).
+
+i18n keys (minimum set expected in `public/i18n/en.json` and `fr.json`)
+----------------------------------------------------------------------
+- `app.title`
+- `navbar.home`, `navbar.workspace`, `navbar.cardExplorer`,
+  `navbar.cardExplorerAdvanced`, `navbar.serverStatus`, `navbar.language`,
+  `navbar.lightMode`, `navbar.darkMode`, `navbar.login`, `navbar.logout`
+- `login.eyebrow`, `login.title`, `login.subtitle`, `login.email`,
+  `login.emailInvalid`, `login.password`, `login.passwordRequired`,
+  `login.invalidCredentials`, `login.submit`
+- `workspace.eyebrow`, `workspace.accordion.deckList`,
+  `workspace.accordion.advancedSearch`, `workspace.deckList.title`,
+  `workspace.deckList.count`, `workspace.deckList.createAction`,
+  `workspace.createDeck.title`, `workspace.createDeck.subtitle`,
+  `workspace.createDeck.nameLabel`, `workspace.createDeck.namePlaceholder`,
+  `workspace.createDeck.typeLabel`, `workspace.createDeck.typePlaceholder`,
+  `workspace.createDeck.noteLabel`, `workspace.createDeck.notePlaceholder`,
+  `workspace.createDeck.cancelAction`, `workspace.createDeck.createAction`,
+  `workspace.createDeck.error`,
+  `workspace.selected.type`, `workspace.selected.queries`,
+  `workspace.selected.notes`, `workspace.selected.noteEmpty`,
+  `workspace.selected.queryEmpty`, `workspace.selected.noCards`,
+  `workspace.selected.card`, `workspace.selected.quantity`,
+  `workspace.selected.tabs.overview`, `workspace.selected.tabs.mainboard`,
+  `workspace.selected.closeSearch`, `workspace.selected.emptyTitle`,
+  `workspace.selected.emptyBody`,
+  `workspace.search.formLabel`, `workspace.search.field.name`,
+  `workspace.search.field.namePlaceholder`,
+  `workspace.search.field.exactName`, `workspace.search.field.color`,
+  `workspace.search.field.colorIdentity`,
+  `workspace.search.field.operator`, `workspace.search.field.types`,
+  `workspace.search.field.typesPlaceholder`,
+  `workspace.search.field.oracleText`,
+  `workspace.search.field.oracleTextPlaceholder`,
+  `workspace.search.field.manaValue`, `workspace.search.field.format`,
+  `workspace.search.section.cardRules`, `workspace.search.section.meta`,
+  `workspace.search.reset`, `workspace.search.search`,
+  `workspace.search.savedQuery`
+- `cardExplorer.eyebrow`, `cardExplorer.title`, `cardExplorer.intro`,
+  `cardExplorer.empty`, `cardExplorer.error`, `cardExplorer.retry`
+- `serverStatus.title`, `serverStatus.refresh`,
+  `serverStatus.status.healthy`, `serverStatus.status.degraded`,
+  `serverStatus.status.down`, `serverStatus.status.unknown`
+
+Mock services expected (stubs — real implementation is out of scope here)
+------------------------------------------------------------------------
+These services expose signals and plain methods. They live under
+`src/app/core/*` and return hardcoded fixtures until the backend is wired.
+
+- `AuthService` — `user` signal, `login(email, password)`,
+  `logout()`, `isAuthenticated` computed.
+- `I18nService` — `languageOptions` signal, `setLanguage(code)`,
+  `currentLanguage` signal.
+- `ThemeService` — `isDarkMode` signal, `toggle()`.
+- `DeckService` — `decks` signal (list), `selectedDeck` signal,
+  `selectDeck(id)`, `createDeck(dto)`, `addQuery(deckId, dto)`,
+  `removeQuery(deckId, queryId)`.
+- `CardSearchService` — `search(queryText)`,
+  `searchAdvanced(queryValue)` → signal/observable of `Card[]`, plus a
+  `state` signal (`idle` | `loading` | `error` | `results`).
+- `ServerStatusService` — `status` signal, `refresh()`.
+
+Accessibility checklist (must pass)
+-----------------------------------
+- Every interactive non-text control has an `aria-label` or visible text.
+- Toggle buttons use `aria-pressed`.
+- Tabs, accordions, trees, and selects use the PrimeNG components (which
+  ship proper roles) — don't reimplement them with `div`s.
+- Focus outlines are visible; never remove `:focus-visible` styles.
+- Text meets WCAG AA contrast; mana pastilles expose the letter as a text
+  fallback, not only color.
+
+Definition of done
+------------------
+- All routes render without console errors in both light and dark theme.
+- Language switch updates every visible string and PrimeNG locale.
+- Workspace shows mock decks, allows selecting one, opening the advanced
+  search panel, submitting a query, and seeing a new tab appear with a
+  mock result grid.
+- Deck form creates a new mock deck and auto-selects it.
+- Login form validates, submits, shows the invalid-credentials message
+  for a specific mock email, and navigates to `/feature/workspace` on
+  success.
+- AXE returns zero violations on every page.
+- `npm run build` and `npm test` (Vitest) pass.

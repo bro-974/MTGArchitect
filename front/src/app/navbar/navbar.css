@@ -1,3 +1,28 @@
 .gem {
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
+
+.navbar-profile-panel {
+  min-width: 18rem;
+}
+
+.navbar-profile-panel--guest {
+  padding: 0.5rem 0.25rem;
+}
+
+.navbar-profile-item {
+  transition: background-color 0.12s;
+}
+
+.navbar-profile-item:hover {
+  background-color: var(--surface-hover);
+}
+
+.navbar-profile-item--danger {
+  color: var(--red-500);
+}
+
+.navbar-profile-item--danger:hover {
+  background-color: var(--red-50);
+  color: var(--red-700);
+}
