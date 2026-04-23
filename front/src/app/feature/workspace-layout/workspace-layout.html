@@ -1,9 +1,6 @@
 <section class="flex h-full w-full min-w-0 gap-2">
   <aside class="workspace-layout-left workspace-layout-pane h-full surface-card border-round-lg border-1 surface-border p-3">
-    <app-workspace
-      (requestCreateDeck)="handleCreateDeckRequest()"
-      (selectedDeckChange)="handleSelectedDeckChange($event)"
-    ></app-workspace>
+    <app-workspace (requestCreateDeck)="handleCreateDeckRequest()"></app-workspace>
   </aside>
 
   <div class="flex-1 min-w-0 h-full">
@@ -19,7 +16,7 @@
             <app-deck-form></app-deck-form>
           }
 
-          <app-workspace-deck-selected [deck]="selectedDeck()"></app-workspace-deck-selected>
+          <app-workspace-deck-selected></app-workspace-deck-selected>
         </div>
       </ng-template>
       <ng-template pTemplate>
