@@ -12,10 +12,8 @@ import { AccordionModule } from 'primeng/accordion';
 import { catchError, EMPTY, Subscription } from 'rxjs';
 import { WorkspaceDeckList } from './workspace-deck-list/workspace-deck-list';
 import { WorkspaceSearchForm } from './workspace-search/workspace-search-form';
-import {
-  WorkspaceDeck,
-  WorkspaceDeckUpsert
-} from './workspace.models';
+import { WorkspaceDeckStateService } from './workspace-deck-state.service';
+import { WorkspaceDeck } from './workspace.models';
 import { WorkspaceService } from './workspace.service';
 
 @Component({
@@ -32,10 +30,10 @@ import { WorkspaceService } from './workspace.service';
 })
 export class Workspace {
   private readonly workspaceService = inject(WorkspaceService);
+  private readonly deckStateService = inject(WorkspaceDeckStateService);
   private readonly subscriptions = new Subscription();
 
   readonly requestCreateDeck = output<void>();
-  readonly selectedDeckChange = output<WorkspaceDeck | null>();
 
   readonly decks = signal<readonly WorkspaceDeck[]>([]);
   readonly selectedDeckId = signal<string | null>(null);
@@ -50,7 +48,7 @@ export class Workspace {
 
   constructor() {
     effect(() => {
-      this.selectedDeckChange.emit(this.selectedDeck());
+      this.deckStateService.selectedDeck.set(this.selectedDeck());
     });
 
     this.subscriptions.add(

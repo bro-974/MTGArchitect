@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { TabsModule } from 'primeng/tabs';
-import { CardQuerySearch } from '../../core/models/card-query-search.model';
 import { SearchShow } from '../search-show/search-show';
-import { WorkspaceDeck, WorkspaceDeckCard, WorkspaceQuerySearch } from '../workspace/workspace.models';
+import { WorkspaceDeckStateService } from '../workspace/workspace-deck-state.service';
+import { WorkspaceDeckCard, WorkspaceQuerySearch } from '../workspace/workspace.models';
 
 interface OpenSearchTab {
   readonly id: string;
@@ -18,7 +18,9 @@ interface OpenSearchTab {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkspaceDeckSelected {
-  readonly deck = input<WorkspaceDeck | null>(null);
+  private readonly deckStateService = inject(WorkspaceDeckStateService);
+
+  readonly deck = this.deckStateService.selectedDeck;
   readonly activeTab = signal('overview');
   readonly openSearchTabs = signal<readonly OpenSearchTab[]>([]);
   readonly mainboard = computed(() =>
