@@ -177,6 +177,7 @@
       "tags": "Etiquettes",
       "quantity": "Qté",
       "card": "Carte",
+      "cost": "Coût",
       "type": "Type",
       "emptySideboard": "Aucune carte de reserve pour ce deck pour le moment."
     },

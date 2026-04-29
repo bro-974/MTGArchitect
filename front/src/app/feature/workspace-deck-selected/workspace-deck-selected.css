@@ -67,7 +67,7 @@
 .workspace-card-table__header,
 .workspace-card-table__row {
   display: grid;
-  grid-template-columns: 4rem minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: 4rem minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 1rem;
   align-items: center;
 }
@@ -100,8 +100,8 @@
     grid-template-columns: 3rem minmax(0, 1fr);
   }
 
-  .workspace-card-table__header span:last-child,
-  .workspace-card-table__row span:last-child {
-    grid-column: 2;
+  .workspace-card-table__col--cost,
+  .workspace-card-table__col--type {
+    display: none;
   }
 }

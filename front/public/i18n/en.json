@@ -177,6 +177,7 @@
       "tags": "Tags",
       "quantity": "Qty",
       "card": "Card",
+      "cost": "Cost",
       "type": "Type",
       "emptySideboard": "No sideboard cards for this deck yet."
     },

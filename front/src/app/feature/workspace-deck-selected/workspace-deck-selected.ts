@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { MessageService } from 'primeng/api';
+import { DividerModule } from 'primeng/divider';
 import { TabsModule } from 'primeng/tabs';
+import { ManaCostComponent } from '../../core/components/mana-cost/mana-cost.component';
 import { SearchShow } from '../search-show/search-show';
 import { WorkspaceDeckStateService } from '../workspace/workspace-deck-state.service';
+import { WorkspaceService } from '../workspace/workspace.service';
 import { WorkspaceDeckCard, WorkspaceQuerySearch } from '../workspace/workspace.models';
 
 interface OpenSearchTab {
@@ -12,19 +16,25 @@ interface OpenSearchTab {
 
 @Component({
   selector: 'app-workspace-deck-selected',
-  imports: [TranslocoPipe, TabsModule, SearchShow],
+  imports: [TranslocoPipe, TabsModule, DividerModule, ManaCostComponent, SearchShow],
   templateUrl: './workspace-deck-selected.html',
   styleUrl: './workspace-deck-selected.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkspaceDeckSelected {
   private readonly deckStateService = inject(WorkspaceDeckStateService);
+  private readonly workspaceService = inject(WorkspaceService);
+  private readonly messageService = inject(MessageService);
+  private readonly transloco = inject(TranslocoService);
 
   readonly deck = this.deckStateService.selectedDeck;
   readonly activeTab = signal('overview');
   readonly openSearchTabs = signal<readonly OpenSearchTab[]>([]);
   readonly mainboard = computed(() =>
     (this.deck()?.cards ?? []).filter((card) => !card.isSideBoard)
+  );
+  readonly sideboard = computed(() =>
+    (this.deck()?.cards ?? []).filter((card) => card.isSideBoard)
   );
 
   private currentDeckId: string | null = null;
@@ -119,11 +129,34 @@ export class WorkspaceDeckSelected {
 
   closeSearch(queryId: string, event: Event): void {
     event.stopPropagation();
+
+    const deck = this.deck();
+    if (!deck) return;
+
+    const closedTab = this.openSearchTabs().find((tab) => tab.id === queryId);
     this.hiddenQueryIds.add(queryId);
     this.openSearchTabs.update((tabs) => tabs.filter((tab) => tab.id !== queryId));
-    // Switch back to overview if the closed tab was active
     if (this.activeTab() === queryId) {
       this.activeTab.set('overview');
     }
+
+    this.workspaceService.removeQuerySearch(deck.id, queryId).subscribe({
+      next: () => {
+        this.deckStateService.selectedDeck.update((d) =>
+          d ? { ...d, querySearches: d.querySearches.filter((q) => q.id !== queryId) } : null
+        );
+      },
+      error: () => {
+        this.hiddenQueryIds.delete(queryId);
+        if (closedTab) {
+          this.openSearchTabs.update((tabs) => [...tabs, closedTab]);
+        }
+        this.messageService.add({
+          severity: 'error',
+          summary: this.transloco.translate('workspace.addCard.errorSummary'),
+          detail: this.transloco.translate('workspace.addCard.errorDetail'),
+        });
+      },
+    });
   }
 }
