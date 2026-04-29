@@ -2,10 +2,11 @@
 ## 1. Context files – load when relevant
 
 | Condition | File to read |
+| Starting any task | `docs/context.general.md` |
 | Working in /front or Angular code | `front/angular.claude.md` |
 | Working in /back or .NET code | `back/dotnet.claude.md` |
-| Referencing or creating API endpoints | `docs/endpoints.txt` |
-| Referencing DB models or schemas | `docs/db.schema` |
+| Referencing or creating API endpoints | `docs/api.endpoint.md` |
+| Referencing DB models or schemas | `docs/db.schema.md` |
 
 Always read the relevant file(s) before answering tasks in that domain.
 

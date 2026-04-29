@@ -47,3 +47,14 @@ public sealed record DeckCardUpsertRequest(
     string Type,
     string? Cost,
     bool IsSideBoard);
+
+/// <summary>
+/// Request to add or increment a card in a deck. Quantity is the delta to add (not the final value).
+/// </summary>
+public sealed record DeckCardAddRequest(
+    string CardName,
+    string ScryFallId,
+    int Quantity,
+    string Type,
+    string? Cost,
+    bool IsSideBoard);

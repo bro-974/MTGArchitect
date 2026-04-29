@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
-import { WorkspaceDeck, WorkspaceDeckUpsert, WorkspaceQuerySearch } from './workspace.models';
+import { WorkspaceDeck, WorkspaceDeckCard, WorkspaceDeckCardAdd, WorkspaceDeckUpsert, WorkspaceQuerySearch } from './workspace.models';
 import { environment } from '../../../environments/environment';
 
 interface QueryInfoUpsertRequest {
@@ -53,5 +53,13 @@ export class WorkspaceService {
     return this.http.delete<void>(
       `${environment.apiUrl}/api/deck/${deckId}/query-search/${queryId}`
     );
+  }
+
+  getDeckById(deckId: string): Observable<WorkspaceDeck> {
+    return this.http.get<WorkspaceDeck>(`${environment.apiUrl}/api/deck/${deckId}`);
+  }
+
+  addCardToDeck(deckId: string, payload: WorkspaceDeckCardAdd): Observable<WorkspaceDeckCard> {
+    return this.http.post<WorkspaceDeckCard>(`${environment.apiUrl}/api/deck/${deckId}/card`, payload);
   }
 }

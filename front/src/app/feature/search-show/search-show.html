@@ -37,6 +37,27 @@
                 <span class="p-2 text-center text-sm font-semibold">{{ card.name }}</span>
               </div>
             }
+            @if (selectedDeck()) {
+              <div class="search-show-card__overlay" role="group" [attr.aria-label]="card.name">
+                <p-button
+                  icon="pi pi-plus"
+                  [pTooltip]="'workspace.addCard.mainboard' | transloco"
+                  tooltipPosition="top"
+                  size="small"
+                  rounded
+                  (onClick)="addCard(card, false)"
+                />
+                <p-button
+                  icon="pi pi-plus"
+                  [pTooltip]="'workspace.addCard.sideboard' | transloco"
+                  tooltipPosition="top"
+                  size="small"
+                  severity="secondary"
+                  rounded
+                  (onClick)="addCard(card, true)"
+                />
+              </div>
+            }
           </article>
         }
       </div>

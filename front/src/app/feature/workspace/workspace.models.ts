@@ -29,6 +29,15 @@ export interface WorkspaceQuerySearchUpsert {
   readonly searchEngine: string;
 }
 
+export interface WorkspaceDeckCardAdd {
+  readonly cardName: string;
+  readonly scryFallId: string;
+  readonly quantity: number;
+  readonly type: string;
+  readonly cost: string | null;
+  readonly isSideBoard: boolean;
+}
+
 export interface WorkspaceDeckCardUpsert {
   readonly cardName: string;
   readonly scryFallId: string;

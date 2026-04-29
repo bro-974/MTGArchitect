@@ -71,4 +71,23 @@ internal sealed class DeckRepository(AuthDbContext dbContext) : IDeckRepository
         dbContext.QueryInfos.Remove(queryInfo);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<DeckCard> AddOrIncrementCardAsync(Guid deckId, DeckCard card, CancellationToken cancellationToken = default)
+    {
+        var existing = await dbContext.DeckCards
+            .FirstOrDefaultAsync(x => x.DeckId == deckId && x.ScryFallId == card.ScryFallId && x.IsSideBoard == card.IsSideBoard, cancellationToken);
+
+        if (existing is not null)
+        {
+            existing.Quantity += card.Quantity;
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return existing;
+        }
+
+        card.Id = Guid.NewGuid();
+        card.DeckId = deckId;
+        dbContext.DeckCards.Add(card);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return card;
+    }
 }

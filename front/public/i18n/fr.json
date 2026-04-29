@@ -180,6 +180,14 @@
       "type": "Type",
       "emptySideboard": "Aucune carte de reserve pour ce deck pour le moment."
     },
+    "addCard": {
+      "mainboard": "Ajouter au principal",
+      "sideboard": "Ajouter en réserve",
+      "successSummary": "Carte ajoutée",
+      "successDetail": "{{ name }} ajoutée à votre deck.",
+      "errorSummary": "Échec de l'ajout",
+      "errorDetail": "Impossible d'ajouter la carte. Veuillez réessayer."
+    },
     "search": {
       "formLabel": "Formulaire de recherche avancee de l'espace de travail",
       "hint": "Preparez une requete structuree sans quitter votre espace deck.",

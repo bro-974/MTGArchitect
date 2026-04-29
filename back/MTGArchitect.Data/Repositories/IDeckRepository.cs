@@ -11,4 +11,5 @@ public interface IDeckRepository
     Task DeleteAsync(Deck deck, CancellationToken cancellationToken = default);
     Task AddQuerySearchToDeckAsync(Guid deckId, QueryInfo queryInfo, CancellationToken cancellationToken = default);
     Task RemoveQuerySearchAsync(Guid deckId, Guid queryId, CancellationToken cancellationToken = default);
+    Task<DeckCard> AddOrIncrementCardAsync(Guid deckId, DeckCard card, CancellationToken cancellationToken = default);
 }

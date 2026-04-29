@@ -180,6 +180,14 @@
       "type": "Type",
       "emptySideboard": "No sideboard cards for this deck yet."
     },
+    "addCard": {
+      "mainboard": "Add to main",
+      "sideboard": "Add to side",
+      "successSummary": "Card added",
+      "successDetail": "{{ name }} added to your deck.",
+      "errorSummary": "Failed to add",
+      "errorDetail": "Could not add the card. Please try again."
+    },
     "search": {
       "formLabel": "Workspace advanced search form",
       "hint": "Prepare a structured query while staying in your deck workspace.",

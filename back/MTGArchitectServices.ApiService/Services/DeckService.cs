@@ -84,6 +84,30 @@ public class DeckService(IDeckRepository deckRepository)
         return Results.Created($"/api/deck/{deckId}/query-search/{queryInfo.Id}", MappingHelpers.ToQueryInfoResponse(queryInfo));
     }
 
+    public async Task<IResult> AddCardToDeckAsync(Guid deckId, DeckCardAddRequest request, ClaimsPrincipal principal, CancellationToken cancellationToken)
+    {
+        var userId = GetUserId(principal);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Results.Unauthorized();
+
+        var deck = await deckRepository.GetByIdAsync(deckId, userId, cancellationToken);
+        if (deck is null)
+            return Results.NotFound();
+
+        var card = new DeckCard
+        {
+            CardName = request.CardName,
+            ScryFallId = request.ScryFallId,
+            Quantity = request.Quantity,
+            Type = request.Type,
+            Cost = request.Cost,
+            IsSideBoard = request.IsSideBoard
+        };
+
+        var result = await deckRepository.AddOrIncrementCardAsync(deckId, card, cancellationToken);
+        return Results.Ok(MappingHelpers.ToDeckCardResponse(result));
+    }
+
     public async Task<IResult> RemoveQuerySearchAsync(Guid deckId, Guid queryId, ClaimsPrincipal principal, CancellationToken cancellationToken)
     {
         var userId = GetUserId(principal);
