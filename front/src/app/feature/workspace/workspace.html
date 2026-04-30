@@ -10,8 +10,12 @@
     </p-accordion-content>
   </p-accordion-panel>
 
-  <p-accordion-panel value="search">
-    <p-accordion-header>{{ 'workspace.accordion.advancedSearch' | transloco }}</p-accordion-header>
+  <p-accordion-panel [disabled]="isSearchDisabled()" value="search">
+    <p-accordion-header
+      [pTooltip]="isSearchDisabled() ? ('workspace.accordion.advancedSearch.disabledTooltip' | transloco) : ''"
+      tooltipPosition="top">
+      {{ 'workspace.accordion.advancedSearch.label' | transloco }}
+    </p-accordion-header>
     <p-accordion-content>
       <app-workspace-search-form
         [saving]="isSavingSearch()"

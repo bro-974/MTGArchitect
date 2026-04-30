@@ -105,7 +105,10 @@
     "loadError": "Could not load your decks. Verify your session and try again.",
     "accordion": {
       "deckList": "Your decks",
-      "advancedSearch": "Advanced search"
+      "advancedSearch": {
+        "label": "Advanced search",
+        "disabledTooltip": "Please select or create a deck first"
+      }
     },
     "deckList": {
       "title": "Decks",

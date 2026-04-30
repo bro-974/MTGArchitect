@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { AccordionModule } from 'primeng/accordion';
+import { TooltipModule } from 'primeng/tooltip';
 import { catchError, EMPTY, Subscription } from 'rxjs';
 import { WorkspaceDeckList } from './workspace-deck-list/workspace-deck-list';
 import { WorkspaceSearchForm } from './workspace-search/workspace-search-form';
@@ -21,6 +22,7 @@ import { WorkspaceService } from './workspace.service';
   imports: [
     TranslocoPipe,
     AccordionModule,
+    TooltipModule,
     WorkspaceDeckList,
     WorkspaceSearchForm
   ],
@@ -44,6 +46,10 @@ export class Workspace {
 
   readonly selectedDeck = computed(
     () => this.decks().find((deck) => deck.id === this.selectedDeckId()) ?? null
+  );
+
+  readonly isSearchDisabled = computed(
+    () => this.decks().length === 0 || this.selectedDeckId() === null
   );
 
   constructor() {

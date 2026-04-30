@@ -105,7 +105,10 @@
     "loadError": "Impossible de charger vos decks. Verifiez votre session puis reessayez.",
     "accordion": {
       "deckList": "Vos decks",
-      "advancedSearch": "Recherche avancee"
+      "advancedSearch": {
+        "label": "Recherche avancee",
+        "disabledTooltip": "Veuillez selectionner ou creer un deck d'abord"
+      }
     },
     "deckList": {
       "title": "Decks",
