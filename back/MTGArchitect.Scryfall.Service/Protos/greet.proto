@@ -7,6 +7,7 @@ package scryfall;
 service CardSearch {
   rpc SearchCards (SearchCardsRequest) returns (SearchCardsReply);
   rpc AdvanceSearchCards (AdvanceSearchCardsRequest) returns (SearchCardsReply);
+  rpc GetCardDetail (GetCardDetailRequest) returns (CardDetailReply);
 }
 
 // ── Shared enums ─────────────────────────────────────────────────────────────
@@ -89,6 +90,47 @@ enum SortOrder {
 enum SortDirection {
   ASC = 0;
   DESC = 1;
+}
+
+// ── Card detail messages ──────────────────────────────────────────────────────
+
+message GetCardDetailRequest {
+  string id = 1;
+}
+
+message CardPrintingItem {
+  string id = 1;
+  string set_code = 2;
+  string set_name = 3;
+  string rarity = 4;
+  string image_url = 5;
+}
+
+message CardRulingItem {
+  string published_at = 1;
+  string comment = 2;
+}
+
+message CardDetailReply {
+  string id = 1;
+  string name = 2;
+  string mana_cost = 3;
+  float cmc = 4;
+  string type_line = 5;
+  string oracle_text = 6;
+  string power = 7;
+  string toughness = 8;
+  string loyalty = 9;
+  string rarity = 10;
+  string set_code = 11;
+  string set_name = 12;
+  map<string, string> legalities = 13;
+  string flavor_text = 14;
+  string artist = 15;
+  string image_url = 16;
+  string image_large_url = 17;
+  repeated CardPrintingItem printings = 18;
+  repeated CardRulingItem rulings = 19;
 }
 
 // ── Existing messages ─────────────────────────────────────────────────────────

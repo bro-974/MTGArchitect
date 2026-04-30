@@ -132,6 +132,15 @@ public static class EndpointExtensions
         })
         .WithName("AdvancedSearchCards");
 
+        cards.MapGet("/{id}", async (
+            string id,
+            [FromServices] SearchServices searchController,
+            CancellationToken cancellationToken) =>
+        {
+            return await searchController.GetCardDetail(id, cancellationToken);
+        })
+        .WithName("GetCardDetail");
+
         return app;
     }
 

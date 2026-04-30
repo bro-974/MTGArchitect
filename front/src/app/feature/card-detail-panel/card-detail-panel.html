@@ -1,0 +1,185 @@
+<div class="card-detail-panel" role="complementary" [attr.aria-label]="detail()?.name ?? ('cardDetail.loading' | transloco)">
+  <div class="card-detail-panel__header">
+    <span class="card-detail-panel__title font-semibold text-lg">{{ detail()?.name ?? '' }}</span>
+    <p-button
+      icon="pi pi-times"
+      [rounded]="true"
+      severity="secondary"
+      size="small"
+      [text]="true"
+      [attr.aria-label]="'cardDetail.close' | transloco"
+      (onClick)="close.emit()"
+    />
+  </div>
+
+  @switch (status()) {
+    @case ('loading') {
+      <div class="card-detail-panel__body">
+        <p-skeleton width="100%" height="320px" styleClass="border-round-xl mb-3" />
+        <p-skeleton width="60%" height="1.5rem" styleClass="mb-2" />
+        <p-skeleton width="40%" height="1rem" styleClass="mb-2" />
+        <p-skeleton width="100%" height="4rem" styleClass="mb-2" />
+        <p-skeleton width="80%" height="1rem" styleClass="mb-2" />
+        <p-skeleton width="50%" height="1rem" />
+      </div>
+    }
+    @case ('error') {
+      <div class="card-detail-panel__body">
+        <p class="text-color-secondary m-0" role="alert">{{ 'cardDetail.error' | transloco }}</p>
+      </div>
+    }
+    @case ('success') {
+      <div class="card-detail-panel__body">
+        <!-- Card image -->
+        <div class="card-detail-panel__image-wrap">
+          @if (displayImageUrl()) {
+            <img
+              class="card-detail-panel__image"
+              [src]="displayImageUrl()"
+              [alt]="detail()!.name"
+              width="488"
+              height="680"
+              loading="lazy"
+            />
+          }
+        </div>
+
+        <!-- Add to deck buttons -->
+        <div class="card-detail-panel__actions">
+          <p-button
+            icon="pi pi-plus"
+            [label]="'cardDetail.addMainboard' | transloco"
+            size="small"
+            styleClass="flex-1"
+            (onClick)="addCard.emit({ isSideBoard: false })"
+          />
+          <p-button
+            icon="pi pi-plus"
+            [label]="'cardDetail.addSideboard' | transloco"
+            size="small"
+            severity="secondary"
+            styleClass="flex-1"
+            (onClick)="addCard.emit({ isSideBoard: true })"
+          />
+        </div>
+
+        <!-- Core info -->
+        <div class="card-detail-panel__info">
+          <div class="card-detail-panel__row">
+            <span class="text-color-secondary text-sm">{{ 'cardDetail.type' | transloco }}</span>
+            <span class="text-sm font-medium">{{ detail()!.typeLine }}</span>
+          </div>
+
+          @if (detail()!.manaCost) {
+            <div class="card-detail-panel__row">
+              <span class="text-color-secondary text-sm">{{ 'cardDetail.manaCost' | transloco }}</span>
+              <span class="text-sm font-medium">{{ detail()!.manaCost }} ({{ detail()!.cmc }})</span>
+            </div>
+          }
+
+          @if (detail()!.power || detail()!.toughness) {
+            <div class="card-detail-panel__row">
+              <span class="text-color-secondary text-sm">{{ 'cardDetail.stats' | transloco }}</span>
+              <span class="text-sm font-medium">{{ detail()!.power }} / {{ detail()!.toughness }}</span>
+            </div>
+          }
+
+          @if (detail()!.loyalty) {
+            <div class="card-detail-panel__row">
+              <span class="text-color-secondary text-sm">{{ 'cardDetail.loyalty' | transloco }}</span>
+              <span class="text-sm font-medium">{{ detail()!.loyalty }}</span>
+            </div>
+          }
+
+          <div class="card-detail-panel__row">
+            <span class="text-color-secondary text-sm">{{ 'cardDetail.rarity' | transloco }}</span>
+            <p-tag [value]="detail()!.rarity" [severity]="raritySeverity(detail()!.rarity)" />
+          </div>
+
+          <div class="card-detail-panel__row">
+            <span class="text-color-secondary text-sm">{{ 'cardDetail.set' | transloco }}</span>
+            <span class="text-sm font-medium">{{ detail()!.setName }} ({{ detail()!.setCode | uppercase }})</span>
+          </div>
+
+          @if (detail()!.artist) {
+            <div class="card-detail-panel__row">
+              <span class="text-color-secondary text-sm">{{ 'cardDetail.artist' | transloco }}</span>
+              <span class="text-sm font-medium">{{ detail()!.artist }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Oracle text -->
+        @if (detail()!.oracleText) {
+          <div class="card-detail-panel__oracle">
+            <p class="text-sm m-0" style="white-space: pre-line">{{ detail()!.oracleText }}</p>
+          </div>
+        }
+
+        <!-- Flavor text -->
+        @if (detail()!.flavorText) {
+          <div class="card-detail-panel__flavor">
+            <p class="text-sm m-0 text-color-secondary font-italic">{{ detail()!.flavorText }}</p>
+          </div>
+        }
+
+        <!-- Format legality -->
+        @if (legalFormats().length > 0) {
+          <div class="card-detail-panel__section">
+            <p class="text-xs font-semibold text-color-secondary uppercase m-0 mb-2">
+              {{ 'cardDetail.legalIn' | transloco }}
+            </p>
+            <div class="card-detail-panel__tags">
+              @for (format of legalFormats(); track format) {
+                <p-tag [value]="format" severity="success" styleClass="text-xs" />
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Printings -->
+        @if (detail()!.printings.length > 1) {
+          <div class="card-detail-panel__section">
+            <p class="text-xs font-semibold text-color-secondary uppercase m-0 mb-2">
+              {{ 'cardDetail.printings' | transloco }} ({{ detail()!.printings.length }})
+            </p>
+            <div class="card-detail-panel__printings">
+              @for (printing of detail()!.printings; track printing.id) {
+                <button
+                  type="button"
+                  class="card-detail-panel__printing-chip"
+                  [class.card-detail-panel__printing-chip--active]="displayImageUrl() === printing.imageUrl"
+                  (click)="selectPrinting(printing.imageUrl)"
+                >
+                  <span class="text-xs font-semibold">{{ printing.setCode | uppercase }}</span>
+                  <span class="text-xs text-color-secondary">{{ printing.rarity | slice:0:1 | uppercase }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Rulings -->
+        @if (hasRulings()) {
+          <p-accordion>
+            <p-accordion-panel value="rulings">
+              <p-accordion-header>
+                {{ 'cardDetail.rulings' | transloco }} ({{ detail()!.rulings.length }})
+              </p-accordion-header>
+              <p-accordion-content>
+                <ul class="card-detail-panel__rulings">
+                  @for (ruling of detail()!.rulings; track ruling.publishedAt + ruling.comment) {
+                    <li class="card-detail-panel__ruling">
+                      <span class="text-xs text-color-secondary">{{ ruling.publishedAt }}</span>
+                      <p class="text-sm m-0">{{ ruling.comment }}</p>
+                    </li>
+                  }
+                </ul>
+              </p-accordion-content>
+            </p-accordion-panel>
+          </p-accordion>
+        }
+      </div>
+    }
+  }
+</div>

@@ -227,6 +227,23 @@
       }
     }
   },
+  "cardDetail": {
+    "loading": "Chargement des détails...",
+    "error": "Impossible de charger les détails. Veuillez réessayer.",
+    "close": "Fermer le détail de la carte",
+    "addMainboard": "Ajouter au principal",
+    "addSideboard": "Ajouter en réserve",
+    "type": "Type",
+    "manaCost": "Coût de mana",
+    "stats": "F / E",
+    "loyalty": "Loyauté",
+    "rarity": "Rareté",
+    "set": "Édition",
+    "artist": "Artiste",
+    "legalIn": "Légal dans",
+    "printings": "Éditions",
+    "rulings": "Règles officielles"
+  },
   "login": {
     "eyebrow": "Authentification",
     "title": "Connexion",

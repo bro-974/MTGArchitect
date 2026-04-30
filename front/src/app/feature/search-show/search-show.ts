@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { MessageService } from 'primeng/api';
@@ -7,6 +7,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { catchError, filter, map, of, startWith, switchMap, take } from 'rxjs';
 import type { Observable } from 'rxjs';
 
+import { CardDetailPanel } from '../card-detail-panel/card-detail-panel';
 import { CardExplorerCard, CardExplorerService } from '../card-explorer/card-explorer.service';
 import { WorkspaceDeckStateService } from '../workspace/workspace-deck-state.service';
 import { WorkspaceService } from '../workspace/workspace.service';
@@ -20,7 +21,7 @@ type SearchState =
 
 @Component({
   selector: 'app-search-show',
-  imports: [TranslocoPipe, Button, Tooltip],
+  imports: [TranslocoPipe, Button, Tooltip, CardDetailPanel],
   templateUrl: './search-show.html',
   styleUrl: './search-show.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +29,8 @@ type SearchState =
 export class SearchShow {
   readonly queryText = input.required<string>();
   readonly isActive = input(true);
+
+  readonly activeCardId = signal<string | null>(null);
 
   private readonly cardExplorerService = inject(CardExplorerService);
   private readonly workspaceService = inject(WorkspaceService);
@@ -57,6 +60,17 @@ export class SearchShow {
   });
 
   readonly selectedDeck = computed(() => this.workspaceDeckState.selectedDeck());
+
+  openDetail(card: CardExplorerCard): void {
+    this.activeCardId.set(card.id);
+  }
+
+  addCardFromPanel(isSideBoard: boolean): void {
+    const id = this.activeCardId();
+    if (!id) return;
+    const card = this.cards().find((c) => c.id === id);
+    if (card) this.addCard(card, isSideBoard);
+  }
 
   addCard(card: CardExplorerCard, isSideBoard: boolean): void {
     const deck = this.workspaceDeckState.selectedDeck();

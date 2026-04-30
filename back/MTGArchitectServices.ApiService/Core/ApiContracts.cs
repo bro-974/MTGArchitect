@@ -58,3 +58,27 @@ public sealed record DeckCardAddRequest(
     string Type,
     string? Cost,
     bool IsSideBoard);
+
+public sealed record CardDetailResponse(
+    string Id,
+    string Name,
+    string ManaCost,
+    float Cmc,
+    string TypeLine,
+    string OracleText,
+    string Power,
+    string Toughness,
+    string Loyalty,
+    string Rarity,
+    string SetCode,
+    string SetName,
+    Dictionary<string, string> Legalities,
+    string FlavorText,
+    string Artist,
+    string ImageUrl,
+    string ImageLargeUrl,
+    IReadOnlyList<CardPrintingResponse> Printings,
+    IReadOnlyList<CardRulingResponse> Rulings);
+
+public sealed record CardPrintingResponse(string Id, string SetCode, string SetName, string Rarity, string ImageUrl);
+public sealed record CardRulingResponse(string PublishedAt, string Comment);

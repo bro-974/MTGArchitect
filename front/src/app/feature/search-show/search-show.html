@@ -1,66 +1,87 @@
-@switch (status()) {
-  @case ('idle') {
-    <!-- Waiting for tab to be opened -->
-  }
-  @case ('loading') {
-    <div class="search-show-grid" aria-live="polite" aria-busy="true">
-      @for (placeholder of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track placeholder) {
-        <div class="search-show-card search-show-card--skeleton" aria-hidden="true"></div>
+<div class="search-show-layout">
+  <div class="search-show-results">
+    @switch (status()) {
+      @case ('idle') {
+        <!-- Waiting for tab to be opened -->
       }
-    </div>
-  }
-  @case ('error') {
-    <p class="m-0 text-color-secondary" role="alert">{{ 'workspace.selected.searchError' | transloco }}</p>
-  }
-  @case ('success') {
-    @if (cards().length === 0) {
-      <p class="m-0 text-color-secondary" aria-live="polite">{{ 'workspace.selected.searchEmpty' | transloco }}</p>
-    } @else {
-      <div class="search-show-grid" aria-live="polite">
-        @for (card of cards(); track card.id) {
-          <article class="search-show-card">
-            @if (card.imageUrl) {
-              <img
-                class="search-show-card__img"
-                [src]="card.imageUrl"
-                [alt]="card.name"
-                width="488"
-                height="680"
-                loading="lazy"
-              />
-            } @else {
-              <div
-                class="search-show-card__img search-show-card__img--missing flex align-items-center justify-content-center"
-                role="img"
+      @case ('loading') {
+        <div class="search-show-grid" aria-live="polite" aria-busy="true">
+          @for (placeholder of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track placeholder) {
+            <div class="search-show-card search-show-card--skeleton" aria-hidden="true"></div>
+          }
+        </div>
+      }
+      @case ('error') {
+        <p class="m-0 text-color-secondary" role="alert">{{ 'workspace.selected.searchError' | transloco }}</p>
+      }
+      @case ('success') {
+        @if (cards().length === 0) {
+          <p class="m-0 text-color-secondary" aria-live="polite">{{ 'workspace.selected.searchEmpty' | transloco }}</p>
+        } @else {
+          <div class="search-show-grid" aria-live="polite">
+            @for (card of cards(); track card.id) {
+              <article
+                class="search-show-card"
+                [class.search-show-card--active]="activeCardId() === card.id"
+                (click)="openDetail(card)"
+                role="button"
+                tabindex="0"
                 [attr.aria-label]="card.name"
+                (keydown.enter)="openDetail(card)"
+                (keydown.space)="openDetail(card)"
               >
-                <span class="p-2 text-center text-sm font-semibold">{{ card.name }}</span>
-              </div>
+                @if (card.imageUrl) {
+                  <img
+                    class="search-show-card__img"
+                    [src]="card.imageUrl"
+                    [alt]="card.name"
+                    width="488"
+                    height="680"
+                    loading="lazy"
+                  />
+                } @else {
+                  <div
+                    class="search-show-card__img search-show-card__img--missing flex align-items-center justify-content-center"
+                    role="img"
+                    [attr.aria-label]="card.name"
+                  >
+                    <span class="p-2 text-center text-sm font-semibold">{{ card.name }}</span>
+                  </div>
+                }
+                @if (selectedDeck()) {
+                  <div class="search-show-card__overlay" role="group" [attr.aria-label]="card.name">
+                    <p-button
+                      icon="pi pi-plus"
+                      [pTooltip]="'workspace.addCard.mainboard' | transloco"
+                      tooltipPosition="top"
+                      size="small"
+                      rounded
+                      (onClick)="addCard(card, false); $event.stopPropagation()"
+                    />
+                    <p-button
+                      icon="pi pi-plus"
+                      [pTooltip]="'workspace.addCard.sideboard' | transloco"
+                      tooltipPosition="top"
+                      size="small"
+                      severity="secondary"
+                      rounded
+                      (onClick)="addCard(card, true); $event.stopPropagation()"
+                    />
+                  </div>
+                }
+              </article>
             }
-            @if (selectedDeck()) {
-              <div class="search-show-card__overlay" role="group" [attr.aria-label]="card.name">
-                <p-button
-                  icon="pi pi-plus"
-                  [pTooltip]="'workspace.addCard.mainboard' | transloco"
-                  tooltipPosition="top"
-                  size="small"
-                  rounded
-                  (onClick)="addCard(card, false)"
-                />
-                <p-button
-                  icon="pi pi-plus"
-                  [pTooltip]="'workspace.addCard.sideboard' | transloco"
-                  tooltipPosition="top"
-                  size="small"
-                  severity="secondary"
-                  rounded
-                  (onClick)="addCard(card, true)"
-                />
-              </div>
-            }
-          </article>
+          </div>
         }
-      </div>
+      }
     }
+  </div>
+
+  @if (activeCardId()) {
+    <app-card-detail-panel
+      [cardId]="activeCardId()!"
+      (close)="activeCardId.set(null)"
+      (addCard)="addCardFromPanel($event.isSideBoard)"
+    />
   }
-}
+</div>

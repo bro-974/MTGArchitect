@@ -227,6 +227,23 @@
       }
     }
   },
+  "cardDetail": {
+    "loading": "Loading card details...",
+    "error": "Could not load card details. Please try again.",
+    "close": "Close card detail",
+    "addMainboard": "Add to main",
+    "addSideboard": "Add to side",
+    "type": "Type",
+    "manaCost": "Mana cost",
+    "stats": "P / T",
+    "loyalty": "Loyalty",
+    "rarity": "Rarity",
+    "set": "Set",
+    "artist": "Artist",
+    "legalIn": "Legal in",
+    "printings": "Printings",
+    "rulings": "Rulings"
+  },
   "login": {
     "eyebrow": "Authentication",
     "title": "Sign in",
