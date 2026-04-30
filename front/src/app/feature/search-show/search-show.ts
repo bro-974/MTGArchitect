@@ -40,7 +40,7 @@ export class SearchShow {
       filter((isActive) => isActive),
       take(1),
       switchMap(() =>
-        this.cardExplorerService.searchCardsAdvanced({ name: this.queryText() }).pipe(
+        this.cardExplorerService.searchCardsAdvanced(JSON.parse(this.queryText())).pipe(
           map((cards): SearchState => ({ status: 'success', cards })),
           catchError((): Observable<SearchState> => of({ status: 'error' })),
           startWith<SearchState>({ status: 'loading' })

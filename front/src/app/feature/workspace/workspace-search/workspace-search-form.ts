@@ -13,7 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TooltipModule } from 'primeng/tooltip';
-import { CardFormat, ComparisonOperator } from '../../../core/models/card-query-search.model';
+import { CardFormat, CardQuerySearch, ComparisonOperator } from '../../../core/models/card-query-search.model';
 
 type ManaColorValue = 'W' | 'U' | 'B' | 'R' | 'G' | 'C';
 
@@ -28,19 +28,6 @@ interface ManaColorOption {
   background: string;
   border: string;
   color: string;
-}
-
-interface WorkspaceSavedQuery {
-  name?: string;
-  exactName?: true;
-  color?: string;
-  colorOperator?: ComparisonOperator;
-  colorIdentity?: string;
-  types?: string;
-  oracleText?: string;
-  manaValue?: number;
-  manaValueOperator?: ComparisonOperator;
-  format?: CardFormat;
 }
 
 @Component({
@@ -64,7 +51,7 @@ export class WorkspaceSearchForm {
 
   readonly selectedColors = signal<readonly ManaColorValue[]>([]);
   readonly selectedIdentityColors = signal<readonly ManaColorValue[]>([]);
-  readonly savedQuery = signal<WorkspaceSavedQuery | null>(null);
+  readonly savedQuery = signal<CardQuerySearch | null>(null);
 
   readonly manaColorOrder: readonly ManaColorValue[] = ['W', 'U', 'B', 'R', 'G', 'C'];
   readonly manaColorOptions: readonly ManaColorOption[] = [
@@ -134,7 +121,7 @@ export class WorkspaceSearchForm {
 
   handleSubmit(): void {
     const value = this.form.getRawValue();
-    const query: WorkspaceSavedQuery = {};
+    const query: CardQuerySearch = {};
 
     if (value.name) {
       query.name = value.name;
@@ -153,7 +140,7 @@ export class WorkspaceSearchForm {
     }
 
     if (value.types) {
-      query.types = value.types;
+      query.types = [value.types];
     }
 
     if (value.oracleText) {
@@ -170,11 +157,7 @@ export class WorkspaceSearchForm {
     }
 
     this.savedQuery.set(query);
-
-    const queryString = this.toQueryString(query);
-    if (queryString) {
-      this.saveQuery.emit(queryString);
-    }
+    this.saveQuery.emit(JSON.stringify(query));
   }
 
   handleReset(): void {
@@ -226,58 +209,4 @@ export class WorkspaceSearchForm {
     return this.manaColorOrder.filter((value) => selected.has(value));
   }
 
-  private toQueryString(query: WorkspaceSavedQuery): string {
-    const tokens: string[] = [];
-
-    if (query.name) {
-      tokens.push(query.exactName ? `!"${query.name}"` : query.name);
-    }
-
-    if (query.color) {
-      const op = this.colorOperatorToScryfall(query.colorOperator ?? 'Equal');
-      tokens.push(`c${op}${query.color}`);
-    }
-
-    if (query.colorIdentity) {
-      tokens.push(`id:${query.colorIdentity}`);
-    }
-
-    if (query.types) {
-      tokens.push(`t:${query.types}`);
-    }
-
-    if (query.oracleText) {
-      tokens.push(`o:${query.oracleText}`);
-    }
-
-    if (query.manaValue !== undefined) {
-      const op = this.mvOperatorToScryfall(query.manaValueOperator ?? 'Equal');
-      tokens.push(`mv${op}${query.manaValue}`);
-    }
-
-    if (query.format) {
-      tokens.push(`f:${query.format.toLowerCase()}`);
-    }
-
-    return tokens.join(' ').trim();
-  }
-
-  private colorOperatorToScryfall(op: ComparisonOperator): string {
-    switch (op) {
-      case 'GreaterThanOrEqual': return '>=';
-      case 'LessThanOrEqual': return '<=';
-      default: return ':';
-    }
-  }
-
-  private mvOperatorToScryfall(op: ComparisonOperator): string {
-    switch (op) {
-      case 'NotEqual': return '!=';
-      case 'GreaterThan': return '>';
-      case 'GreaterThanOrEqual': return '>=';
-      case 'LessThan': return '<';
-      case 'LessThanOrEqual': return '<=';
-      default: return '=';
-    }
-  }
 }
