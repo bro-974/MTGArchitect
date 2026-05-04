@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Navbar } from "./navbar/navbar";
 import { RouterOutlet } from "@angular/router";
 import { ToastModule } from 'primeng/toast';
@@ -10,7 +10,8 @@ import { AuthService } from './core/auth/auth.service';
   selector: 'app-root',
   imports: [Navbar, RouterOutlet, ToastModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   readonly i18n = inject(I18nService);

@@ -7,7 +7,12 @@
       "mcp__graphify__get_community",
       "mcp__graphify__query_graph",
       "mcp__graphify__shortest_path",
-      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")"
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js|jsx\\)$\")",
+      "mcp__angular-cli__list_projects",
+      "mcp__angular-cli__get_best_practices",
+      "Bash(Get-ChildItem -Path \"c:\\\\Repository\\\\bro974\\\\MTGArchitect\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(grep -E \"^|\\\\.ts$\")"
     ]
   }
 }

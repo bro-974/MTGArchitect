@@ -1,9 +1,8 @@
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { AvatarModule } from 'primeng/avatar';
 import { PopoverModule } from 'primeng/popover';
@@ -14,9 +13,10 @@ import { AuthService } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [ButtonModule, CommonModule, SelectModule, ReactiveFormsModule, TranslocoPipe, AvatarModule, PopoverModule],
+  imports: [ButtonModule, SelectModule, ReactiveFormsModule, TranslocoPipe, AvatarModule, PopoverModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
   readonly i18nService = inject(I18nService);
