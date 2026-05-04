@@ -8,6 +8,7 @@
     <File Path="README" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="MTGArchitect.Api.Integration.Tests/MTGArchitect.Api.Integration.Tests.csproj" />
     <Project Path="MTGArchitect.Data.Tests/MTGArchitect.Data.Tests.csproj" Id="4b0ec9b6-9c02-4b67-a160-74324a0a7e23" />
     <Project Path="MTGArchitect.Scryfall.Service.Tests/MTGArchitect.Scryfall.Service.Tests.csproj" Id="b54fca13-497b-42c6-a9c2-d2806b194bd5" />
     <Project Path="MTGArchitectServices.ApiService.Tests/MTGArchitectServices.ApiService.Tests.csproj" />
