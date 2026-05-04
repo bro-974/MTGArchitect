@@ -6,6 +6,7 @@ import {
   output,
   signal
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
@@ -47,6 +48,7 @@ interface ManaColorOption {
 })
 export class WorkspaceSearchForm {
   readonly saving = input(false);
+  readonly deckFormat = input<CardFormat | null>(null);
   readonly saveQuery = output<string>();
 
   readonly selectedColors = signal<readonly ManaColorValue[]>([]);
@@ -106,6 +108,17 @@ export class WorkspaceSearchForm {
     manaValueOperator: new FormControl<ComparisonOperator>('Equal', { nonNullable: true }),
     format: new FormControl<CardFormat | null>(null)
   });
+
+  constructor() {
+    console.log('[WorkspaceSearchForm] constructor');
+    toObservable(this.deckFormat)
+      .pipe(takeUntilDestroyed())
+      .subscribe((format) => {
+        console.log('[WorkspaceSearchForm] deckFormat changed →', format);
+        this.form.controls.format.setValue(format);
+        console.log('[WorkspaceSearchForm] form.format after setValue →', this.form.controls.format.value);
+      });
+  }
 
   readonly savedQueryLabel = computed(() => {
     const query = this.savedQuery();
@@ -171,7 +184,7 @@ export class WorkspaceSearchForm {
       oracleText: '',
       manaValue: null,
       manaValueOperator: 'Equal',
-      format: null
+      format: this.deckFormat()
     });
     this.selectedColors.set([]);
     this.selectedIdentityColors.set([]);

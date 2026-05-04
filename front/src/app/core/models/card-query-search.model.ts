@@ -29,7 +29,8 @@ export type CardFormat =
   | 'Duel'
   | 'OldSchool'
   | 'Premodern'
-  | 'Predh';
+  | 'Predh'
+  | 'Custom';
 
 export interface CardQuerySearch {
   name?: string;

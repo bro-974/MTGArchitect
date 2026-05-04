@@ -1,3 +1,5 @@
+import { CardFormat } from '../../core/models/card-query-search.model';
+
 export interface WorkspaceQuerySearch {
   readonly id: string;
   readonly query: string;
@@ -17,7 +19,7 @@ export interface WorkspaceDeckCard {
 export interface WorkspaceDeck {
   readonly id: string;
   readonly name: string;
-  readonly type: string;
+  readonly type: CardFormat;
   readonly note: string | null;
   readonly querySearches: readonly WorkspaceQuerySearch[];
   readonly cards: readonly WorkspaceDeckCard[];
@@ -49,8 +51,7 @@ export interface WorkspaceDeckCardUpsert {
 
 export interface WorkspaceDeckUpsert {
   readonly name: string;
-  readonly type: string;
-  readonly format: string | null;
+  readonly type: CardFormat;
   readonly commander: string | null;
   readonly colorIdentity: string | null;
   readonly note: string | null;

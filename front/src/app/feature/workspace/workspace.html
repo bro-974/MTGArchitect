@@ -19,6 +19,7 @@
     <p-accordion-content>
       <app-workspace-search-form
         [saving]="isSavingSearch()"
+        [deckFormat]="selectedDeck()?.type ?? null"
         (saveQuery)="handleSaveQuery($event)"
       />
     </p-accordion-content>

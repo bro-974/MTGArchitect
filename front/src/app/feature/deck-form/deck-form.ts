@@ -17,6 +17,7 @@ import { SelectModule } from 'primeng/select';
 import { catchError, debounceTime, distinctUntilChanged, EMPTY, finalize, switchMap } from 'rxjs';
 import { WorkspaceService } from '../workspace/workspace.service';
 import { WorkspaceLayoutStateService } from '../workspace-layout/workspace-layout-state.service';
+import { CardFormat } from '../../core/models/card-query-search.model';
 
 type ManaColorValue = 'W' | 'U' | 'B' | 'R' | 'G' | 'C';
 
@@ -76,7 +77,7 @@ export class DeckForm {
       nonNullable: true,
       validators: [Validators.required, Validators.maxLength(120)]
     }),
-    format: new FormControl<string | null>(null),
+    format: new FormControl<CardFormat | null>(null),
     commander: new FormControl('', { nonNullable: true }),
     note: new FormControl('', { nonNullable: true })
   });
@@ -241,7 +242,6 @@ export class DeckForm {
       .createDeck({
         name,
         type: format ?? 'Custom',
-        format: format ?? null,
         commander: commander?.name ?? null,
         colorIdentity: this.selectedColors().join('') || null,
         note: noteValue || null,
