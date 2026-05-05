@@ -75,7 +75,7 @@ public static class MappingHelpers
         return (queryInfos ?? [])
             .Select(x => new QueryInfo
             {
-                Id = x.Id.GetValueOrDefault() == Guid.Empty ? Guid.NewGuid() : x.Id.Value,
+                Id = x.Id.GetValueOrDefault() == Guid.Empty ? Guid.NewGuid() : x.Id.GetValueOrDefault(),
                 Query = x.QueryJson,
                 SearchEngine = x.SearchEngine
             })

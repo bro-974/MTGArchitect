@@ -10,6 +10,7 @@ public class ScryfallCardSearchService(
 {
     public override async Task<SearchCardsReply> SearchCards(SearchCardsRequest request, ServerCallContext context)
     {
+        logger.LogInformation("Received SearchCards request: Query={Query}, PageSize={PageSize}", request.Query, request.PageSize);
         var result = await cardController.SearchCards(request.Query, request.PageSize, context.CancellationToken);
         return MappingHelpers.ToReply(result);
     }
@@ -17,12 +18,14 @@ public class ScryfallCardSearchService(
     public override async Task<SearchCardsReply> AdvanceSearchCards(AdvanceSearchCardsRequest request, ServerCallContext context)
     {
         var query = MappingHelpers.ToCardQuerySearch(request);
+        logger.LogInformation("Received AdvanceSearchCards request: Query={Query}, PageSize={PageSize}", query, request.PageSize);
         var result = await cardController.AdvanceSearchCards(query, cancellationToken: context.CancellationToken);
         return MappingHelpers.ToReply(result);
     }
 
     public override async Task<CardDetailReply> GetCardDetail(GetCardDetailRequest request, ServerCallContext context)
     {
+        logger.LogInformation("Received GetCardDetail request: Id={Id}", request.Id);
         var result = await cardController.GetCardDetail(request.Id, context.CancellationToken);
         if (result is null)
             throw new RpcException(new Status(StatusCode.NotFound, $"Card {request.Id} not found"));
