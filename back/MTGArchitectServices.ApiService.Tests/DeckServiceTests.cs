@@ -58,7 +58,7 @@ public class DeckServiceTests
     [Test]
     public async Task CreateAsync_WithValidRequest_ReturnsCreated()
     {
-        var request = new DeckUpsertRequest("Test Deck", "Standard", null, null, null);
+        var request = new DeckUpsertRequest("Test Deck", "Standard", null, null, null,null,null);
 
         var result = await _service.CreateAsync(request, CreatePrincipal(), default);
 
@@ -69,7 +69,7 @@ public class DeckServiceTests
     [Test]
     public async Task CreateAsync_WhenUnauthorized_ReturnsUnauthorized()
     {
-        var request = new DeckUpsertRequest("Test Deck", "Standard", null, null, null);
+        var request = new DeckUpsertRequest("Test Deck", "Standard", null, null, null, null, null);
 
         var result = await _service.CreateAsync(request, CreateAnonymousPrincipal(), default);
 
@@ -85,7 +85,7 @@ public class DeckServiceTests
         var deck = CreateDeck();
         _repository.GetByIdWithDetailsAsync(deck.Id, "user-1", Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(deck);
-        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null);
+        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null, null, null);
 
         var result = await _service.UpdateAsync(deck.Id, request, CreatePrincipal(), default);
 
@@ -97,7 +97,7 @@ public class DeckServiceTests
     {
         _repository.GetByIdWithDetailsAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns((Deck?)null);
-        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null);
+        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null, null, null);
 
         var result = await _service.UpdateAsync(Guid.NewGuid(), request, CreatePrincipal(), default);
 
@@ -107,7 +107,7 @@ public class DeckServiceTests
     [Test]
     public async Task UpdateAsync_WhenUnauthorized_ReturnsUnauthorized()
     {
-        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null);
+        var request = new DeckUpsertRequest("Updated", "Commander", null, null, null, null, null);
 
         var result = await _service.UpdateAsync(Guid.NewGuid(), request, CreateAnonymousPrincipal(), default);
 

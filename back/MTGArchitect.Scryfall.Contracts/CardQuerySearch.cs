@@ -276,6 +276,6 @@ namespace MTGArchitect.Scryfall.Contracts
         // ── Pagination ────────────────────────────────────────────────────────────
 
         /// <summary>Maximum number of cards to return. Clamped to 1–50. Defaults to 20.</summary>
-        public int PageSize { get; set; } = 20;
+        public int? PageSize { get; set; }
     }
 }

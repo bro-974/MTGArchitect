@@ -101,6 +101,8 @@ internal static class MappingHelpers
         if (r.HasDirection) q.Direction = r.Direction == SortDirection.Desc ? SearchContracts.SortDirection.Desc : SearchContracts.SortDirection.Asc;
         if (r.HasPrefer) q.Prefer = r.Prefer;
 
+        if(r.HasPageSize) q.PageSize = r.PageSize;
+
         return q;
     }
 

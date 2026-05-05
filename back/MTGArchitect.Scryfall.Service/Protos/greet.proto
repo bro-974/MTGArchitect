@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/wrappers.proto";
+
 option csharp_namespace = "MTGArchitect.Scryfall.Service.Contracts";
 
 package scryfall;
@@ -264,5 +266,5 @@ message AdvanceSearchCardsRequest {
   optional string prefer = 71;
 
   // Pagination
-  int32 page_size = 72;
+  optional int32 page_size = 72;
 }

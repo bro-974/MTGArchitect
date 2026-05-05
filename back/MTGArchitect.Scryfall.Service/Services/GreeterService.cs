@@ -17,8 +17,7 @@ public class ScryfallCardSearchService(
     public override async Task<SearchCardsReply> AdvanceSearchCards(AdvanceSearchCardsRequest request, ServerCallContext context)
     {
         var query = MappingHelpers.ToCardQuerySearch(request);
-        var pageSize = request.PageSize > 0 ? request.PageSize : query.PageSize;
-        var result = await cardController.AdvanceSearchCards(query, pageSize, context.CancellationToken);
+        var result = await cardController.AdvanceSearchCards(query, cancellationToken: context.CancellationToken);
         return MappingHelpers.ToReply(result);
     }
 

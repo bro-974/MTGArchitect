@@ -24,7 +24,8 @@ Accept: application/json
 {
   "types": ["elf"],
   "manaCost": "G",
-  "manaValue": 3
+  "manaValue": 3,
+  "PageSize" : 10
 }
 
 ### 4. Call API with JWT - TEST 200

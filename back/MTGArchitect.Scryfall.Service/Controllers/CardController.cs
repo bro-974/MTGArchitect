@@ -34,7 +34,7 @@ public class CardController : ICardController
         var search = new CardQueryBuilder().SetFromQuery(query).Build();
         if (string.IsNullOrWhiteSpace(search))
             search = "type:creature";
-        var resolvedPageSize = query.PageSize > 0 ? query.PageSize : pageSize;
+        var resolvedPageSize = query.PageSize is > 0 ? query.PageSize.Value : pageSize;
         return await Search(search, resolvedPageSize, cancellationToken);
     }
 
