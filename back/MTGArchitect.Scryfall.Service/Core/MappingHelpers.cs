@@ -9,6 +9,7 @@ internal static class MappingHelpers
     internal static SearchCardsReply ToReply(CardController.SearchCardsResult result)
     {
         var reply = new SearchCardsReply();
+        reply.TotalCount = result.TotalCount;
         reply.Cards.AddRange(result.Cards.Select(c => new CardItem
         {
             Id = c.Id,
@@ -102,6 +103,7 @@ internal static class MappingHelpers
         if (r.HasPrefer) q.Prefer = r.Prefer;
 
         if(r.HasPageSize) q.PageSize = r.PageSize;
+        if(r.HasPage) q.Page = r.Page;
 
         return q;
     }

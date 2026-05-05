@@ -394,3 +394,69 @@ Add to `/Tests/` folder:
 - Responses deserialized into local `record` types defined inline in each test file
 - `Jwt:Key` override in `appHost.Configuration` must be ≥ 32 characters for HMAC-SHA256
 - Known stable Scryfall card ID for `GetCardDetail` test: Lightning Bolt `e3285e6b-3e79-4d7c-bf96-d920f973b122`
+
+# Feature Plan: Color Identity & Commander in Deck API
+
+## Context
+
+The `DeckForm` UI already sends `colorIdentity` (e.g. `"WUB"`) and `commander` (e.g. `"Atraxa, Praetors' Voice"`) to the API. The backend currently ignores both fields. This plan wires them end-to-end.
+
+## Decisions
+
+- **Storage format**: `string?` — matches the frontend representation, nullable for existing decks.
+- **Validation**: `colorIdentity` must match `^[WUBRGC]*$`; invalid values → `400 Bad Request`.
+- **Scope**: both `colorIdentity` and `commander` added together (same request/response shape, same DB change).
+- **DB migrations**: none — DB is recreated on each dev startup via `EnsureCreated`.
+- **Frontend read side**: add both fields to `WorkspaceDeck` and display them in the overview tab.
+
+## Checklist
+
+### Backend
+
+- [x] `back/MTGArchitect.Data/Models/Deck.cs` — add `Commander: string?` and `ColorIdentity: string?`
+- [x] `back/MTGArchitect.Data/Data/AuthDbContext.cs` — configure both columns in `OnModelCreating` (max lengths: Commander 200, ColorIdentity 6)
+- [x] `back/MTGArchitectServices.ApiService/Core/ApiContracts.cs` — add both fields to `DeckUpsertRequest` and `DeckResponse`
+- [x] `back/MTGArchitectServices.ApiService/Core/MappingHelpers.cs` — map both fields in `ToDeckResponse`, `ToDeck`, `Apply`
+- [x] `back/MTGArchitectServices.ApiService/Services/DeckService.cs` — validate `colorIdentity` against `^[WUBRGC]*$`, return `400` if invalid
+
+### Frontend
+
+- [x] `front/src/app/feature/workspace/workspace.models.ts` — add `commander: string | null` and `colorIdentity: string | null` to `WorkspaceDeck`
+- [x] `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.ts` — add computed to convert `"WUB"` → `"{W}{U}{B}"` for `ManaCostComponent`
+- [x] `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.html` — display commander name and color pips in the overview tab
+- [x] `front/src/assets/i18n/en.json` and `fr.json` — add translation keys for commander and color identity labels
+
+### Docs
+
+- [x] `docs/api.endpoint.md` — update `DeckResponse` and `POST /api/deck` / `PUT /api/deck/{id}` request body contracts
+
+# Feature Plan: Pagination for Workspace Search Results
+
+## Goal
+Add server-side page navigation to the `search-show` component so users can browse beyond the first 30 results of a saved search query.
+
+## Decisions
+| Decision | Choice |
+|---|---|
+| Strategy | Server-side pages |
+| UI | PrimeNG `<p-paginator>` — `<<` `<` `{start}–{end} of {total}` `>` `>>` |
+| Page size | Hardcoded 30 |
+| Paginator position | Bottom of card grid |
+
+## Checklist
+
+### Backend — Scryfall Service
+- [x] `SearchCardsResult` record: add `TotalCount: int`
+- [x] `greet.proto`: add `int32 total_count` to `SearchCardsReply`; add `int32 page` to the advanced search request message
+- [x] `CardController.cs`: accept `page` param, pass it to Scryfall (1-based), capture `total_cards` from Scryfall response, populate `TotalCount`
+- [x] `MappingHelpers.cs` (scryfall service): map `TotalCount` in `ToReply`
+
+### Backend — API Service
+- [x] gRPC client call: pass `page`, read `TotalCount` from reply
+- [x] Change response from flat `CardExplorerCard[]` to `{ cards: CardExplorerCard[], totalCount: int }`
+
+### Frontend
+- [x] Add `CardExplorerSearchResult { cards: CardExplorerCard[], totalCount: number }` type
+- [x] `CardExplorerService.searchCardsAdvanced()`: accept `page` argument, return `CardExplorerSearchResult`
+- [x] `search-show.ts`: add `currentPage` signal (0-based), add `totalCount` signal, re-fetch on page change, reset to page 0 when `queryText` input changes
+- [x] `search-show.html`: add `<p-paginator>` at bottom with custom first/prev/next/last icon template, `[rows]="30"`, `[totalRecords]="totalCount()"`

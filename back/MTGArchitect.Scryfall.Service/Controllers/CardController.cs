@@ -17,7 +17,7 @@ public class CardController : ICardController
         this.logger = logger;
     }
 
-    public record SearchCardsResult(List<CardItem> Cards);
+    public record SearchCardsResult(List<CardItem> Cards, int TotalCount);
 
     public record CardPrinting(string Id, string SetCode, string SetName, string Rarity, string ImageUrl);
     public record CardRuling(string PublishedAt, string Comment);
@@ -35,13 +35,14 @@ public class CardController : ICardController
         if (string.IsNullOrWhiteSpace(search))
             search = "type:creature";
         var resolvedPageSize = query.PageSize is > 0 ? query.PageSize.Value : pageSize;
-        return await Search(search, resolvedPageSize, cancellationToken);
+        var resolvedPage = query.Page ?? 0;
+        return await Search(search, resolvedPageSize, resolvedPage, cancellationToken);
     }
 
     public async Task<SearchCardsResult> SearchCards(string query, int pageSize = 20, CancellationToken cancellationToken = default)
     {
         var searchQuery = string.IsNullOrWhiteSpace(query) ? "type:creature" : query.Trim();
-        return await Search(searchQuery, pageSize, cancellationToken);
+        return await Search(searchQuery, pageSize, 0, cancellationToken);
     }
 
 
@@ -151,33 +152,60 @@ public class CardController : ICardController
         return string.Empty;
     }
 
-    private async Task<SearchCardsResult> Search(string searchQuery, int pageSize = 20, CancellationToken cancellationToken = default)
+    private async Task<SearchCardsResult> Search(string searchQuery, int pageSize, int page, CancellationToken cancellationToken)
     {
-        var validatedPageSize = pageSize <= 0 ? 20 : Math.Min(pageSize, 50);
-        var apiQuery = Uri.EscapeDataString(searchQuery);
-        var apiPath = $"cards/search?q={apiQuery}&unique=cards&order=name";
+        const int scryfallPageSize = 175;
+        var validatedPageSize = Math.Clamp(pageSize, 1, 50);
+        var offset = page * validatedPageSize;
+        var scryfallPage = offset / scryfallPageSize + 1;
+        var skipWithin = offset % scryfallPageSize;
         var client = httpClientFactory.CreateClient("scryfall");
 
         try
         {
-            using var response = await client.GetAsync(apiPath, cancellationToken);
-            response.EnsureSuccessStatusCode();
+            var (cards, totalCount, hasMore) = await FetchScryfallPage(client, searchQuery, scryfallPage, cancellationToken);
+            var result = cards.Skip(skipWithin).Take(validatedPageSize).ToList();
 
-            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-            using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
+            if (result.Count < validatedPageSize && hasMore)
+            {
+                var needed = validatedPageSize - result.Count;
+                var (nextCards, _, _) = await FetchScryfallPage(client, searchQuery, scryfallPage + 1, cancellationToken);
+                result.AddRange(nextCards.Take(needed));
+            }
 
-            var cards = document.RootElement.TryGetProperty("data", out var dataElement)
-                && dataElement.ValueKind == JsonValueKind.Array
-                ? dataElement.EnumerateArray().Take(validatedPageSize).Select(MapCard).ToList()
-                : [];
-
-            return new SearchCardsResult(cards);
+            return new SearchCardsResult(result, totalCount);
         }
         catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or JsonException)
         {
             logger.LogWarning(exception, "Scryfall search failed for query {Query}", searchQuery);
-            return new SearchCardsResult([]);
+            return new SearchCardsResult([], 0);
         }
+    }
+
+    private async Task<(List<CardItem> Cards, int TotalCount, bool HasMore)> FetchScryfallPage(
+        HttpClient client, string searchQuery, int scryfallPage, CancellationToken cancellationToken)
+    {
+        var apiQuery = Uri.EscapeDataString(searchQuery);
+        var apiPath = $"cards/search?q={apiQuery}&unique=cards&order=name&page={scryfallPage}";
+
+        using var response = await client.GetAsync(apiPath, cancellationToken);
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return ([], 0, false);
+        response.EnsureSuccessStatusCode();
+
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+        using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
+
+        var totalCount = document.RootElement.TryGetProperty("total_cards", out var totalEl)
+            && totalEl.ValueKind == JsonValueKind.Number ? totalEl.GetInt32() : 0;
+        var hasMore = document.RootElement.TryGetProperty("has_more", out var hasMoreEl)
+            && hasMoreEl.ValueKind == JsonValueKind.True;
+        var cards = document.RootElement.TryGetProperty("data", out var dataElement)
+            && dataElement.ValueKind == JsonValueKind.Array
+            ? dataElement.EnumerateArray().Select(MapCard).ToList()
+            : [];
+
+        return (cards, totalCount, hasMore);
     }
 
     private static CardItem MapCard(JsonElement source)

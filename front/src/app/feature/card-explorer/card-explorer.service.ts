@@ -13,6 +13,11 @@ export interface CardExplorerCard {
   imageUrl: string;
 }
 
+export interface CardExplorerSearchResult {
+  cards: CardExplorerCard[];
+  totalCount: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class CardExplorerService {
   private readonly http = inject(HttpClient);
@@ -25,8 +30,9 @@ export class CardExplorerService {
     return this.http.get<CardExplorerCard[]>(`${environment.apiUrl}/api/cards/search`, { params });
   }
 
-  searchCardsAdvanced(query: CardQuerySearch, pageSize = 18): Observable<CardExplorerCard[]> {
-    query.pageSize = pageSize;
-    return this.http.post<CardExplorerCard[]>(`${environment.apiUrl}/api/cards/search/advanced`, query);
+  searchCardsAdvanced(query: CardQuerySearch, page = 0): Observable<CardExplorerSearchResult> {
+    query.pageSize = 30;
+    query.page = page;
+    return this.http.post<CardExplorerSearchResult>(`${environment.apiUrl}/api/cards/search/advanced`, query);
   }
 }

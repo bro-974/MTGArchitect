@@ -54,4 +54,5 @@ export interface CardQuerySearch {
   rarityOperator?: ComparisonOperator;
   format?: CardFormat;
   pageSize?: number;
+  page?: number;
 }

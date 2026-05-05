@@ -3,8 +3,9 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
+import { Paginator, type PaginatorState } from 'primeng/paginator';
 import { Tooltip } from 'primeng/tooltip';
-import { catchError, filter, map, of, startWith, switchMap, take } from 'rxjs';
+import { catchError, filter, map, of, startWith, switchMap, take, tap } from 'rxjs';
 import type { Observable } from 'rxjs';
 
 import { CardDetailPanel } from '../card-detail-panel/card-detail-panel';
@@ -21,7 +22,7 @@ type SearchState =
 
 @Component({
   selector: 'app-search-show',
-  imports: [TranslocoPipe, Button, Tooltip, CardDetailPanel],
+  imports: [TranslocoPipe, Button, Tooltip, CardDetailPanel, Paginator],
   templateUrl: './search-show.html',
   styleUrl: './search-show.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -31,6 +32,8 @@ export class SearchShow {
   readonly isActive = input(true);
 
   readonly activeCardId = signal<string | null>(null);
+  readonly currentPage = signal(0);
+  readonly totalCount = signal(0);
 
   private readonly cardExplorerService = inject(CardExplorerService);
   private readonly workspaceService = inject(WorkspaceService);
@@ -38,15 +41,22 @@ export class SearchShow {
   private readonly messageService = inject(MessageService);
   private readonly transloco = inject(TranslocoService);
 
+  readonly #currentPage$ = toObservable(this.currentPage);
+
   readonly #state = toSignal(
     toObservable(this.isActive).pipe(
-      filter((isActive) => isActive),
+      filter(Boolean),
       take(1),
       switchMap(() =>
-        this.cardExplorerService.searchCardsAdvanced(JSON.parse(this.queryText())).pipe(
-          map((cards): SearchState => ({ status: 'success', cards })),
-          catchError((): Observable<SearchState> => of({ status: 'error' })),
-          startWith<SearchState>({ status: 'loading' })
+        this.#currentPage$.pipe(
+          switchMap((page) =>
+            this.cardExplorerService.searchCardsAdvanced(JSON.parse(this.queryText()), page).pipe(
+              tap((result) => this.totalCount.set(result.totalCount)),
+              map((result): SearchState => ({ status: 'success', cards: result.cards })),
+              catchError((): Observable<SearchState> => of({ status: 'error' })),
+              startWith<SearchState>({ status: 'loading' })
+            )
+          )
         )
       )
     ),
@@ -60,6 +70,10 @@ export class SearchShow {
   });
 
   readonly selectedDeck = computed(() => this.workspaceDeckState.selectedDeck());
+
+  handlePageChange(event: PaginatorState): void {
+    this.currentPage.set(event.page ?? 0);
+  }
 
   openDetail(card: CardExplorerCard): void {
     this.activeCardId.set(card.id);

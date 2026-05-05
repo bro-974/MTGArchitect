@@ -44,7 +44,7 @@ public class SearchServicesTests
     {
         var body = new CardQuerySearch();
         _client.AdvancedSearchAsync(body, Arg.Any<CancellationToken>())
-            .Returns([new Card { Name = "Counterspell" }]);
+            .Returns(new CardSearchResult { Cards = new List<Card> { new Card { Name = "Counterspell" } } });
 
         var result = await _service.AdvancedSearch(body, default);
 

@@ -13,4 +13,10 @@ namespace MTGArchitect.Scryfall.Contracts
         public string SetCode { get; set; }
         public string ImageUrl { get; set; } = string.Empty;
     }
+
+    public class CardSearchResult
+    {
+        public IReadOnlyList<Card> Cards { get; set; } = new List<Card>();
+        public int TotalCount { get; set; }
+    }
 }

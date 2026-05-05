@@ -25,8 +25,8 @@ public class SearchServices
 
     public async Task<IResult> AdvancedSearch(CardQuerySearch body, CancellationToken cancellationToken)
     {
-        var reply = await cardSearchClient.AdvancedSearchAsync(body, cancellationToken: cancellationToken);
-        return Results.Ok(reply);
+        var result = await cardSearchClient.AdvancedSearchAsync(body, cancellationToken: cancellationToken);
+        return Results.Ok(new { cards = result.Cards, totalCount = result.TotalCount });
     }
 
     public async Task<IResult> GetCardDetail(string id, CancellationToken cancellationToken)

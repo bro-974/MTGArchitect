@@ -21,6 +21,8 @@ public static class MappingHelpers
         var req = new ProtoContracts.AdvanceSearchCardsRequest();
         if (q.PageSize.HasValue)
             req.PageSize = q.PageSize.Value;
+        if (q.Page.HasValue)
+            req.Page = q.Page.Value;
 
         if (q.Name is not null) { req.Name = q.Name; req.ExactName = q.ExactName; }
         if (q.Color is not null) { req.Color = q.Color; req.ColorOperator = MapOp(q.ColorOperator); }

@@ -158,8 +158,8 @@ export class CardExplorerSearchAdvanced {
         }),
         switchMap((query) =>
           this.cardExplorerService.searchCardsAdvanced(query).pipe(
-            tap((cards) => {
-              this.cards.set(cards);
+            tap((result) => {
+              this.cards.set(result.cards);
               this.state.set('ready');
             }),
             catchError(() => {
@@ -216,8 +216,8 @@ export class CardExplorerSearchAdvanced {
     if (v.format) query.format = v.format;
 
     this.cardExplorerService.searchCardsAdvanced(query).subscribe({
-      next: (cards) => {
-        this.cards.set(cards);
+      next: (result) => {
+        this.cards.set(result.cards);
         this.submittedQuery.set(query);
         this.state.set('ready');
       },

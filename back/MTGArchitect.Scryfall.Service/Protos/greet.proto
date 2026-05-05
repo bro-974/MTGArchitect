@@ -144,6 +144,7 @@ message SearchCardsRequest {
 
 message SearchCardsReply {
   repeated CardItem cards = 1;
+  int32 total_count = 2;
 }
 
 message CardItem {
@@ -267,4 +268,5 @@ message AdvanceSearchCardsRequest {
 
   // Pagination
   optional int32 page_size = 72;
+  optional int32 page = 73;
 }

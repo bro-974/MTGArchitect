@@ -72,6 +72,16 @@
               </article>
             }
           </div>
+          <p-paginator
+            [first]="currentPage() * 30"
+            [rows]="30"
+            [totalRecords]="totalCount()"
+            [showFirstLastIcon]="true"
+            [showPageLinks]="false"
+            currentPageReportTemplate="{first}-{last} of {totalRecords}"
+            [showCurrentPageReport]="true"
+            (onPageChange)="handlePageChange($event)"
+          />
         }
       }
     }
