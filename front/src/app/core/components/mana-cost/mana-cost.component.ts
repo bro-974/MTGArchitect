@@ -1,21 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
+const SCRYFALL_SVG_BASE = 'https://svgs.scryfall.io/card-symbols';
+
 interface ManaToken {
   label: string;
-  background: string;
-  border: string;
-  color: string;
+  svgUrl: string;
 }
-
-const MANA_PALETTE: Record<string, Omit<ManaToken, 'label'>> = {
-  W: { background: '#f8fafc', border: '#cbd5e1', color: '#111827' },
-  U: { background: '#60a5fa', border: '#2563eb', color: '#0b1220' },
-  B: { background: '#1f2937', border: '#111827', color: '#f9fafb' },
-  R: { background: '#f87171', border: '#dc2626', color: '#111827' },
-  G: { background: '#4ade80', border: '#16a34a', color: '#0b1220' },
-};
-
-const COLORLESS = { background: '#9ca3af', border: '#6b7280', color: '#111827' };
 
 @Component({
   selector: 'app-mana-cost',
@@ -31,9 +21,8 @@ export class ManaCostComponent {
     const c = this.cost();
     if (!c) return [];
     return (c.match(/\{[^}]+\}/g) ?? []).map((token) => {
-      const symbol = token.slice(1, -1).toUpperCase();
-      const palette = MANA_PALETTE[symbol] ?? COLORLESS;
-      return { label: token.slice(1, -1), ...palette };
+      const filename = token.slice(1, -1).replace('/', '').toUpperCase();
+      return { label: token.slice(1, -1), svgUrl: `${SCRYFALL_SVG_BASE}/${filename}.svg` };
     });
   });
 }

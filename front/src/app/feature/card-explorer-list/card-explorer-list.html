@@ -50,7 +50,7 @@
           </div>
           <p class="m-0 text-color-secondary">{{ card.typeLine }}</p>
           @if (card.manaCost) {
-            <p class="m-0 text-color-secondary">{{ card.manaCost }}</p>
+            <app-mana-cost [cost]="card.manaCost" />
           }
         </div>
         </div>

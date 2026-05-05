@@ -49,17 +49,13 @@
                 <button
                   type="button"
                   class="mana-pastille"
-                  [style.--pastille-bg]="color.background"
-                  [style.--pastille-border]="color.border"
-                  [style.--pastille-color]="color.color"
                   [class.is-selected]="isManaColorSelected(color.value)"
                   [attr.aria-pressed]="isManaColorSelected(color.value)"
                   [attr.aria-label]="color.labelKey | transloco"
                   [title]="color.labelKey | transloco"
                   (click)="toggleManaColor(color.value)"
                 >
-                  <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
-                  <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                  <img [src]="color.svgUrl" [alt]="color.value" aria-hidden="true" />
                 </button>
               }
             </div>
@@ -81,17 +77,13 @@
                 <button
                   type="button"
                   class="mana-pastille"
-                  [style.--pastille-bg]="color.background"
-                  [style.--pastille-border]="color.border"
-                  [style.--pastille-color]="color.color"
                   [class.is-selected]="isManaIdentityColorSelected(color.value)"
                   [attr.aria-pressed]="isManaIdentityColorSelected(color.value)"
                   [attr.aria-label]="color.labelKey | transloco"
                   [title]="color.labelKey | transloco"
                   (click)="toggleManaIdentityColor(color.value)"
                 >
-                  <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
-                  <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                  <img [src]="color.svgUrl" [alt]="color.value" aria-hidden="true" />
                 </button>
               }
             </div>

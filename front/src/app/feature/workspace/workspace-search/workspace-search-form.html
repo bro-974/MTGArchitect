@@ -36,17 +36,13 @@
               <button
                 type="button"
                 class="mana-pastille"
-                [style.--pastille-bg]="color.background"
-                [style.--pastille-border]="color.border"
-                [style.--pastille-color]="color.color"
                 [class.is-selected]="isColorSelected(color.value)"
                 [attr.aria-pressed]="isColorSelected(color.value)"
                 [attr.aria-label]="color.labelKey | transloco"
                 [title]="color.labelKey | transloco"
                 (click)="toggleColor(color.value)"
               >
-                <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
-                <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                <img [src]="color.svgUrl" [alt]="color.value" aria-hidden="true" />
               </button>
             }
           </div>
@@ -67,17 +63,13 @@
               <button
                 type="button"
                 class="mana-pastille"
-                [style.--pastille-bg]="color.background"
-                [style.--pastille-border]="color.border"
-                [style.--pastille-color]="color.color"
                 [class.is-selected]="isIdentityColorSelected(color.value)"
                 [attr.aria-pressed]="isIdentityColorSelected(color.value)"
                 [attr.aria-label]="color.labelKey | transloco"
                 [title]="color.labelKey | transloco"
                 (click)="toggleIdentityColor(color.value)"
               >
-                <span class="mana-pastille-label" aria-hidden="true">{{ color.value }}</span>
-                <i class="pi pi-check mana-pastille-check" aria-hidden="true"></i>
+                <img [src]="color.svgUrl" [alt]="color.value" aria-hidden="true" />
               </button>
             }
           </div>

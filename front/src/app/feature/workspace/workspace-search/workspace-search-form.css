@@ -47,21 +47,23 @@
 }
 
 .mana-pastille {
-  --pastille-bg: #e5e7eb;
-  --pastille-border: #9ca3af;
-  --pastille-color: #111827;
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 9999px;
-  border: 2px solid var(--pastille-border);
-  background: var(--pastille-bg);
-  color: var(--pastille-color);
+  border: none;
+  background: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease;
+  padding: 0;
+}
+
+.mana-pastille img {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
 }
 
 .mana-pastille:hover {
@@ -73,31 +75,7 @@
   outline-offset: 2px;
 }
 
-.mana-pastille-label {
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  opacity: 1;
-  transition: opacity 120ms ease;
-}
-
-.mana-pastille-check {
-  position: absolute;
-  font-size: 0.95rem;
-  opacity: 0;
-  transform: scale(0.75);
-  transition: opacity 120ms ease, transform 120ms ease;
-}
-
 .mana-pastille.is-selected {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--pastille-border) 55%, transparent);
-}
-
-.mana-pastille.is-selected .mana-pastille-label {
-  opacity: 0;
-}
-
-.mana-pastille.is-selected .mana-pastille-check {
-  opacity: 1;
-  transform: scale(1);
+  box-shadow: 0 0 0 3px #f59e0b;
 }
 

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { ManaCostComponent } from '../../core/components/mana-cost/mana-cost.component';
 import { CardExplorerCard } from '../card-explorer/card-explorer.service';
 
 @Component({
   selector: 'app-card-explorer-list',
-  imports: [TranslocoPipe],
+  imports: [TranslocoPipe, ManaCostComponent],
   templateUrl: './card-explorer-list.html',
   styleUrl: './card-explorer-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush

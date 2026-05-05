@@ -1,12 +1,7 @@
 @if (tokens().length > 0) {
   <span class="mana-cost" [class.mana-cost--small]="small()" aria-hidden="true">
     @for (token of tokens(); track $index) {
-      <span
-        class="mana-cost__pill"
-        [style.--pill-bg]="token.background"
-        [style.--pill-border]="token.border"
-        [style.--pill-color]="token.color"
-      >{{ token.label }}</span>
+      <img class="mana-cost__symbol" [src]="token.svgUrl" [alt]="token.label" />
     }
   </span>
 }

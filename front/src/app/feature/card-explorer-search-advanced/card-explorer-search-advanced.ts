@@ -38,9 +38,7 @@ type ManaColorValue = 'W' | 'U' | 'B' | 'R' | 'G' | 'C';
 interface ManaColorOption {
   value: ManaColorValue;
   labelKey: string;
-  background: string;
-  border: string;
-  color: string;
+  svgUrl: string;
 }
 
 @Component({
@@ -71,12 +69,12 @@ export class CardExplorerSearchAdvanced {
 
   readonly manaColorOrder: readonly ManaColorValue[] = ['W', 'U', 'B', 'R', 'G', 'C'];
   readonly manaColorOptions: readonly ManaColorOption[] = [
-    { value: 'W', labelKey: 'cardExplorerAdvanced.color.white', background: '#f8fafc', border: '#cbd5e1', color: '#111827' },
-    { value: 'U', labelKey: 'cardExplorerAdvanced.color.blue', background: '#60a5fa', border: '#2563eb', color: '#0b1220' },
-    { value: 'B', labelKey: 'cardExplorerAdvanced.color.black', background: '#1f2937', border: '#111827', color: '#f9fafb' },
-    { value: 'R', labelKey: 'cardExplorerAdvanced.color.red', background: '#f87171', border: '#dc2626', color: '#111827' },
-    { value: 'G', labelKey: 'cardExplorerAdvanced.color.green', background: '#4ade80', border: '#16a34a', color: '#0b1220' },
-    { value: 'C', labelKey: 'cardExplorerAdvanced.color.gray', background: '#9ca3af', border: '#6b7280', color: '#111827' }
+    { value: 'W', labelKey: 'cardExplorerAdvanced.color.white', svgUrl: 'https://svgs.scryfall.io/card-symbols/W.svg' },
+    { value: 'U', labelKey: 'cardExplorerAdvanced.color.blue', svgUrl: 'https://svgs.scryfall.io/card-symbols/U.svg' },
+    { value: 'B', labelKey: 'cardExplorerAdvanced.color.black', svgUrl: 'https://svgs.scryfall.io/card-symbols/B.svg' },
+    { value: 'R', labelKey: 'cardExplorerAdvanced.color.red', svgUrl: 'https://svgs.scryfall.io/card-symbols/R.svg' },
+    { value: 'G', labelKey: 'cardExplorerAdvanced.color.green', svgUrl: 'https://svgs.scryfall.io/card-symbols/G.svg' },
+    { value: 'C', labelKey: 'cardExplorerAdvanced.color.gray', svgUrl: 'https://svgs.scryfall.io/card-symbols/C.svg' }
   ];
 
   readonly operatorOptions: SelectOption<ComparisonOperator>[] = [

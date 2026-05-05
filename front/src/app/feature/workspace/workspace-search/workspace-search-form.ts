@@ -26,9 +26,7 @@ interface SelectOption<T> {
 interface ManaColorOption {
   value: ManaColorValue;
   labelKey: string;
-  background: string;
-  border: string;
-  color: string;
+  svgUrl: string;
 }
 
 @Component({
@@ -58,12 +56,12 @@ export class WorkspaceSearchForm {
 
   readonly manaColorOrder: readonly ManaColorValue[] = ['W', 'U', 'B', 'R', 'G', 'C'];
   readonly manaColorOptions: readonly ManaColorOption[] = [
-    { value: 'W', labelKey: 'workspace.search.color.white', background: '#f8fafc', border: '#cbd5e1', color: '#111827' },
-    { value: 'U', labelKey: 'workspace.search.color.blue', background: '#60a5fa', border: '#2563eb', color: '#0b1220' },
-    { value: 'B', labelKey: 'workspace.search.color.black', background: '#1f2937', border: '#111827', color: '#f9fafb' },
-    { value: 'R', labelKey: 'workspace.search.color.red', background: '#f87171', border: '#dc2626', color: '#111827' },
-    { value: 'G', labelKey: 'workspace.search.color.green', background: '#4ade80', border: '#16a34a', color: '#0b1220' },
-    { value: 'C', labelKey: 'workspace.search.color.gray', background: '#9ca3af', border: '#6b7280', color: '#111827' }
+    { value: 'W', labelKey: 'workspace.search.color.white', svgUrl: 'https://svgs.scryfall.io/card-symbols/W.svg' },
+    { value: 'U', labelKey: 'workspace.search.color.blue', svgUrl: 'https://svgs.scryfall.io/card-symbols/U.svg' },
+    { value: 'B', labelKey: 'workspace.search.color.black', svgUrl: 'https://svgs.scryfall.io/card-symbols/B.svg' },
+    { value: 'R', labelKey: 'workspace.search.color.red', svgUrl: 'https://svgs.scryfall.io/card-symbols/R.svg' },
+    { value: 'G', labelKey: 'workspace.search.color.green', svgUrl: 'https://svgs.scryfall.io/card-symbols/G.svg' },
+    { value: 'C', labelKey: 'workspace.search.color.gray', svgUrl: 'https://svgs.scryfall.io/card-symbols/C.svg' }
   ];
 
   readonly operatorOptions: SelectOption<ComparisonOperator>[] = [

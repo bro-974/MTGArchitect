@@ -482,3 +482,70 @@ Add server-side page navigation to the `search-show` component so users can brow
 - New: `front/src/app/core/directives/card-hover-preview.directive.ts`
 - Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.html`
 - Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.ts`
+
+# Feature Plans
+
+## Card Hover Preview (workspace-deck-selected)
+
+**Goal:** When hovering a card row in the mainboard/sideboard table, display the card image next to the cursor.
+
+| Decision | Choice |
+|---|---|
+| Image source | Scryfall CDN: `cards.scryfall.io/normal/front/{id[0]}/{id[1]}/{id}.jpg` |
+| Architecture | Standalone Angular directive (`CardHoverPreviewDirective`) |
+| Overlay | Single `<img>` appended to `document.body`, `position: fixed` |
+| Positioning | Follows mouse via `transform: translate(x, y)`, offset 16px right + 8px up |
+| Edge detection | Flip left if cursor within 250px of right edge; flip up if within 320px of bottom |
+| Hover delay | 150ms `setTimeout`, cancelled on `mouseleave` |
+| Image display size | 320×446px (from Scryfall `normal` source) |
+| Scope | `workspace-card-table__row` divs only (mainboard + sideboard sections) |
+
+**Files:**
+- New: `front/src/app/core/directives/card-hover-preview.directive.ts`
+- Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.html`
+- Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.ts`
+
+---
+
+## Mana Symbol SVG (mana-cost display)
+
+**Goal:** Replace colored pill spans with Scryfall SVG mana symbols in the mana-cost component.
+
+| Decision | Choice |
+|---|---|
+| Symbol source | Scryfall CDN, constructed directly: `svgs.scryfall.io/card-symbols/{symbol}.svg` |
+| Render method | `<img>` tag per token |
+| Transform | `token.slice(1, -1).replace('/', '').toUpperCase()` + `.svg` |
+| Component | Update `ManaCostComponent` in place — interface unchanged |
+| Null/empty cost | Already guarded, renders nothing |
+| card-explorer-list | Replace `{{ card.manaCost }}` with `<app-mana-cost [cost]="card.manaCost" />` |
+
+**Files:**
+- Modify: `front/src/app/core/components/mana-cost/mana-cost.component.ts`
+- Modify: `front/src/app/core/components/mana-cost/mana-cost.component.html`
+- Modify: `front/src/app/core/components/mana-cost/mana-cost.component.css`
+- Modify: `front/src/app/feature/card-explorer-list/card-explorer-list.html`
+- Modify: `front/src/app/feature/card-explorer-list/card-explorer-list.ts`
+
+---
+
+## Mana Symbol Toggle Buttons (search forms)
+
+**Goal:** Replace colored pill toggle buttons in color/color-identity filters with Scryfall SVG mana symbols.
+
+| Decision | Choice |
+|---|---|
+| Symbol render | `<img>` from `svgs.scryfall.io/card-symbols/{X}.svg` |
+| Selected state | Glowing ring (`box-shadow`) + scale-up, no checkmark |
+| Button background | Transparent — SVG is self-colored |
+| CSS cleanup | Remove label, check, CSS vars, background/border/color fields entirely |
+| TS cleanup | Remove `background`, `border`, `color` from `ManaColorOption` in both components |
+| CSS duplication | Keep per-component (sizes differ: 2.5rem vs 2.25rem) |
+
+**Files:**
+- Modify: `front/src/app/feature/card-explorer-search-advanced/card-explorer-search-advanced.ts`
+- Modify: `front/src/app/feature/card-explorer-search-advanced/card-explorer-search-advanced.html`
+- Modify: `front/src/app/feature/card-explorer-search-advanced/card-explorer-search-advanced.css`
+- Modify: `front/src/app/feature/workspace/workspace-search/workspace-search-form.ts`
+- Modify: `front/src/app/feature/workspace/workspace-search/workspace-search-form.html`
+- Modify: `front/src/app/feature/workspace/workspace-search/workspace-search-form.css`
