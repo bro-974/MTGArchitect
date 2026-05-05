@@ -20,6 +20,7 @@
       <app-workspace-search-form
         [saving]="isSavingSearch()"
         [deckFormat]="selectedDeck()?.type ?? null"
+        [deckColorIdentity]="selectedDeck()?.colorIdentity ?? null"
         (saveQuery)="handleSaveQuery($event)"
       />
     </p-accordion-content>

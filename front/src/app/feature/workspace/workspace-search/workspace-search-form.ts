@@ -49,6 +49,7 @@ interface ManaColorOption {
 export class WorkspaceSearchForm {
   readonly saving = input(false);
   readonly deckFormat = input<CardFormat | null>(null);
+  readonly deckColorIdentity = input<string | null>(null);
   readonly saveQuery = output<string>();
 
   readonly selectedColors = signal<readonly ManaColorValue[]>([]);
@@ -118,6 +119,14 @@ export class WorkspaceSearchForm {
         this.form.controls.format.setValue(format);
         console.log('[WorkspaceSearchForm] form.format after setValue →', this.form.controls.format.value);
       });
+
+    toObservable(this.deckColorIdentity)
+      .pipe(takeUntilDestroyed())
+      .subscribe((ci) => {
+        const colors = ci ? (ci.split('') as ManaColorValue[]) : [];
+        this.selectedIdentityColors.set(colors);
+        this.form.controls.colorIdentity.setValue(ci ?? '');
+      });
   }
 
   readonly savedQueryLabel = computed(() => {
@@ -174,12 +183,13 @@ export class WorkspaceSearchForm {
   }
 
   handleReset(): void {
+    const ci = this.deckColorIdentity();
     this.form.reset({
       name: '',
       exactName: false,
       color: '',
       colorOperator: 'Equal',
-      colorIdentity: '',
+      colorIdentity: ci ?? '',
       types: '',
       oracleText: '',
       manaValue: null,
@@ -187,7 +197,7 @@ export class WorkspaceSearchForm {
       format: this.deckFormat()
     });
     this.selectedColors.set([]);
-    this.selectedIdentityColors.set([]);
+    this.selectedIdentityColors.set(ci ? (ci.split('') as ManaColorValue[]) : []);
     this.savedQuery.set(null);
   }
 
