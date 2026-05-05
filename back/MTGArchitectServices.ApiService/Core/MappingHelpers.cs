@@ -17,6 +17,8 @@ public static class MappingHelpers
             deck.Name,
             deck.Type,
             deck.Note,
+            deck.Commander,
+            deck.ColorIdentity,
             deck.QuerySearches.Select(ToQueryInfoResponse).ToArray(),
             deck.Cards.Select(ToDeckCardResponse).ToArray());
     }
@@ -50,6 +52,8 @@ public static class MappingHelpers
             Name = request.Name,
             Type = request.Type,
             Note = request.Note,
+            Commander = request.Commander,
+            ColorIdentity = request.ColorIdentity,
             QuerySearches = ToQueryInfos(request.QuerySearches),
             Cards = ToDeckCards(request.Cards)
         };
@@ -60,6 +64,8 @@ public static class MappingHelpers
         deck.Name = request.Name;
         deck.Type = request.Type;
         deck.Note = request.Note;
+        deck.Commander = request.Commander;
+        deck.ColorIdentity = request.ColorIdentity;
         deck.QuerySearches = ToQueryInfos(request.QuerySearches);
         deck.Cards = ToDeckCards(request.Cards);
     }

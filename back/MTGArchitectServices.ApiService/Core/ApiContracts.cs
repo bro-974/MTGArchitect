@@ -5,6 +5,8 @@ public sealed record DeckResponse(
     string Name,
     string Type,
     string? Note,
+    string? Commander,
+    string? ColorIdentity,
     IReadOnlyCollection<QueryInfoResponse> QuerySearches,
     IReadOnlyCollection<DeckCardResponse> Cards);
 
@@ -26,6 +28,8 @@ public sealed record DeckUpsertRequest(
     string Name,
     string Type,
     string? Note,
+    string? Commander,
+    string? ColorIdentity,
     List<QueryInfoUpsertRequest>? QuerySearches,
     List<DeckCardUpsertRequest>? Cards);
 

@@ -128,6 +128,8 @@ For protected routes, send:
     "name": "My Elf Deck",
     "type": "Commander",
     "note": "string",
+    "commander": "Atraxa, Praetors' Voice",
+    "colorIdentity": "WUBG",
     "querySearches": [
       {
         "id": "query-guid",
@@ -162,6 +164,8 @@ For protected routes, send:
   "name": "My Elf Deck",
   "type": "Commander",
   "note": "my deck",
+  "commander": "Atraxa, Praetors' Voice",
+  "colorIdentity": "WUBG",
   "querySearches": [
     {
       "id": null,

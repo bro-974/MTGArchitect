@@ -52,6 +52,18 @@
                     <p class="m-0 mt-2 text-color-secondary">{{ sideboard().length }}</p>
                   </div>
                 }
+                @if (selectedDeck.commander) {
+                  <div>
+                    <h2 class="m-0 text-base">{{ 'workspace.selected.commander' | transloco }}</h2>
+                    <p class="m-0 mt-2 text-color-secondary">{{ selectedDeck.commander }}</p>
+                  </div>
+                }
+                @if (colorIdentityPips()) {
+                  <div>
+                    <h2 class="m-0 text-base">{{ 'workspace.selected.colorIdentity' | transloco }}</h2>
+                    <app-mana-cost class="mt-2 flex" [cost]="colorIdentityPips()" />
+                  </div>
+                }
               </div>
             </div>
           </div>

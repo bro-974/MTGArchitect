@@ -36,6 +36,11 @@ export class WorkspaceDeckSelected {
   readonly sideboard = computed(() =>
     (this.deck()?.cards ?? []).filter((card) => card.isSideBoard)
   );
+  readonly colorIdentityPips = computed(() => {
+    const ci = this.deck()?.colorIdentity;
+    if (!ci) return null;
+    return ci.split('').map((c) => `{${c}}`).join('');
+  });
 
   private currentDeckId: string | null = null;
   private hiddenQueryIds = new Set<string>();

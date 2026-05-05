@@ -1,9 +1,11 @@
 using MTGArchitect.Data.Models;
 using MTGArchitect.Data.Repositories;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 public class DeckService(IDeckRepository deckRepository)
 {
+    private static readonly Regex ValidColorIdentity = new(@"^[WUBRGC]*$", RegexOptions.Compiled);
     public async Task<IResult> GetByIdAsync(Guid id, ClaimsPrincipal principal, CancellationToken cancellationToken)
     {
         var userId = GetUserId(principal);
@@ -23,6 +25,9 @@ public class DeckService(IDeckRepository deckRepository)
         if (string.IsNullOrWhiteSpace(userId))
             return Results.Unauthorized();
 
+        if (request.ColorIdentity is not null && !ValidColorIdentity.IsMatch(request.ColorIdentity))
+            return Results.BadRequest("colorIdentity must only contain the characters W, U, B, R, G, C.");
+
         var deck = MappingHelpers.ToDeck(request, userId);
 
         await deckRepository.AddAsync(deck, cancellationToken);
@@ -35,6 +40,9 @@ public class DeckService(IDeckRepository deckRepository)
         var userId = GetUserId(principal);
         if (string.IsNullOrWhiteSpace(userId))
             return Results.Unauthorized();
+
+        if (request.ColorIdentity is not null && !ValidColorIdentity.IsMatch(request.ColorIdentity))
+            return Results.BadRequest("colorIdentity must only contain the characters W, U, B, R, G, C.");
 
         var deck = await deckRepository.GetByIdWithDetailsAsync(id, userId, cancellationToken: cancellationToken);
 

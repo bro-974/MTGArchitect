@@ -21,6 +21,8 @@ export interface WorkspaceDeck {
   readonly name: string;
   readonly type: CardFormat;
   readonly note: string | null;
+  readonly commander: string | null;
+  readonly colorIdentity: string | null;
   readonly querySearches: readonly WorkspaceQuerySearch[];
   readonly cards: readonly WorkspaceDeckCard[];
 }

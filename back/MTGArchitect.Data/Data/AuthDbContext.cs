@@ -20,6 +20,8 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
             entity.Property(x => x.Name).HasMaxLength(150).IsRequired();
             entity.Property(x => x.Type).HasMaxLength(80).IsRequired();
             entity.Property(x => x.Note).HasColumnType("text");
+            entity.Property(x => x.Commander).HasMaxLength(200);
+            entity.Property(x => x.ColorIdentity).HasMaxLength(6);
 
             entity.HasOne(x => x.User)
                 .WithMany(x => x.DeckWorkspace)
