@@ -7,7 +7,8 @@ const string jwtIssuer = "MTGArchitect.Auth";
 const string jwtAudience = "MTGArchitect";
 
 var cache = builder.AddRedis("cache");
-var postgres = builder.AddPostgres("postgres");
+var postgres = builder.AddPostgres("postgres")
+    .WithDataVolume();
 var authDb = postgres.AddDatabase("authdb");
 
 var scryfallService = builder.AddProject<Projects.MTGArchitect_Scryfall_Service>("scryfallservice")

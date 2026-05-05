@@ -460,3 +460,25 @@ Add server-side page navigation to the `search-show` component so users can brow
 - [x] `CardExplorerService.searchCardsAdvanced()`: accept `page` argument, return `CardExplorerSearchResult`
 - [x] `search-show.ts`: add `currentPage` signal (0-based), add `totalCount` signal, re-fetch on page change, reset to page 0 when `queryText` input changes
 - [x] `search-show.html`: add `<p-paginator>` at bottom with custom first/prev/next/last icon template, `[rows]="30"`, `[totalRecords]="totalCount()"`
+
+# Feature Plans
+
+## Card Hover Preview (workspace-deck-selected)
+
+**Goal:** When hovering a card row in the mainboard/sideboard table, display the card image next to the cursor.
+
+| Decision | Choice |
+|---|---|
+| Image source | Scryfall CDN: `cards.scryfall.io/normal/front/{id[0]}/{id[1]}/{id}.jpg` |
+| Architecture | Standalone Angular directive (`CardHoverPreviewDirective`) |
+| Overlay | Single `<img>` appended to `document.body`, `position: fixed` |
+| Positioning | Follows mouse via `transform: translate(x, y)`, offset 16px right + 8px up |
+| Edge detection | Flip left if cursor within 250px of right edge; flip up if within 320px of bottom |
+| Hover delay | 150ms `setTimeout`, cancelled on `mouseleave` |
+| Image display size | 220×307px (from Scryfall `normal` source) |
+| Scope | `workspace-card-table__row` divs only (mainboard + sideboard sections) |
+
+**Files:**
+- New: `front/src/app/core/directives/card-hover-preview.directive.ts`
+- Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.html`
+- Modify: `front/src/app/feature/workspace-deck-selected/workspace-deck-selected.ts`

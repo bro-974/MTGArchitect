@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { TabsModule } from 'primeng/tabs';
 import { ManaCostComponent } from '../../core/components/mana-cost/mana-cost.component';
+import { CardHoverPreviewDirective } from '../../core/directives/card-hover-preview.directive';
 import { SearchShow } from '../search-show/search-show';
 import { WorkspaceDeckStateService } from '../workspace/workspace-deck-state.service';
 import { WorkspaceService } from '../workspace/workspace.service';
@@ -16,7 +17,7 @@ interface OpenSearchTab {
 
 @Component({
   selector: 'app-workspace-deck-selected',
-  imports: [TranslocoPipe, TabsModule, DividerModule, ManaCostComponent, SearchShow],
+  imports: [TranslocoPipe, TabsModule, DividerModule, ManaCostComponent, SearchShow, CardHoverPreviewDirective],
   templateUrl: './workspace-deck-selected.html',
   styleUrl: './workspace-deck-selected.css',
   changeDetection: ChangeDetectionStrategy.OnPush
