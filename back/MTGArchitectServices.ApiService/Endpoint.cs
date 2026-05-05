@@ -12,7 +12,7 @@ public static class EndpointExtensions
 
         app.MapGet("/", () => "API service is running.");
 
-        app.MapPublicHealth(api);
+        app.MapServer(api);
         app.MapPublicSearch(api);
         app.MapPrivateUserEndpoints(api);
         app.MapDefaultEndpoints();
@@ -144,7 +144,7 @@ public static class EndpointExtensions
         return app;
     }
 
-    private static WebApplication MapPublicHealth(this WebApplication app, RouteGroupBuilder apiRoot)
+    private static WebApplication MapServer(this WebApplication app, RouteGroupBuilder apiRoot)
     {
         app.MapGrpcHealthChecksService();
 
