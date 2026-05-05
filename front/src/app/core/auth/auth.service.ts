@@ -13,11 +13,13 @@ interface LoginResponse {
   expiresAtUtc: string;
   userId: string;
   email: string;
+  roles: string[];
 }
 
 export interface AuthUser {
   userId: string;
   email: string;
+  roles: string[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -30,6 +32,7 @@ export class AuthService {
   readonly token = signal<string | null>(localStorage.getItem(AuthService.TOKEN_STORAGE_KEY));
   readonly user = signal<AuthUser | null>(this.readPersistedUser());
   readonly isLoggedIn = computed(() => !!this.token() && !!this.user());
+  readonly isAdmin = computed(() => this.user()?.roles?.includes('Admin') ?? false);
 
   login(email: string, password: string): Observable<LoginResponse> {
     const request: LoginRequest = { email, password };
@@ -38,7 +41,8 @@ export class AuthService {
       tap((response) => {
         this.persistAuth(response.accessToken, {
           userId: response.userId,
-          email: response.email
+          email: response.email,
+          roles: response.roles ?? []
         });
       })
     );

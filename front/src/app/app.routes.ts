@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
+import { adminGuard } from './core/auth/admin.guard';
 
 export const routes: Routes = [
 	{
@@ -29,6 +30,7 @@ export const routes: Routes = [
 	},
 	{
 		path: 'feature/server-status',
+		canActivate: [adminGuard],
 		loadComponent: () =>
 			import('./feature/server-status/server-status').then((module) => module.ServerStatus)
 	}

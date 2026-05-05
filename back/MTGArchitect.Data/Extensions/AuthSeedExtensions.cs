@@ -9,11 +9,17 @@ namespace MTGArchitect.Data.Extensions;
 
 public static class AuthSeedExtensions
 {
-    private const string DefaultUserName = "Tester";
-    private const string DefaultUserEmail = "nordyn@hotmail.fr";
-    private const string DefaultUserPassword = "Aqw1!";
+    private const string AdminRole = "Admin";
 
-    public static async Task SeedDefaultAuthUserAsync(this WebApplication app, CancellationToken cancellationToken = default)
+    public static async Task SeedDefaultAuthUserAsync(
+        this WebApplication app,
+        string defaultEmail,
+        string defaultPassword,
+        string defaultDisplayName,
+        string adminEmail,
+        string adminPassword,
+        string adminDisplayName,
+        CancellationToken cancellationToken = default)
     {
         using var scope = app.Services.CreateScope();
 
@@ -26,30 +32,61 @@ public static class AuthSeedExtensions
             await dbContext.Database.EnsureCreatedAsync(cancellationToken);
 
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        var existingUser = await userManager.FindByEmailAsync(DefaultUserEmail);
-        if (existingUser is not null)
-            return;
-
-        var user = new ApplicationUser
+        // Pass 1 — ensure Admin role exists
+        if (!await roleManager.RoleExistsAsync(AdminRole))
         {
-            UserName = DefaultUserEmail,
-            Email = DefaultUserEmail,
-            DisplayName = DefaultUserName,
-            EmailConfirmed = true,
-            IsDeleted = false
-        };
+            var roleResult = await roleManager.CreateAsync(new IdentityRole(AdminRole));
+            if (!roleResult.Succeeded)
+                throw new InvalidOperationException($"Unable to create Admin role: {string.Join("; ", roleResult.Errors.Select(x => x.Description))}");
+        }
 
-        var createResult = await userManager.CreateAsync(user);
+        // Pass 2 — seed default test user
+        var existingDefault = await userManager.FindByEmailAsync(defaultEmail);
+        if (existingDefault is null)
+        {
+            var defaultUser = new ApplicationUser
+            {
+                UserName = defaultEmail,
+                Email = defaultEmail,
+                DisplayName = defaultDisplayName,
+                EmailConfirmed = true,
+                IsDeleted = false
+            };
 
-        if (!createResult.Succeeded)
-            throw new InvalidOperationException($"Unable to seed default auth user: {string.Join("; ", createResult.Errors.Select(x => x.Description))}");
+            var createResult = await userManager.CreateAsync(defaultUser);
+            if (!createResult.Succeeded)
+                throw new InvalidOperationException($"Unable to seed default auth user: {string.Join("; ", createResult.Errors.Select(x => x.Description))}");
 
-        user.PasswordHash = userManager.PasswordHasher.HashPassword(user, DefaultUserPassword);
+            defaultUser.PasswordHash = userManager.PasswordHasher.HashPassword(defaultUser, defaultPassword);
+            var updateResult = await userManager.UpdateAsync(defaultUser);
+            if (!updateResult.Succeeded)
+                throw new InvalidOperationException($"Unable to set seeded default user password: {string.Join("; ", updateResult.Errors.Select(x => x.Description))}");
+        }
 
-        var updateResult = await userManager.UpdateAsync(user);
+        // Pass 3 — seed admin user
+        var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
+        if (existingAdmin is null)
+        {
+            var adminUser = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                DisplayName = adminDisplayName,
+                EmailConfirmed = true,
+                IsDeleted = false
+            };
 
-        if (!updateResult.Succeeded)
-            throw new InvalidOperationException($"Unable to set seeded default user password: {string.Join("; ", updateResult.Errors.Select(x => x.Description))}");
+            var createResult = await userManager.CreateAsync(adminUser, adminPassword);
+            if (!createResult.Succeeded)
+                throw new InvalidOperationException($"Unable to seed admin user: {string.Join("; ", createResult.Errors.Select(x => x.Description))}");
+
+            await userManager.AddToRoleAsync(adminUser, AdminRole);
+        }
+        else if (!await userManager.IsInRoleAsync(existingAdmin, AdminRole))
+        {
+            await userManager.AddToRoleAsync(existingAdmin, AdminRole);
+        }
     }
 }

@@ -49,15 +49,17 @@
         [ariaLabel]="'navbar.cardExplorerAdvanced' | transloco">
       </p-button>
 
-      <p-button
-        severity="secondary"
-        type="button"
-        icon="pi pi-server"
-        class="p-button-rounded p-button-text"
-        (click)="goServerStatus()"
-        [title]="'navbar.serverStatus' | transloco"
-        [ariaLabel]="'navbar.serverStatus' | transloco">
-      </p-button>
+      @if (authService.isAdmin()) {
+        <p-button
+          severity="secondary"
+          type="button"
+          icon="pi pi-server"
+          class="p-button-rounded p-button-text"
+          (click)="goServerStatus()"
+          [title]="'navbar.serverStatus' | transloco"
+          [ariaLabel]="'navbar.serverStatus' | transloco">
+        </p-button>
+      }
     </div>
 
     <!-- Actions -->

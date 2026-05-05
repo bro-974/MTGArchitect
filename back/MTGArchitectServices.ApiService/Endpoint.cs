@@ -153,6 +153,7 @@ public static class EndpointExtensions
             var report = await healthCheckService.CheckHealthAsync(cancellationToken);
             return Results.Ok(new { status = report.Status.ToString(), checkedAt = DateTimeOffset.UtcNow });
         })
+        .RequireAuthorization(policy => policy.RequireRole("Admin"))
         .WithName("GetServerStatus");
 
         return app;

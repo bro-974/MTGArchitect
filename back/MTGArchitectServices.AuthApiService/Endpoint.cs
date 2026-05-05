@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using MTGArchitect.Data.Models;
 using MTGArchitect.Data.Services;
 using MTGArchitectServices.AuthApiService.Contracts;
 using MTGArchitectServices.AuthApiService.Services;
@@ -36,7 +38,8 @@ public static class EndpointExtensions
         app.MapPost("/api/auth/login", async (
             LoginRequest request,
             IAuthDataService authDataService,
-            IJwtTokenGenerator jwtTokenGenerator) =>
+            IJwtTokenGenerator jwtTokenGenerator,
+            UserManager<ApplicationUser> userManager) =>
         {
             var validationErrors = ValidateCredentials(request.Email, request.Password);
 
@@ -48,13 +51,15 @@ public static class EndpointExtensions
             if (user is null)
                 return Results.Unauthorized();
 
-            var token = jwtTokenGenerator.GenerateToken(user);
+            var token = await jwtTokenGenerator.GenerateTokenAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
 
             return Results.Ok(new AuthResponse(
                 token.AccessToken,
                 token.ExpiresAtUtc,
                 user.Id,
-                user.Email ?? string.Empty));
+                user.Email ?? string.Empty,
+                roles.ToList()));
         })
         .WithName("LoginUser");
 
@@ -63,7 +68,8 @@ public static class EndpointExtensions
             return Results.Ok(new
             {
                 userId = user.FindFirstValue(ClaimTypes.NameIdentifier),
-                email = user.FindFirstValue(ClaimTypes.Email)
+                email = user.FindFirstValue(ClaimTypes.Email),
+                roles = user.FindAll(ClaimTypes.Role).Select(c => c.Value).ToArray()
             });
         })
         .RequireAuthorization()

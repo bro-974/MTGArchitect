@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MTGArchitect.Data.Models;
@@ -10,27 +11,33 @@ namespace MTGArchitectServices.AuthApiService.Services;
 
 public interface IJwtTokenGenerator
 {
-    AuthToken GenerateToken(ApplicationUser user);
+    Task<AuthToken> GenerateTokenAsync(ApplicationUser user);
 }
 
 public sealed record AuthToken(string AccessToken, DateTime ExpiresAtUtc);
 
-public sealed class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerator
+public sealed class JwtTokenGenerator(
+    IOptions<JwtOptions> options,
+    UserManager<ApplicationUser> userManager) : IJwtTokenGenerator
 {
     private readonly JwtOptions jwtOptions = options.Value;
 
-    public AuthToken GenerateToken(ApplicationUser user)
+    public async Task<AuthToken> GenerateTokenAsync(ApplicationUser user)
     {
         var expiresAtUtc = DateTime.UtcNow.AddMinutes(jwtOptions.ExpirationMinutes);
+        var roles = await userManager.GetRolesAsync(user);
 
-        Claim[] claims =
-        [
+        var claims = new List<Claim>
+        {
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Email, user.Email ?? string.Empty),
             new(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        ];
+        };
+
+        foreach (var role in roles)
+            claims.Add(new Claim(ClaimTypes.Role, role));
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),

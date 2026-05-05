@@ -55,9 +55,24 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+var seedOptions = builder.Configuration.GetSection(SeedOptions.SectionName).Get<SeedOptions>()
+    ?? throw new InvalidOperationException("Seed configuration is missing.");
+
+if (string.IsNullOrWhiteSpace(seedOptions.DefaultUser.Email) || string.IsNullOrWhiteSpace(seedOptions.DefaultUser.Password))
+    throw new InvalidOperationException("Seed default user configuration is incomplete.");
+
+if (string.IsNullOrWhiteSpace(seedOptions.AdminUser.Email) || string.IsNullOrWhiteSpace(seedOptions.AdminUser.Password))
+    throw new InvalidOperationException("Seed admin user configuration is incomplete.");
+
 var app = builder.Build();
 
-await app.SeedDefaultAuthUserAsync();
+await app.SeedDefaultAuthUserAsync(
+    seedOptions.DefaultUser.Email,
+    seedOptions.DefaultUser.Password,
+    seedOptions.DefaultUser.DisplayName,
+    seedOptions.AdminUser.Email,
+    seedOptions.AdminUser.Password,
+    seedOptions.AdminUser.DisplayName);
 
 app.UseExceptionHandler();
 app.UseCors("frontend-dev");
