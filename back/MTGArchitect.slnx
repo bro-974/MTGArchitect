@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/ChatBot/">
+    <Project Path="MTGArchitect.AI.Client/MTGArchitect.AI.Client.csproj" Id="bf2ee92d-63b0-4e8d-8eed-c24318d4bb24" />
+    <Project Path="MTGArchitect.AI.Contract/MTGArchitect.AI.Contract.csproj" Id="eb5e4102-6de4-4aa4-80c5-2069fed53ea0" />
+    <Project Path="MTGArchitect.AI.Service/MTGArchitect.AI.Service.csproj" Id="71fcf461-9b39-444e-a3a6-49e3f55da059" />
+  </Folder>
   <Folder Name="/Scryfall/">
     <Project Path="MTGArchitect.Scryfall.Client/MTGArchitect.Scryfall.Client.csproj" Id="ccc6c26b-59d9-48b9-82fa-0a09a3bc23dd" />
     <Project Path="MTGArchitect.Scryfall.Contracts/MTGArchitect.Scryfall.Contracts.csproj" Id="2877f3d2-d478-4e95-bc2c-cca04dbc3a95" />
@@ -8,10 +13,10 @@
     <File Path="README" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="MTGArchitect.Api.Integration.Tests/MTGArchitect.Api.Integration.Tests.csproj" />
     <Project Path="MTGArchitect.Data.Tests/MTGArchitect.Data.Tests.csproj" Id="4b0ec9b6-9c02-4b67-a160-74324a0a7e23" />
     <Project Path="MTGArchitect.Scryfall.Service.Tests/MTGArchitect.Scryfall.Service.Tests.csproj" Id="b54fca13-497b-42c6-a9c2-d2806b194bd5" />
     <Project Path="MTGArchitectServices.ApiService.Tests/MTGArchitectServices.ApiService.Tests.csproj" />
-    <Project Path="MTGArchitect.Api.Integration.Tests/MTGArchitect.Api.Integration.Tests.csproj" />
   </Folder>
   <Project Path="MTGArchitect.Data/MTGArchitect.Data.csproj" />
   <Project Path="MTGArchitectServices.ApiService/MTGArchitect.Api.csproj" />
