@@ -1,0 +1,31 @@
+<p-accordion [multiple]="true">
+  <p-accordion-panel value="thinking">
+    <p-accordion-header>
+      <span class="panel-header">
+        Thinking
+        @if (isStreaming()) {
+          <p-progressspinner
+            [style]="{ width: '14px', height: '14px' }"
+            strokeWidth="5"
+          />
+        }
+      </span>
+    </p-accordion-header>
+    <p-accordion-content>
+      <div class="reasoning-content">
+        @if (currentReasoning()) {
+          {{ currentReasoning() }}
+        } @else {
+          <span class="placeholder-text">No reasoning available yet.</span>
+        }
+      </div>
+    </p-accordion-content>
+  </p-accordion-panel>
+
+  <p-accordion-panel value="metadata">
+    <p-accordion-header>Metadata</p-accordion-header>
+    <p-accordion-content>
+      <span class="placeholder-text">Coming soon — AI-suggested MTG cards will appear here.</span>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>

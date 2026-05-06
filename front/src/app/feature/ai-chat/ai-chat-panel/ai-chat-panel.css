@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reasoning-content {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text-color-secondary);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.placeholder-text {
+  font-size: 0.8125rem;
+  color: var(--text-color-secondary);
+  font-style: italic;
+}

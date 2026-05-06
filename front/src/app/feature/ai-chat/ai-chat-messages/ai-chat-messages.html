@@ -1,0 +1,19 @@
+<div #scrollContainer class="messages-scroll">
+  @for (msg of completedMessages(); track $index) {
+    <div class="message-block">
+      <div class="message-prompt">{{ msg.prompt }}</div>
+      <div class="message-answer">{{ msg.answer }}</div>
+    </div>
+  }
+
+  @if (isStreaming() && currentPrompt()) {
+    <div class="message-block">
+      <div class="message-prompt">{{ currentPrompt() }}</div>
+      <div class="message-answer">{{ currentAnswer() }}<span class="streaming-cursor">▌</span></div>
+    </div>
+  }
+
+  @if (completedMessages().length === 0 && !isStreaming()) {
+    <div class="empty-state">Ask something about your deck or MTG cards…</div>
+  }
+</div>

@@ -1,0 +1,22 @@
+<div class="input-row">
+  <textarea
+    pTextarea
+    class="flex-1"
+    [autoResize]="true"
+    rows="2"
+    [disabled]="disabled()"
+    [value]="text()"
+    (input)="onTextInput($event)"
+    (keydown)="handleKeydown($event)"
+    placeholder="Ask about your deck or MTG rules… (Enter to send, Shift+Enter for new line)"
+  ></textarea>
+  <p-button
+    icon="pi pi-send"
+    [rounded]="true"
+    [text]="true"
+    [disabled]="disabled() || !text().trim()"
+    (onClick)="submit()"
+    pTooltip="Send"
+    tooltipPosition="top"
+  />
+</div>

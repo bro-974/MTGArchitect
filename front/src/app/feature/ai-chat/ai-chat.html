@@ -1,0 +1,28 @@
+<p-splitter
+  layout="horizontal"
+  class="ai-chat-splitter"
+  [panelSizes]="[70, 30]"
+  [minSizes]="[40, 20]"
+>
+  <ng-template pTemplate>
+    <div class="chat-column">
+      <app-ai-chat-messages
+        [completedMessages]="completedMessages()"
+        [currentPrompt]="currentPrompt()"
+        [currentAnswer]="currentAnswer()"
+        [isStreaming]="isStreaming()"
+      />
+      <app-ai-chat-input
+        [disabled]="isStreaming()"
+        (send)="onSend($event)"
+      />
+    </div>
+  </ng-template>
+  <ng-template pTemplate>
+    <app-ai-chat-panel
+      class="h-full w-full"
+      [currentReasoning]="currentReasoning()"
+      [isStreaming]="isStreaming()"
+    />
+  </ng-template>
+</p-splitter>

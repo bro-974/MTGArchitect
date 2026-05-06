@@ -4,6 +4,7 @@ import {
   inject
 } from '@angular/core';
 import { SplitterModule } from 'primeng/splitter';
+import { AiChat } from '../ai-chat/ai-chat';
 import { DeckForm } from '../deck-form/deck-form';
 import { WorkspaceDeckSelected } from '../workspace-deck-selected/workspace-deck-selected';
 import { Workspace } from '../workspace/workspace';
@@ -15,6 +16,7 @@ import { WorkspaceLayoutStateService } from './workspace-layout-state.service';
   styleUrl: './workspace-layout.css',
   imports: [
     SplitterModule,
+    AiChat,
     Workspace,
     WorkspaceDeckSelected,
     DeckForm

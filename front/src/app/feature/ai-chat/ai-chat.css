@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.ai-chat-splitter {
+  height: 100%;
+  width: 100%;
+}
+
+.chat-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  gap: 0.5rem;
+  overflow: hidden;
+}
