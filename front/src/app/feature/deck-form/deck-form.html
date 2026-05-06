@@ -60,51 +60,35 @@
             <!-- Selected chip -->
             <div class="deck-form__commander-chip flex align-items-center justify-content-between">
               <span class="text-sm font-medium">{{ commander.name }}</span>
-              <button
+              <p-button
                 type="button"
-                class="deck-form__chip-remove"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                severity="secondary"
+                icon="pi pi-times"
                 (click)="clearCommander()"
                 [attr.aria-label]="'workspace.createDeck.clearCommander' | transloco"
-              >
-                <i class="pi pi-times" aria-hidden="true"></i>
-              </button>
+              />
             </div>
           } @else {
-            <!-- Typeahead input -->
-            <div class="deck-form__commander-wrap">
-              <div class="p-inputgroup">
-                <input
-                  id="deck-commander"
-                  formControlName="commander"
-                  type="text"
-                  pInputText
-                  class="w-full"
-                  [attr.placeholder]="'workspace.createDeck.commanderPlaceholder' | transloco"
-                  autocomplete="off"
-                  (focus)="onCommanderInputFocus()"
-                  (blur)="hideSuggestions()"
-                />
-                @if (commanderSearching()) {
-                  <span class="p-inputgroup-addon">
-                    <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
-                  </span>
-                }
-              </div>
-              @if (showSuggestions() && commanderSuggestions().length > 0) {
-                <ul class="deck-form__suggestions" role="listbox">
-                  @for (suggestion of commanderSuggestions(); track suggestion.name) {
-                    <li
-                      class="deck-form__suggestion"
-                      role="option"
-                      (mousedown)="selectCommander(suggestion)"
-                    >
-                      <span class="deck-form__suggestion-name">{{ suggestion.name }}</span>
-                      <span class="deck-form__suggestion-type">{{ suggestion.typeLine }}</span>
-                    </li>
-                  }
-                </ul>
-              }
-            </div>
+            <!-- Autocomplete input -->
+            <p-autocomplete
+              [ngModel]="commanderInputValue()"
+              (ngModelChange)="onCommanderValueChange($event)"
+              [suggestions]="commanderSuggestions()"
+              field="name"
+              [placeholder]="'workspace.createDeck.commanderPlaceholder' | transloco"
+              (completeMethod)="searchCommander($event)"
+              class="w-full"
+            >
+              <ng-template let-card pTemplate="item">
+                <div class="flex justify-content-between align-items-center gap-2">
+                  <span class="text-sm">{{ card.name }}</span>
+                  <span class="text-xs text-color-secondary flex-shrink-0">{{ card.typeLine }}</span>
+                </div>
+              </ng-template>
+            </p-autocomplete>
           }
         </div>
       }

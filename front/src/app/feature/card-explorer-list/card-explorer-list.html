@@ -3,12 +3,12 @@
     @for (placeholder of [1, 2, 3, 4, 5, 6]; track placeholder) {
       <article class="col-12 sm:col-6 lg:col-4 xl:col-3" aria-hidden="true">
         <div class="surface-card border-round-2xl p-3 shadow-1 h-full">
-          <div class="card-art-media border-round-xl"></div>
-        <div class="flex flex-column gap-2 mt-3">
-          <div class="line-placeholder border-round" style="width: 75%; height: 1rem;"></div>
-          <div class="line-placeholder border-round"></div>
-          <div class="line-placeholder border-round" style="width: 48%;"></div>
-        </div>
+          <p-skeleton styleClass="card-art-media border-round-xl" />
+          <div class="flex flex-column gap-2 mt-3">
+            <p-skeleton width="75%" height="1rem" />
+            <p-skeleton height="0.8rem" />
+            <p-skeleton width="48%" height="0.8rem" />
+          </div>
         </div>
       </article>
     }
@@ -45,7 +45,7 @@
           <div class="flex justify-content-between align-items-start gap-2">
             <h3 class="m-0 text-xl line-height-2">{{ card.name }}</h3>
             @if (card.setCode) {
-              <span class="set-chip">{{ card.setCode }}</span>
+              <p-tag [value]="card.setCode" severity="secondary" class="text-xs font-bold uppercase" />
             }
           </div>
           <p class="m-0 text-color-secondary">{{ card.typeLine }}</p>

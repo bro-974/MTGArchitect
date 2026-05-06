@@ -46,36 +46,4 @@
   flex: 0 0 5rem;
 }
 
-.mana-pastille {
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 9999px;
-  border: none;
-  background: transparent;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
-  padding: 0;
-}
-
-.mana-pastille img {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 9999px;
-}
-
-.mana-pastille:hover {
-  transform: translateY(-1px);
-}
-
-.mana-pastille:focus-visible {
-  outline: 3px solid var(--primary-300);
-  outline-offset: 2px;
-}
-
-.mana-pastille.is-selected {
-  box-shadow: 0 0 0 3px #f59e0b;
-}
 

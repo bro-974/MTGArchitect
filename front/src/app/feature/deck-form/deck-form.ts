@@ -7,14 +7,16 @@ import {
   signal
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
-import { catchError, debounceTime, distinctUntilChanged, EMPTY, finalize, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, EMPTY, finalize, Subject, switchMap } from 'rxjs';
 import { WorkspaceService } from '../workspace/workspace.service';
 import { WorkspaceLayoutStateService } from '../workspace-layout/workspace-layout-state.service';
 import { CardFormat } from '../../core/models/card-query-search.model';
@@ -53,11 +55,14 @@ const COMMANDER_FORMATS = ['Commander', 'Brawl', 'Oathbreaker'] as const;
   templateUrl: './deck-form.html',
   styleUrl: './deck-form.css',
   imports: [
+    FormsModule,
     ReactiveFormsModule,
     TranslocoPipe,
+    AutoCompleteModule,
+    ButtonModule,
+    DividerModule,
     InputTextModule,
     TextareaModule,
-    ButtonModule,
     SelectModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -78,7 +83,6 @@ export class DeckForm {
       validators: [Validators.required, Validators.maxLength(120)]
     }),
     format: new FormControl<CardFormat | null>(null),
-    commander: new FormControl('', { nonNullable: true }),
     note: new FormControl('', { nonNullable: true })
   });
 
@@ -122,18 +126,18 @@ export class DeckForm {
   }
 
   // ── Commander search ──────────────────────────────────
-  readonly commanderQuery = signal('');
-  readonly commanderSuggestions = signal<readonly CommanderSuggestion[]>([]);
+  readonly commanderSuggestions = signal<CommanderSuggestion[]>([]);
   readonly commanderSearching = signal(false);
   readonly selectedCommander = signal<CommanderSuggestion | null>(null);
-  readonly showSuggestions = signal(false);
+  readonly commanderInputValue = signal<CommanderSuggestion | string | null>(null);
+  private readonly commanderSearch$ = new Subject<string>();
 
   readonly needsCommander = computed(() =>
     COMMANDER_FORMATS.includes(this.deckForm.controls.format.value as typeof COMMANDER_FORMATS[number])
   );
 
   constructor() {
-    this.deckForm.controls.commander.valueChanges.pipe(
+    this.commanderSearch$.pipe(
       debounceTime(320),
       distinctUntilChanged(),
       switchMap((query) => {
@@ -171,36 +175,29 @@ export class DeckForm {
           colorIdentity: c.color_identity
         }))
       );
-      this.showSuggestions.set(true);
     });
   }
 
-  onCommanderInputFocus(): void {
-    if (this.commanderSuggestions().length > 0) {
-      this.showSuggestions.set(true);
-    }
+  searchCommander(event: { query: string }): void {
+    this.commanderSearch$.next(event.query);
   }
 
-  selectCommander(suggestion: CommanderSuggestion): void {
-    this.selectedCommander.set(suggestion);
-    this.deckForm.controls.commander.setValue('', { emitEvent: false });
-    this.commanderSuggestions.set([]);
-    this.showSuggestions.set(false);
-    // Auto-apply color identity from commander
-    const ordered = this.manaColorOrder.filter((c) =>
-      suggestion.colorIdentity.includes(c)
-    );
-    this.selectedColors.set(ordered);
+  onCommanderValueChange(value: CommanderSuggestion | string | null): void {
+    if (value && typeof value === 'object') {
+      this.selectedCommander.set(value);
+      this.commanderInputValue.set(null);
+      this.commanderSuggestions.set([]);
+      const ordered = this.manaColorOrder.filter((c) => value.colorIdentity.includes(c));
+      this.selectedColors.set(ordered);
+    } else {
+      this.commanderInputValue.set(value);
+    }
   }
 
   clearCommander(): void {
     this.selectedCommander.set(null);
-    this.deckForm.controls.commander.setValue('');
-  }
-
-  hideSuggestions(): void {
-    // Delay so click on a suggestion registers first
-    setTimeout(() => this.showSuggestions.set(false), 150);
+    this.commanderInputValue.set(null);
+    this.commanderSuggestions.set([]);
   }
 
   // ── Live preview computed values ──────────────────────
@@ -268,10 +265,10 @@ export class DeckForm {
   }
 
   resetForm(): void {
-    this.deckForm.reset({ name: '', format: null, commander: '', note: '' });
+    this.deckForm.reset({ name: '', format: null, note: '' });
     this.selectedColors.set([]);
     this.selectedCommander.set(null);
+    this.commanderInputValue.set(null);
     this.commanderSuggestions.set([]);
-    this.commanderQuery.set('');
   }
 }
