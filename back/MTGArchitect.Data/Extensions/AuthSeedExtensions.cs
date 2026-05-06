@@ -42,7 +42,7 @@ public static class AuthSeedExtensions
                 throw new InvalidOperationException($"Unable to create Admin role: {string.Join("; ", roleResult.Errors.Select(x => x.Description))}");
         }
 
-        // Pass 2 — seed default test user
+        // Pass 2 — seed default test user (always sync password to current config)
         var existingDefault = await userManager.FindByEmailAsync(defaultEmail);
         if (existingDefault is null)
         {
@@ -59,11 +59,13 @@ public static class AuthSeedExtensions
             if (!createResult.Succeeded)
                 throw new InvalidOperationException($"Unable to seed default auth user: {string.Join("; ", createResult.Errors.Select(x => x.Description))}");
 
-            defaultUser.PasswordHash = userManager.PasswordHasher.HashPassword(defaultUser, defaultPassword);
-            var updateResult = await userManager.UpdateAsync(defaultUser);
-            if (!updateResult.Succeeded)
-                throw new InvalidOperationException($"Unable to set seeded default user password: {string.Join("; ", updateResult.Errors.Select(x => x.Description))}");
+            existingDefault = defaultUser;
         }
+
+        existingDefault.PasswordHash = userManager.PasswordHasher.HashPassword(existingDefault, defaultPassword);
+        var updateResult = await userManager.UpdateAsync(existingDefault);
+        if (!updateResult.Succeeded)
+            throw new InvalidOperationException($"Unable to set seeded default user password: {string.Join("; ", updateResult.Errors.Select(x => x.Description))}");
 
         // Pass 3 — seed admin user
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);

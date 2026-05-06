@@ -16,6 +16,9 @@ public class IntegrationTestFixture
     [OneTimeSetUp]
     public async Task StartAsync()
     {
+        const string testEmail = "admin@admin.fr";
+        const string testPassword = "a123456798!";
+
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.MTGArchitect_AppHost>();
         appHost.Configuration["Jwt:Key"] = "integration-test-signing-key-32chars!!";
 
@@ -28,8 +31,8 @@ public class IntegrationTestFixture
         using var authClient = _app.CreateHttpClient("authapiservice");
         var loginResponse = await authClient.PostAsJsonAsync("/api/auth/login", new
         {
-            email = "nordyn@hotmail.fr",
-            password = "Aqw1!"
+            email = testEmail,
+            password = testPassword
         });
         loginResponse.EnsureSuccessStatusCode();
 
