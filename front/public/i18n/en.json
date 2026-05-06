@@ -164,6 +164,7 @@
         "search": "Search results"
       },
       "closeSearch": "Close search",
+      "searchLoading": "Searching cards...",
       "searchEmpty": "No cards found for this query.",
       "searchError": "Search failed. Please try again.",
       "emptyTitle": "Choose a deck from the list",

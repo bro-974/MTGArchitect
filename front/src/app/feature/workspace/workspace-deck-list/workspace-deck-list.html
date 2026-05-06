@@ -17,12 +17,19 @@
     />
   </header>
 
-  <p-tree
-    [value]="treeNodes()"
-    selectionMode="single"
-    [selection]="selectedNode()"
-    [metaKeySelection]="true"
-    [attr.aria-label]="'workspace.deckList.title' | transloco"
-    (onNodeSelect)="handleNodeSelect($event)"
-  />
+  @if (isLoading()) {
+    <div class="deck-list-loading" aria-live="polite" aria-busy="true">
+      <p-progressspinner strokeWidth="4" animationDuration=".8s" ariaLabel="Loading decks" />
+      <p class="m-0 text-sm text-color-secondary">{{ 'workspace.loading' | transloco }}</p>
+    </div>
+  } @else {
+    <p-tree
+      [value]="treeNodes()"
+      selectionMode="single"
+      [selection]="selectedNode()"
+      [metaKeySelection]="true"
+      [attr.aria-label]="'workspace.deckList.title' | transloco"
+      (onNodeSelect)="handleNodeSelect($event)"
+    />
+  }
 </section>

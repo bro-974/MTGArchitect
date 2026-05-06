@@ -164,6 +164,7 @@
         "search": "Resultats de recherche"
       },
       "closeSearch": "Fermer la recherche",
+      "searchLoading": "Recherche des cartes...",
       "searchEmpty": "Aucune carte trouvee pour cette requete.",
       "searchError": "La recherche a echoue. Veuillez reessayer.",
       "emptyTitle": "Choisissez un deck dans la liste",

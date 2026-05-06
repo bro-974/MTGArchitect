@@ -5,10 +5,9 @@
         <!-- Waiting for tab to be opened -->
       }
       @case ('loading') {
-        <div class="search-show-grid" aria-live="polite" aria-busy="true">
-          @for (placeholder of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track placeholder) {
-            <div class="search-show-card search-show-card--skeleton" aria-hidden="true"></div>
-          }
+        <div class="search-show-loading" aria-live="polite" aria-busy="true">
+          <p-progressspinner strokeWidth="4" animationDuration=".8s" ariaLabel="Loading search results" />
+          <p class="m-0 text-color-secondary">{{ 'workspace.selected.searchLoading' | transloco }}</p>
         </div>
       }
       @case ('error') {

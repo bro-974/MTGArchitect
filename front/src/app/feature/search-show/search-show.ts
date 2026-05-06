@@ -4,6 +4,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Paginator, type PaginatorState } from 'primeng/paginator';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Tooltip } from 'primeng/tooltip';
 import { catchError, filter, map, of, startWith, switchMap, take, tap } from 'rxjs';
 import type { Observable } from 'rxjs';
@@ -22,7 +23,7 @@ type SearchState =
 
 @Component({
   selector: 'app-search-show',
-  imports: [TranslocoPipe, Button, Tooltip, CardDetailPanel, Paginator],
+  imports: [TranslocoPipe, Button, Tooltip, CardDetailPanel, Paginator, ProgressSpinnerModule],
   templateUrl: './search-show.html',
   styleUrl: './search-show.css',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -1,7 +1,7 @@
 # Graph Report - MTGArchitect  (2026-05-06)
 
 ## Corpus Check
-- 192 files · ~147,534 words
+- 192 files · ~147,557 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

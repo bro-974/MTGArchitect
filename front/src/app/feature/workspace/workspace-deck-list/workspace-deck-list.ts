@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TreeModule } from 'primeng/tree';
 import { TreeNode } from 'primeng/api';
 import { catchError, EMPTY, Subscription } from 'rxjs';
@@ -14,7 +15,7 @@ interface DeckTreeNodeData {
 
 @Component({
   selector: 'app-workspace-deck-list',
-  imports: [TranslocoPipe, ButtonModule, TreeModule],
+  imports: [TranslocoPipe, ButtonModule, TreeModule, ProgressSpinnerModule],
   templateUrl: './workspace-deck-list.html',
   styleUrl: './workspace-deck-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +24,7 @@ export class WorkspaceDeckList {
   private readonly workspaceService = inject(WorkspaceService);
   private readonly subscriptions = new Subscription();
 
+  readonly isLoading = signal(true);
   readonly decks = signal<readonly WorkspaceDeck[]>([]);
   readonly groupedDecks = computed(() => {
     const grouped = new Map<string, WorkspaceDeck[]>();
@@ -86,11 +88,13 @@ export class WorkspaceDeckList {
       .pipe(
         catchError(() => {
           this.decks.set([]);
+          this.isLoading.set(false);
           return EMPTY;
         })
       )
       .subscribe((decks) => {
         this.decks.set(decks);
+        this.isLoading.set(false);
       });
 
     this.subscriptions.add(
