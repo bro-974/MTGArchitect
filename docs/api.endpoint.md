@@ -212,8 +212,26 @@ For protected routes, send:
 - Description: Remove a query search from a deck (owned by logged user).
 - Response: `204 No Content`
 
-## Documentation validation skill
+#### `GET /api/ai/chat?prompt={prompt}`
+- Description: Stream an AI response for the given prompt via Server-Sent Events (SSE).
+- Query params:
+  - `prompt` (required) — the question or instruction sent to the LLM
+- Response: `text/event-stream` — each event is a `data:` line containing a JSON object:
+```
+data: {"content":"Let me think about this...","type":"Reasoning"}
 
-Run this command from repository root to validate README endpoint contracts against source endpoints:
+data: {"content":"A land card is...","type":"Answer"}
+```
+- Chunk types:
 
-`powershell -ExecutionPolicy Bypass -File ..\back\scripts\Check-EndpointContracts.ps1`
+| `type` | Meaning |
+|---|---|
+| `Reasoning` | DeepSeek-R1 thinking tokens (internal chain-of-thought) |
+| `Answer` | Final answer tokens to display to the user |
+| `Metadata` | Reserved for future structured payloads |
+
+- Notes:
+  - Chunks arrive incrementally as the LLM generates them — consume as a stream, do not buffer.
+  - `Reasoning` chunks may be hidden in the UI or shown in a collapsible "thinking" section.
+  - The stream ends when the connection closes (no explicit `event: done`).
+

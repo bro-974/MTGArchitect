@@ -28,8 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\MTGArchitect.Scryfall.Service\Protos\greet.proto" GrpcServices="Client" Link="Protos\scryfall.proto">
-		</Protobuf>
+		<Protobuf Include="..\MTGArchitect.AI.Service\Protos\mind.proto" GrpcServices="Client" Link="Protos\mind.proto" />
 	</ItemGroup>
 
 </Project>

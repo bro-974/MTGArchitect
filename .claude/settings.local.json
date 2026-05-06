@@ -12,7 +12,9 @@
       "mcp__angular-cli__get_best_practices",
       "Bash(Get-ChildItem -Path \"c:\\\\Repository\\\\bro974\\\\MTGArchitect\" -Directory)",
       "Bash(Select-Object Name)",
-      "Bash(grep -E \"^|\\\\.ts$\")"
+      "Bash(grep -E \"^|\\\\.ts$\")",
+      "Bash(dotnet build *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Repository\\\\bro974\\\\MTGArchitect\\\\back\\\\MTGArchitect.Api.Integration.Tests\\\\\" -Recurse -File | Select-Object FullName)"
     ]
   }
 }

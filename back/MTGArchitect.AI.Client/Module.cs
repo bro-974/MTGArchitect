@@ -1,17 +1,26 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using MTGArchitect.AI.Client.Services;
+using Grpc.Health.V1;
 
-namespace MTGArchitect.Scryfall.Client;
+namespace MTGArchitect.AI.Client;
 
 public static class Module
 {
-    public static IServiceCollection AddScryfallClient(this IServiceCollection services, Uri scryfallService)
+    public static IServiceCollection AddMindClient(this IServiceCollection services, Uri aiService)
     {
-        //services.AddGrpcClient<>(options =>
-        //{
-        //    options.Address = scryfallService;
-        //});
-        //services.AddScoped<>();
+        services.AddGrpcClient<MTGArchitect.AI.Service.MindService.MindServiceClient>(options =>
+        {
+            options.Address = aiService;
+        });
+        services.AddGrpcClient<Health.HealthClient>(options =>
+        {
+            options.Address = aiService;
+        });
+        services.AddHttpClient<IMindHealthClient, MindHealthClient>(client =>
+        {
+            client.BaseAddress = aiService;
+        });
+        services.AddScoped<IMindClient, MindClient>();
         return services;
     }
 }
-

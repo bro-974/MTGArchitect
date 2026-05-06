@@ -4,18 +4,20 @@ option csharp_namespace = "MTGArchitect.AI.Service";
 
 package mind;
 
-// The greeting service definition.
-service Mind {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+service MindService {
+  rpc Chat(ChatRequest) returns (stream ChatResponseStream);
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message ChatRequest {
+  string prompt = 1;
 }
 
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+message ChatResponseStream {
+  oneof payload {
+    string reasoning_chunk = 1;
+    string answer_chunk = 2;
+    SuggestedActions final_data = 3;
+  }
 }
+
+message SuggestedActions {}

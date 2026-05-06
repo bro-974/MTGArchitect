@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MTGArchitect.Scryfall.Contracts;
 using MTGArchitectServices.ApiService.Controllers;
+using MTGArchitectServices.ApiService.Services;
 using System.Security.Claims;
 
 public static class EndpointExtensions
@@ -15,6 +16,7 @@ public static class EndpointExtensions
         app.MapServer(api);
         app.MapPublicSearch(api);
         app.MapPrivateUserEndpoints(api);
+        app.MapAiChat(api);
         app.MapDefaultEndpoints();
 
         return app;
@@ -155,6 +157,29 @@ public static class EndpointExtensions
         })
         .RequireAuthorization(policy => policy.RequireRole("Admin"))
         .WithName("GetServerStatus");
+
+        return app;
+    }
+
+    public static WebApplication MapAiChat(this WebApplication app, RouteGroupBuilder apiRoot)
+    {
+        var secured_ai = apiRoot.MapGroup("/ai")
+            .RequireAuthorization();
+
+        secured_ai.MapGet("/health", async (
+            [FromServices] MindHealthService mindHealthService,
+            CancellationToken ct) =>
+            Results.Ok(await mindHealthService.GetHealthAsync(ct)))
+        .RequireAuthorization(policy => policy.RequireRole("Admin"))
+        .WithName("AiHealth");
+
+        secured_ai.MapGet("/chat", async (
+            string prompt,
+            HttpResponse response,
+            [FromServices] MindServices mindServices,
+            CancellationToken ct) =>
+            await mindServices.StreamChatAsync(prompt, response, ct))
+        .WithName("AiChat");
 
         return app;
     }

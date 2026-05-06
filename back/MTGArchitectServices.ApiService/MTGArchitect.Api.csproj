@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MTGArchitect.AI.Client\MTGArchitect.AI.Client.csproj" />
     <ProjectReference Include="..\MTGArchitect.Data\MTGArchitect.Data.csproj" />
     <ProjectReference Include="..\MTGArchitect.Scryfall.Client\MTGArchitect.Scryfall.Client.csproj" />
     <ProjectReference Include="..\MTGArchitectServices.ServiceDefaults\MTGArchitect.ServiceDefaults.csproj" />

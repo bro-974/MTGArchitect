@@ -8,8 +8,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "nordyn@hotmail.fr",
-  "password": "Aqw1!"
+  "email": "admin@admin.fr",
+  "password": "a123456798!"
 }
 
 ### 2. Search a card with the name "Black Lotus"
@@ -39,5 +39,10 @@ Accept: application/json
 
 ### 6. Test auth api
 GET {{AuthApiService_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+### 7. Test ai endpoint
+GET {{ApiService_HostAddress}}/api/ai/chat?prompt=Hello
 Accept: application/json
 Authorization: Bearer {{login.response.body.$.accessToken}}
