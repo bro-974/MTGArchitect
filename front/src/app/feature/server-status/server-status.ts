@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, KeyValuePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ButtonModule } from 'primeng/button';
@@ -8,7 +8,7 @@ type StatusState = 'idle' | 'loading' | 'online' | 'error';
 
 @Component({
   selector: 'app-server-status',
-  imports: [ButtonModule, TranslocoPipe, DatePipe],
+  imports: [ButtonModule, TranslocoPipe, DatePipe, KeyValuePipe],
   templateUrl: './server-status.html',
   styleUrl: './server-status.css',
   changeDetection: ChangeDetectionStrategy.OnPush

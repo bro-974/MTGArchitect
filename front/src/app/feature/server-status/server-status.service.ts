@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 export interface ServerStatusResponse {
   status: string;
   checkedAt: string;
+  services: Record<string, string>;
 }
 
 @Injectable({ providedIn: 'root' })

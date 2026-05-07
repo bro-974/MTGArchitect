@@ -1,9 +1,11 @@
+using Grpc.Health.V1;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MTGArchitect.Data.Extensions;
 using MTGArchitect.AI.Client;
 using MTGArchitect.Scryfall.Client;
 using MTGArchitectServices.ApiService.Controllers;
+using MTGArchitectServices.ApiService.HealthChecks;
 using MTGArchitectServices.ApiService.Services;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -43,6 +45,21 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScryfallClient(new Uri("https://scryfallservice"));
 builder.Services.AddMindClient(new Uri("https://aiservice"));
+
+// Named gRPC health client for Scryfall (avoids type collision with AI's Health.HealthClient)
+builder.Services.AddGrpcClient<Health.HealthClient>("scryfall-health", o =>
+    o.Address = new Uri("https://scryfallservice"));
+
+builder.Services.AddHttpClient<LmStudioRemoteHealthCheck>(c =>
+    c.BaseAddress = new Uri("https://aiservice"));
+builder.Services.AddHttpClient<AuthServiceHealthCheck>(c =>
+    c.BaseAddress = new Uri("https://authapiservice"));
+
+builder.Services.AddHealthChecks()
+    .AddCheck<ScryfallGrpcHealthCheck>("scryfall")
+    .AddCheck<AiGrpcHealthCheck>("ai")
+    .AddCheck<LmStudioRemoteHealthCheck>("llm")
+    .AddCheck<AuthServiceHealthCheck>("auth");
 
 var authConnectionString = builder.Configuration.GetConnectionString("authdb")
     ?? throw new InvalidOperationException("Connection string 'authdb' is missing.");

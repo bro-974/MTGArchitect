@@ -10,6 +10,8 @@ builder.Services.AddGrpc();
 builder.Services.AddGrpcHealthChecks();
 builder.Services.AddHttpClient("lmstudio-health");
 builder.Services.AddSingleton<LmStudioHealthCheck>();
+builder.Services.AddHealthChecks()
+    .AddCheck<LmStudioHealthCheck>("lmstudio");
 
 var lmStudioUri = builder.Configuration["LmStudioUri"]
     ?? throw new InvalidOperationException("LmStudioUri configuration is missing.");

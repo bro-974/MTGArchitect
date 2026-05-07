@@ -2,7 +2,6 @@
 ## 1. Context files – load when relevant
 
 | Condition | File to read |
-| Starting any task | `docs/context.general.md` |
 | Working in /front or Angular code | `front/angular.claude.md` |
 | Working in /back or .NET code | `back/dotnet.claude.md` |
 | Referencing or creating API endpoints | `docs/api.endpoint.md` |
@@ -24,6 +23,8 @@ MTGArchitect is a distributed application orchestrated by **.NET Aspire**.
 - `scryfallservice` — gRPC
 - `authapiservice` — REST, depends on `authdb`
 - `apiservice` — REST, depends on `scryfallservice` + `authapiservice` + `authdb`, exposed on port **4300**
+- `aiservice` — REST, depends on `lmstudio`, exposed on port **5000**
+- `lmstudio` — local LLM inference server (LM Studio), used by `aiservice`
 - `frontend` — `npm start` from `../../front`, port **4201**
 
 Start the whole stack from the repo root with:

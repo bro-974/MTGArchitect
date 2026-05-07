@@ -10,6 +10,15 @@
     <p class="m-0 text-color-secondary">
       {{ 'serverStatus.lastChecked' | transloco }}: {{ status.checkedAt | date: 'medium' }}
     </p>
+
+    <ul class="service-list mt-3">
+      @for (entry of status.services | keyvalue; track entry.key) {
+        <li class="service-row">
+          <span class="service-name">{{ entry.key }}</span>
+          <span class="service-badge" [class]="entry.value.toLowerCase()">{{ entry.value }}</span>
+        </li>
+      }
+    </ul>
   } @else if (state() === 'error') {
     <p class="m-0 mb-2">{{ 'serverStatus.offline' | transloco }}</p>
   } @else {

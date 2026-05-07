@@ -153,7 +153,10 @@ public static class EndpointExtensions
         apiRoot.MapGet("/server-status", async (HealthCheckService healthCheckService, CancellationToken cancellationToken) =>
         {
             var report = await healthCheckService.CheckHealthAsync(cancellationToken);
-            return Results.Ok(new { status = report.Status.ToString(), checkedAt = DateTimeOffset.UtcNow });
+            var services = report.Entries.ToDictionary(
+                e => e.Key == "self" ? "api" : e.Key,
+                e => e.Value.Status.ToString());
+            return Results.Ok(new { status = report.Status.ToString(), checkedAt = DateTimeOffset.UtcNow, services });
         })
         .RequireAuthorization(policy => policy.RequireRole("Admin"))
         .WithName("GetServerStatus");
