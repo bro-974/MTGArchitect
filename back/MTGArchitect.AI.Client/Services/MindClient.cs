@@ -6,12 +6,22 @@ namespace MTGArchitect.AI.Client.Services;
 
 public interface IMindClient
 {
-    IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, IEnumerable<ChatHistoryTurn>? history = null, CancellationToken ct = default);
+    IAsyncEnumerable<ChatChunk> StreamChatAsync(
+        string prompt,
+        IEnumerable<ChatHistoryTurn>? history = null,
+        string? format = null,
+        string? deckContext = null,
+        CancellationToken ct = default);
 }
 
 public class MindClient(MTGArchitect.AI.Service.MindService.MindServiceClient grpcClient) : IMindClient
 {
-    public async IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, IEnumerable<ChatHistoryTurn>? history = null, [EnumeratorCancellation] CancellationToken ct = default)
+    public async IAsyncEnumerable<ChatChunk> StreamChatAsync(
+        string prompt,
+        IEnumerable<ChatHistoryTurn>? history = null,
+        string? format = null,
+        string? deckContext = null,
+        [EnumeratorCancellation] CancellationToken ct = default)
     {
         var request = new MTGArchitect.AI.Service.ChatRequest { Prompt = prompt };
         if (history is not null)
@@ -22,6 +32,8 @@ public class MindClient(MTGArchitect.AI.Service.MindService.MindServiceClient gr
                 Answer = t.Answer
             }));
         }
+        if (!string.IsNullOrEmpty(format))      request.Format = format;
+        if (!string.IsNullOrEmpty(deckContext)) request.DeckContext = deckContext;
 
         using var call = grpcClient.Chat(request);
         await foreach (var chunk in call.ResponseStream.ReadAllAsync(ct))

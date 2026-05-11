@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { CompletedMessage, ChatSession } from './ai-chat.models';
 import { ChatSessionService } from './chat-session.service';
 import { WorkspaceDeckStateService } from '../workspace/workspace-deck-state.service';
@@ -11,6 +11,7 @@ export class AiChatStateService {
   readonly sessions = signal<readonly ChatSession[]>([]);
   readonly activeSession = signal<ChatSession | null>(null);
   readonly completedMessages = signal<readonly CompletedMessage[]>([]);
+  readonly selectedDeckId = computed(() => this.deckState.selectedDeck()?.id ?? null);
 
   constructor() {
     effect(() => {

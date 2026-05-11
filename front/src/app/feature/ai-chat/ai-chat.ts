@@ -38,30 +38,35 @@ export class AiChat {
     this.currentAnswer.set('');
     this.currentReasoning.set('');
 
-    this.ctrl = this.aiChatService.stream(prompt, session.id, {
-      onChunk: (chunk) => {
-        if (chunk.type === 'Answer') {
-          this.currentAnswer.update((v) => v + chunk.content);
-        } else if (chunk.type === 'Reasoning') {
-          this.currentReasoning.update((v) => v + chunk.content);
-        }
+    this.ctrl = this.aiChatService.stream(
+      prompt,
+      session.id,
+      {
+        onChunk: (chunk) => {
+          if (chunk.type === 'Answer') {
+            this.currentAnswer.update((v) => v + chunk.content);
+          } else if (chunk.type === 'Reasoning') {
+            this.currentReasoning.update((v) => v + chunk.content);
+          }
+        },
+        onDone: () => {
+          this.chatState.addCompletedMessage({
+            prompt: this.currentPrompt()!,
+            answer: this.currentAnswer(),
+            reasoning: this.currentReasoning(),
+          });
+          this.currentPrompt.set(null);
+          this.currentAnswer.set('');
+          this.currentReasoning.set('');
+          this.isStreaming.set(false);
+          this.ctrl = null;
+        },
+        onError: () => {
+          this.isStreaming.set(false);
+          this.ctrl = null;
+        },
       },
-      onDone: () => {
-        this.chatState.addCompletedMessage({
-          prompt: this.currentPrompt()!,
-          answer: this.currentAnswer(),
-          reasoning: this.currentReasoning(),
-        });
-        this.currentPrompt.set(null);
-        this.currentAnswer.set('');
-        this.currentReasoning.set('');
-        this.isStreaming.set(false);
-        this.ctrl = null;
-      },
-      onError: () => {
-        this.isStreaming.set(false);
-        this.ctrl = null;
-      },
-    });
+      this.chatState.selectedDeckId(),
+    );
   }
 }

@@ -21,6 +21,7 @@ public static class Module
             client.BaseAddress = aiService;
         });
         services.AddScoped<IMindClient, MindClient>();
+        services.AddSingleton<IDeckContextFormatter, DeckContextFormatter>();
         return services;
     }
 }

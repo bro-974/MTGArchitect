@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace MTGArchitect.AI.Service.Services;
 
-public class MindServiceHandler(ChatClient chatClient) : MindService.MindServiceBase
+public class MindServiceHandler(ChatClient chatClient, IConfiguration configuration) : MindService.MindServiceBase
 {
     public override async Task Chat(
         ChatRequest request,
@@ -14,12 +14,26 @@ public class MindServiceHandler(ChatClient chatClient) : MindService.MindService
     {
         var messages = new List<ChatMessage>();
 
+        // 1. Main system prompt with format substitution
+        var systemPromptTemplate = configuration["AiService:SystemPrompt"] ?? string.Empty;
+        var format = string.IsNullOrEmpty(request.Format) ? "Custom" : request.Format;
+        var systemPrompt = systemPromptTemplate.Replace("{{format}}", format);
+        messages.Add(new SystemChatMessage(systemPrompt));
+
+        // 2. Deck context (optional)
+        if (!string.IsNullOrEmpty(request.DeckContext))
+        {
+            messages.Add(new SystemChatMessage($"The user is playing the following deck:\n{request.DeckContext}"));
+        }
+
+        // 3. Conversation history
         foreach (var turn in request.History)
         {
             messages.Add(new UserChatMessage(turn.UserPrompt));
             messages.Add(new AssistantChatMessage(turn.Answer));
         }
 
+        // 4. Current prompt
         messages.Add(new UserChatMessage(request.Prompt));
 
         await foreach (var update in chatClient.CompleteChatStreamingAsync(messages, cancellationToken: context.CancellationToken))

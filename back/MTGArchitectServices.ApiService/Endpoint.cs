@@ -180,6 +180,7 @@ public static class EndpointExtensions
         secured_ai.MapGet("/chat", async (
             string prompt,
             Guid sessionId,
+            Guid? deckId,
             ClaimsPrincipal principal,
             HttpResponse response,
             [FromServices] MindServices mindServices,
@@ -187,7 +188,7 @@ public static class EndpointExtensions
         {
             var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null) return Results.Unauthorized();
-            await mindServices.StreamChatAsync(prompt, sessionId, userId, response, ct);
+            await mindServices.StreamChatAsync(prompt, sessionId, userId, response, ct, deckId);
             return Results.Empty;
         })
         .WithName("AiChat");
