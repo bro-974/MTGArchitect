@@ -1,28 +1,34 @@
-<p-splitter
-  layout="horizontal"
-  class="ai-chat-splitter"
-  [panelSizes]="[70, 30]"
-  [minSizes]="[40, 20]"
->
-  <ng-template pTemplate>
-    <div class="chat-column">
-      <app-ai-chat-messages
-        [completedMessages]="completedMessages()"
-        [currentPrompt]="currentPrompt()"
-        [currentAnswer]="currentAnswer()"
+@if (chatState.activeSession()) {
+  <p-splitter
+    layout="horizontal"
+    class="h-full w-full"
+    [panelSizes]="[70, 30]"
+    [minSizes]="[40, 20]"
+  >
+    <ng-template pTemplate>
+      <div class="flex flex-column h-full w-full gap-2 overflow-hidden">
+        <app-ai-chat-messages
+          [completedMessages]="chatState.completedMessages()"
+          [currentPrompt]="currentPrompt()"
+          [currentAnswer]="currentAnswer()"
+          [isStreaming]="isStreaming()"
+        />
+        <app-ai-chat-input
+          [disabled]="isStreaming()"
+          (send)="onSend($event)"
+        />
+      </div>
+    </ng-template>
+    <ng-template pTemplate>
+      <app-ai-chat-panel
+        class="h-full w-full"
+        [currentReasoning]="currentReasoning()"
         [isStreaming]="isStreaming()"
       />
-      <app-ai-chat-input
-        [disabled]="isStreaming()"
-        (send)="onSend($event)"
-      />
-    </div>
-  </ng-template>
-  <ng-template pTemplate>
-    <app-ai-chat-panel
-      class="h-full w-full"
-      [currentReasoning]="currentReasoning()"
-      [isStreaming]="isStreaming()"
-    />
-  </ng-template>
-</p-splitter>
+    </ng-template>
+  </p-splitter>
+} @else {
+  <div class="flex flex-1 align-items-center justify-content-center no-session-message">
+    <p>Select a deck and create a chat session to get started.</p>
+  </div>
+}

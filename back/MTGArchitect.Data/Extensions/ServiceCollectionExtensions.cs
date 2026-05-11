@@ -33,6 +33,20 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthDataService, AuthDataService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IDeckRepository, DeckRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddMessageData(this IServiceCollection services, string authConnectionString)
+    {
+        services.AddDbContext<AuthDbContext>(options =>
+        {
+            options.UseNpgsql(authConnectionString);
+        });
+
+        
+        services.AddScoped<IChatRepository, ChatRepository>();
 
         return services;
     }

@@ -1,0 +1,27 @@
+.session-list-panel {
+  min-width: 0;
+}
+
+.session-node-actions {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.session-node-content:hover .session-node-actions,
+.session-node-content:focus-within .session-node-actions {
+  opacity: 1;
+}
+
+.session-rename-input {
+  flex: 1;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+}
+
+.no-sessions {
+  padding: 0.75rem 0;
+  color: var(--p-text-muted-color);
+  font-size: 0.875rem;
+  text-align: center;
+}

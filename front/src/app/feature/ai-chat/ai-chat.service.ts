@@ -17,10 +17,10 @@ export interface AiChatCallbacks {
 export class AiChatService {
   private readonly authService = inject(AuthService);
 
-  stream(prompt: string, callbacks: AiChatCallbacks): AbortController {
+  stream(prompt: string, sessionId: string, callbacks: AiChatCallbacks): AbortController {
     const ctrl = new AbortController();
     const token = this.authService.token();
-    const url = `${environment.apiUrl}/api/ai/chat?prompt=${encodeURIComponent(prompt)}`;
+    const url = `${environment.apiUrl}/api/ai/chat?prompt=${encodeURIComponent(prompt)}&sessionId=${sessionId}`;
 
     fetch(url, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},

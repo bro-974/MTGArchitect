@@ -9,6 +9,8 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
     public DbSet<Deck> Decks => Set<Deck>();
     public DbSet<DeckCard> DeckCards => Set<DeckCard>();
     public DbSet<QueryInfo> QueryInfos => Set<QueryInfo>();
+    public DbSet<ChatSession> ChatSessions => Set<ChatSession>();
+    public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -54,6 +56,36 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : IdentityDb
             entity.HasOne(x => x.Deck)
                 .WithMany(x => x.Cards)
                 .HasForeignKey(x => x.DeckId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<ChatSession>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.DisplayName).HasMaxLength(150).IsRequired();
+            entity.Property(x => x.CreatedAt).IsRequired();
+
+            entity.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.Deck)
+                .WithMany()
+                .HasForeignKey(x => x.DeckId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<ChatMessage>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.UserPrompt).HasColumnType("text").IsRequired();
+            entity.Property(x => x.Answer).HasColumnType("text").IsRequired();
+            entity.Property(x => x.CreatedAt).IsRequired();
+
+            entity.HasOne(x => x.ChatSession)
+                .WithMany(x => x.Messages)
+                .HasForeignKey(x => x.ChatSessionId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

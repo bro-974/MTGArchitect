@@ -17,6 +17,7 @@ public static class EndpointExtensions
         app.MapPublicSearch(api);
         app.MapPrivateUserEndpoints(api);
         app.MapAiChat(api);
+        app.MapChatSessions(api);
         app.MapDefaultEndpoints();
 
         return app;
@@ -178,12 +179,71 @@ public static class EndpointExtensions
 
         secured_ai.MapGet("/chat", async (
             string prompt,
+            Guid sessionId,
+            ClaimsPrincipal principal,
             HttpResponse response,
             [FromServices] MindServices mindServices,
             CancellationToken ct) =>
-            await mindServices.StreamChatAsync(prompt, response, ct))
+        {
+            var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null) return Results.Unauthorized();
+            await mindServices.StreamChatAsync(prompt, sessionId, userId, response, ct);
+            return Results.Empty;
+        })
         .WithName("AiChat");
 
         return app;
     }
+
+    public static WebApplication MapChatSessions(this WebApplication app, RouteGroupBuilder apiRoot)
+    {
+        var chat = apiRoot.MapGroup("/chat/sessions")
+            .RequireAuthorization();
+
+        chat.MapPost(string.Empty, (
+            CreateSessionRequest request,
+            ClaimsPrincipal principal,
+            [FromServices] ChatServices chatServices,
+            CancellationToken ct) =>
+            chatServices.CreateSessionAsync(request.DeckId, principal, ct))
+        .WithName("CreateChatSession");
+
+        chat.MapGet(string.Empty, (
+            Guid deckId,
+            ClaimsPrincipal principal,
+            [FromServices] ChatServices chatServices,
+            CancellationToken ct) =>
+            chatServices.GetSessionsByDeckAsync(deckId, principal, ct))
+        .WithName("GetChatSessions");
+
+        chat.MapDelete("/{sessionId:guid}", (
+            Guid sessionId,
+            ClaimsPrincipal principal,
+            [FromServices] ChatServices chatServices,
+            CancellationToken ct) =>
+            chatServices.DeleteSessionAsync(sessionId, principal, ct))
+        .WithName("DeleteChatSession");
+
+        chat.MapPatch("/{sessionId:guid}/name", (
+            Guid sessionId,
+            RenameSessionRequest request,
+            ClaimsPrincipal principal,
+            [FromServices] ChatServices chatServices,
+            CancellationToken ct) =>
+            chatServices.RenameSessionAsync(sessionId, request.Name, principal, ct))
+        .WithName("RenameChatSession");
+
+        chat.MapGet("/{sessionId:guid}/messages", (
+            Guid sessionId,
+            ClaimsPrincipal principal,
+            [FromServices] ChatServices chatServices,
+            CancellationToken ct) =>
+            chatServices.GetSessionMessagesAsync(sessionId, principal, ct))
+        .WithName("GetChatSessionMessages");
+
+        return app;
+    }
+
+    private record CreateSessionRequest(Guid DeckId);
+    private record RenameSessionRequest(string Name);
 }

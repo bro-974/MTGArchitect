@@ -11,6 +11,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { AccordionModule } from 'primeng/accordion';
 import { TooltipModule } from 'primeng/tooltip';
 import { catchError, EMPTY, Subscription } from 'rxjs';
+import { AiChatSessionList } from '../ai-chat/ai-chat-session-list/ai-chat-session-list';
 import { WorkspaceDeckList } from './workspace-deck-list/workspace-deck-list';
 import { WorkspaceSearchForm } from './workspace-search/workspace-search-form';
 import { WorkspaceDeckStateService } from './workspace-deck-state.service';
@@ -24,7 +25,8 @@ import { WorkspaceService } from './workspace.service';
     AccordionModule,
     TooltipModule,
     WorkspaceDeckList,
-    WorkspaceSearchForm
+    WorkspaceSearchForm,
+    AiChatSessionList,
   ],
   templateUrl: './workspace.html',
   styleUrl: './workspace.css',
@@ -49,6 +51,10 @@ export class Workspace {
   );
 
   readonly isSearchDisabled = computed(
+    () => this.decks().length === 0 || this.selectedDeckId() === null
+  );
+
+  readonly isChatDisabled = computed(
     () => this.decks().length === 0 || this.selectedDeckId() === null
   );
 

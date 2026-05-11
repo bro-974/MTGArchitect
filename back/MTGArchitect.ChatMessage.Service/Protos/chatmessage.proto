@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+option csharp_namespace = "MTGArchitect.ChatMessage.Service";
+
+package chatmessage;
+
+import "google/protobuf/empty.proto";
+
+service ChatMessageService {
+  rpc CreateSession(CreateSessionRequest)               returns (SessionReply);
+  rpc GetSessionsByDeck(GetSessionsByDeckRequest)       returns (SessionListReply);
+  rpc GetSessionWithMessages(GetSessionWithMessagesRequest) returns (SessionWithMessagesReply);
+  rpc AddMessage(AddMessageRequest)                     returns (google.protobuf.Empty);
+  rpc DeleteSession(DeleteSessionRequest)               returns (google.protobuf.Empty);
+  rpc RenameSession(RenameSessionRequest)               returns (google.protobuf.Empty);
+}
+
+message CreateSessionRequest {
+  string user_id = 1;
+  string deck_id = 2;
+  string display_name = 3;
+}
+
+message GetSessionsByDeckRequest {
+  string user_id = 1;
+  string deck_id = 2;
+}
+
+message GetSessionWithMessagesRequest {
+  string session_id = 1;
+  string user_id = 2;
+  int32 limit = 3;
+}
+
+message AddMessageRequest {
+  string session_id = 1;
+  string user_prompt = 2;
+  string answer = 3;
+}
+
+message DeleteSessionRequest {
+  string session_id = 1;
+  string user_id = 2;
+}
+
+message RenameSessionRequest {
+  string session_id = 1;
+  string user_id = 2;
+  string new_name = 3;
+}
+
+message SessionReply {
+  string id = 1;
+  string display_name = 2;
+  string created_at = 3;
+}
+
+message SessionListReply {
+  repeated SessionReply sessions = 1;
+}
+
+message ChatMessageReply {
+  string id = 1;
+  string user_prompt = 2;
+  string answer = 3;
+  string created_at = 4;
+}
+
+message SessionWithMessagesReply {
+  SessionReply session = 1;
+  repeated ChatMessageReply messages = 2;
+}

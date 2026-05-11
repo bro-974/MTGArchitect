@@ -108,6 +108,14 @@
       "advancedSearch": {
         "label": "Recherche avancee",
         "disabledTooltip": "Veuillez selectionner ou creer un deck d'abord"
+      },
+      "chatSessions": {
+        "label": "Sessions de chat",
+        "disabledTooltip": "Veuillez selectionner ou creer un deck d'abord",
+        "title": "Sessions de chat",
+        "count": "{{ count }} sessions",
+        "newChat": "Nouvelle session de chat",
+        "empty": "Aucune session. Cliquez sur + pour commencer."
       }
     },
     "deckList": {

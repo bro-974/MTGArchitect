@@ -25,5 +25,15 @@
       />
     </p-accordion-content>
   </p-accordion-panel>
+
+  <p-accordion-panel [disabled]="isChatDisabled()" value="chat">
+    <p-accordion-header
+      [pTooltip]="isChatDisabled() ? ('workspace.accordion.chatSessions.disabledTooltip' | transloco) : ''"
+      tooltipPosition="top">
+      {{ 'workspace.accordion.chatSessions.label' | transloco }}
+    </p-accordion-header>
+    <p-accordion-content>
+      <app-ai-chat-session-list />
+    </p-accordion-content>
+  </p-accordion-panel>
 </p-accordion>
-    

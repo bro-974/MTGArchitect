@@ -17,6 +17,11 @@ var aiService = builder.AddProject<Projects.MTGArchitect_AI_Service>("aiservice"
     .WithHttpHealthCheck("/health")
     .WithEnvironment("LmStudioUri", lmStudioUri);
 
+var chatMessageService = builder.AddProject<Projects.MTGArchitect_ChatMessage_Service>("chatmessageservice")
+    .WithHttpHealthCheck("/health")
+    .WithReference(authDb)
+    .WaitFor(authDb);
+
 var scryfallService = builder.AddProject<Projects.MTGArchitect_Scryfall_Service>("scryfallservice")
     .WithHttpHealthCheck("/health");
 
@@ -40,6 +45,7 @@ var apiService = builder.AddProject<Projects.MTGArchitect_Api>("apiservice")
     .WithReference(authDb)
     .WithReference(aiService)
     .WithReference(authApiService)
+    .WithReference(chatMessageService)
     .WithEnvironment("Jwt__Issuer", jwtIssuer)
     .WithEnvironment("Jwt__Audience", jwtAudience)
     .WithEnvironment("Jwt__Key", jwtKey)
@@ -47,6 +53,7 @@ var apiService = builder.AddProject<Projects.MTGArchitect_Api>("apiservice")
     .WaitFor(authApiService)
     .WaitFor(authDb)
     .WaitFor(aiService)
+    .WaitFor(chatMessageService)
     .WithHttpEndpoint(port: 4300, name: "api-http");
 
 builder.Build().Run();

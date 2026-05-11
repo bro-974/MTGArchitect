@@ -6,14 +6,24 @@ namespace MTGArchitect.AI.Client.Services;
 
 public interface IMindClient
 {
-    IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, CancellationToken ct = default);
+    IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, IEnumerable<ChatHistoryTurn>? history = null, CancellationToken ct = default);
 }
 
 public class MindClient(MTGArchitect.AI.Service.MindService.MindServiceClient grpcClient) : IMindClient
 {
-    public async IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, [EnumeratorCancellation] CancellationToken ct = default)
+    public async IAsyncEnumerable<ChatChunk> StreamChatAsync(string prompt, IEnumerable<ChatHistoryTurn>? history = null, [EnumeratorCancellation] CancellationToken ct = default)
     {
-        using var call = grpcClient.Chat(new MTGArchitect.AI.Service.ChatRequest { Prompt = prompt });
+        var request = new MTGArchitect.AI.Service.ChatRequest { Prompt = prompt };
+        if (history is not null)
+        {
+            request.History.AddRange(history.Select(t => new MTGArchitect.AI.Service.ChatTurn
+            {
+                UserPrompt = t.UserPrompt,
+                Answer = t.Answer
+            }));
+        }
+
+        using var call = grpcClient.Chat(request);
         await foreach (var chunk in call.ResponseStream.ReadAllAsync(ct))
         {
             yield return chunk.PayloadCase switch

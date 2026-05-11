@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MTGArchitect.Data.Extensions;
 using MTGArchitect.AI.Client;
+using MTGArchitect.ChatMessage.Client;
 using MTGArchitect.Scryfall.Client;
 using MTGArchitectServices.ApiService.Controllers;
 using MTGArchitectServices.ApiService.HealthChecks;
@@ -20,6 +21,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<DeckService>();
 builder.Services.AddScoped<MindServices>();
 builder.Services.AddScoped<MindHealthService>();
+builder.Services.AddScoped<ChatServices>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -45,6 +47,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScryfallClient(new Uri("https://scryfallservice"));
 builder.Services.AddMindClient(new Uri("https://aiservice"));
+builder.Services.AddChatMessageClient(new Uri("https://chatmessageservice"));
 
 // Named gRPC health client for Scryfall (avoids type collision with AI's Health.HealthClient)
 builder.Services.AddGrpcClient<Health.HealthClient>("scryfall-health", o =>

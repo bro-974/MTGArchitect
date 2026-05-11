@@ -3,13 +3,7 @@
   flex-shrink: 0;
 }
 
-.input-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-
-.input-row textarea {
+textarea {
   flex: 1;
   resize: none;
   min-height: 2.5rem;

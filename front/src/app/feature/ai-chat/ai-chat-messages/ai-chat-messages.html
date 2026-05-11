@@ -1,19 +1,19 @@
-<div #scrollContainer class="messages-scroll">
+<div #scrollContainer class="flex-1 overflow-y-auto flex flex-column gap-3 pr-1">
   @for (msg of completedMessages(); track $index) {
-    <div class="message-block">
+    <div class="flex flex-column gap-2 message-block">
       <div class="message-prompt">{{ msg.prompt }}</div>
       <div class="message-answer">{{ msg.answer }}</div>
     </div>
   }
 
   @if (isStreaming() && currentPrompt()) {
-    <div class="message-block">
+    <div class="flex flex-column gap-2 message-block">
       <div class="message-prompt">{{ currentPrompt() }}</div>
       <div class="message-answer">{{ currentAnswer() }}<span class="streaming-cursor">▌</span></div>
     </div>
   }
 
   @if (completedMessages().length === 0 && !isStreaming()) {
-    <div class="empty-state">Ask something about your deck or MTG cards…</div>
+    <div class="flex flex-1 align-items-center justify-content-center text-color-secondary empty-state">Ask something about your deck or MTG cards…</div>
   }
 </div>

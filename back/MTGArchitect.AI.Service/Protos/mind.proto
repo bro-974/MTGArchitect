@@ -8,8 +8,14 @@ service MindService {
   rpc Chat(ChatRequest) returns (stream ChatResponseStream);
 }
 
+message ChatTurn {
+  string user_prompt = 1;
+  string answer = 2;
+}
+
 message ChatRequest {
   string prompt = 1;
+  repeated ChatTurn history = 2;
 }
 
 message ChatResponseStream {

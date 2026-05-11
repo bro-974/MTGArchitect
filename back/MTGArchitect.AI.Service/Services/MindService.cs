@@ -12,7 +12,15 @@ public class MindServiceHandler(ChatClient chatClient) : MindService.MindService
         IServerStreamWriter<ChatResponseStream> responseStream,
         ServerCallContext context)
     {
-        var messages = new List<ChatMessage> { new UserChatMessage(request.Prompt) };
+        var messages = new List<ChatMessage>();
+
+        foreach (var turn in request.History)
+        {
+            messages.Add(new UserChatMessage(turn.UserPrompt));
+            messages.Add(new AssistantChatMessage(turn.Answer));
+        }
+
+        messages.Add(new UserChatMessage(request.Prompt));
 
         await foreach (var update in chatClient.CompleteChatStreamingAsync(messages, cancellationToken: context.CancellationToken))
         {

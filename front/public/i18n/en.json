@@ -108,6 +108,14 @@
       "advancedSearch": {
         "label": "Advanced search",
         "disabledTooltip": "Please select or create a deck first"
+      },
+      "chatSessions": {
+        "label": "Chat sessions",
+        "disabledTooltip": "Please select or create a deck first",
+        "title": "Chat sessions",
+        "count": "{{ count }} sessions",
+        "newChat": "New chat session",
+        "empty": "No sessions yet. Click + to start."
       }
     },
     "deckList": {

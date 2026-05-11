@@ -4,6 +4,11 @@
     <Project Path="MTGArchitect.AI.Contract/MTGArchitect.AI.Contract.csproj" Id="eb5e4102-6de4-4aa4-80c5-2069fed53ea0" />
     <Project Path="MTGArchitect.AI.Service/MTGArchitect.AI.Service.csproj" Id="71fcf461-9b39-444e-a3a6-49e3f55da059" />
   </Folder>
+  <Folder Name="/ChatMessages/">
+    <Project Path="MTGArchitect.ChatMessage.Client/MTGArchitect.ChatMessage.Client.csproj" />
+    <Project Path="MTGArchitect.ChatMessage.Contracts/MTGArchitect.ChatMessage.Contracts.csproj" />
+    <Project Path="MTGArchitect.ChatMessage.Service/MTGArchitect.ChatMessage.Service.csproj" />
+  </Folder>
   <Folder Name="/Scryfall/">
     <Project Path="MTGArchitect.Scryfall.Client/MTGArchitect.Scryfall.Client.csproj" Id="ccc6c26b-59d9-48b9-82fa-0a09a3bc23dd" />
     <Project Path="MTGArchitect.Scryfall.Contracts/MTGArchitect.Scryfall.Contracts.csproj" Id="2877f3d2-d478-4e95-bc2c-cca04dbc3a95" />

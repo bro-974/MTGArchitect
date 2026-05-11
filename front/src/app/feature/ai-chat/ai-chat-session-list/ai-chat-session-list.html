@@ -1,0 +1,72 @@
+<section class="session-list-panel flex flex-column gap-3">
+  <header class="flex align-items-start justify-content-between gap-3">
+    <div class="flex flex-column gap-1">
+      <h2 class="m-0 text-lg">{{ 'workspace.accordion.chatSessions.title' | transloco }}</h2>
+      <p class="m-0 text-sm text-color-secondary">
+        {{ 'workspace.accordion.chatSessions.count' | transloco: { count: chatState.sessions().length } }}
+      </p>
+    </div>
+    <p-button
+      icon="pi pi-plus"
+      [text]="true"
+      [rounded]="true"
+      severity="secondary"
+      [attr.aria-label]="'workspace.accordion.chatSessions.newChat' | transloco"
+      [attr.title]="'workspace.accordion.chatSessions.newChat' | transloco"
+      (click)="handleNewChat()"
+    />
+  </header>
+
+  <p-tree
+    [value]="treeNodes()"
+    selectionMode="single"
+    [selection]="selectedNode()"
+    [metaKeySelection]="false"
+    (onNodeSelect)="handleNodeSelect($event)"
+    [pt]="{ nodeLabel: { style: 'flex: 1; min-width: 0; overflow: hidden;' } }"
+  >
+    <ng-template pTemplate="default" let-node>
+      @if (editingId() === node.key) {
+        <input
+          pInputText
+          class="session-rename-input"
+          [ngModel]="editingName()"
+          (ngModelChange)="editingName.set($event)"
+          (keydown.enter)="commitRename(node.key)"
+          (keydown.escape)="cancelRename()"
+          (blur)="commitRename(node.key)"
+          autofocus
+        />
+      } @else {
+        <div class="flex align-items-center w-full gap-1 session-node-content">
+          <span
+            class="flex-1 overflow-hidden white-space-nowrap text-overflow-ellipsis"
+            (dblclick)="sessionFromNode(node) && startRename(sessionFromNode(node)!, $event)"
+          >
+            {{ node.label }}
+          </span>
+          <div class="flex gap-1 flex-shrink-0 ml-auto session-node-actions">
+            <p-button
+              icon="pi pi-pencil"
+              [text]="true"
+              size="small"
+              [rounded]="true"
+              (click)="sessionFromNode(node) && startRename(sessionFromNode(node)!, $event)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              [text]="true"
+              size="small"
+              [rounded]="true"
+              severity="danger"
+              (click)="onDelete(node.key!, $event)"
+            />
+          </div>
+        </div>
+      }
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <p class="no-sessions">{{ 'workspace.accordion.chatSessions.empty' | transloco }}</p>
+    </ng-template>
+  </p-tree>
+</section>
