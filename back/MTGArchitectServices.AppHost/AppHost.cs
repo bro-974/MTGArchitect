@@ -7,15 +7,23 @@ const string jwtIssuer = "MTGArchitect.Auth";
 const string jwtAudience = "MTGArchitect";
 
 builder.AddRedis("cache");
+
 var postgres = builder.AddPostgres("postgres")
-    .WithDataVolume();
+    .WithImage("ankane/pgvector")
+    .WithImageTag("latest")
+    .WithDataVolume()
+    .WithPgAdmin();
+
 var authDb = postgres.AddDatabase("authdb");
+var ragDb = postgres.AddDatabase("ragdb");
 
 var lmStudioUri = builder.AddParameter("LmStudioUri", "http://localhost:1234/v1");
 
 var aiService = builder.AddProject<Projects.MTGArchitect_AI_Service>("aiservice")
     .WithHttpHealthCheck("/health")
-    .WithEnvironment("LmStudioUri", lmStudioUri);
+    .WithEnvironment("LmStudioUri", lmStudioUri)
+    .WithReference(ragDb)
+    .WaitFor(ragDb);
 
 var chatMessageService = builder.AddProject<Projects.MTGArchitect_ChatMessage_Service>("chatmessageservice")
     .WithHttpHealthCheck("/health")
@@ -55,5 +63,10 @@ var apiService = builder.AddProject<Projects.MTGArchitect_Api>("apiservice")
     .WaitFor(aiService)
     .WaitFor(chatMessageService)
     .WithHttpEndpoint(port: 4300, name: "api-http");
+
+var ingestor = builder.AddProject<Projects.MTGArchitect_Ingestor>("ingestor")
+    .WithReference(ragDb)
+    .WithEnvironment("LmStudioUri", lmStudioUri)
+    .WithExplicitStart();
 
 builder.Build().Run();

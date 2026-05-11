@@ -1,4 +1,6 @@
 using MTGArchitect.AI.Service.Services;
+using MTGArchitect.RAG.Data.Data;
+using MTGArchitect.RAG.Data.Extensions;
 using OpenAI;
 using OpenAI.Chat;
 using System.ClientModel;
@@ -22,7 +24,18 @@ var openAIClient = new OpenAIClient(
 
 builder.Services.AddSingleton(openAIClient.GetChatClient("deepseek-r1"));
 
+var ragConnectionString = builder.Configuration.GetConnectionString("ragdb")
+    ?? throw new InvalidOperationException("Connection string 'ragdb' is missing.");
+
+builder.Services.AddRagData(ragConnectionString);
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var ragDb = scope.ServiceProvider.GetRequiredService<RagDbContext>();
+    await ragDb.Database.EnsureCreatedAsync();
+}
 
 app.MapDefaultEndpoints();
 app.MapGrpcHealthChecksService();

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MTGArchitectServices.ServiceDefaults\MTGArchitect.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\MTGArchitect.RAG.Data\MTGArchitect.RAG.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

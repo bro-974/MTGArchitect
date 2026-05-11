@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MTGArchitect.AI.Service\MTGArchitect.AI.Service.csproj" />
+    <ProjectReference Include="..\MTGArchitect.Ingestor\MTGArchitect.Ingestor.csproj" />
     <ProjectReference Include="..\MTGArchitect.ChatMessage.Service\MTGArchitect.ChatMessage.Service.csproj" />
     <ProjectReference Include="..\MTGArchitect.Scryfall.Service\MTGArchitect.Scryfall.Service.csproj" />
     <ProjectReference Include="..\MTGArchitectServices.ApiService\MTGArchitect.Api.csproj" />

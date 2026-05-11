@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Api/">
+    <Project Path="MTGArchitectServices.ApiService/MTGArchitect.Api.csproj" />
+    <Project Path="MTGArchitectServices.AuthApiService/MTGArchitect.Auth.Api.csproj" />
+  </Folder>
   <Folder Name="/ChatBot/">
     <Project Path="MTGArchitect.AI.Client/MTGArchitect.AI.Client.csproj" Id="bf2ee92d-63b0-4e8d-8eed-c24318d4bb24" />
     <Project Path="MTGArchitect.AI.Contract/MTGArchitect.AI.Contract.csproj" Id="eb5e4102-6de4-4aa4-80c5-2069fed53ea0" />
@@ -8,6 +12,10 @@
     <Project Path="MTGArchitect.ChatMessage.Client/MTGArchitect.ChatMessage.Client.csproj" />
     <Project Path="MTGArchitect.ChatMessage.Contracts/MTGArchitect.ChatMessage.Contracts.csproj" />
     <Project Path="MTGArchitect.ChatMessage.Service/MTGArchitect.ChatMessage.Service.csproj" />
+  </Folder>
+  <Folder Name="/RAG/">
+    <Project Path="MTGArchitect.Ingestor/MTGArchitect.Ingestor.csproj" />
+    <Project Path="MTGArchitect.RAG.Data/MTGArchitect.RAG.Data.csproj" />
   </Folder>
   <Folder Name="/Scryfall/">
     <Project Path="MTGArchitect.Scryfall.Client/MTGArchitect.Scryfall.Client.csproj" Id="ccc6c26b-59d9-48b9-82fa-0a09a3bc23dd" />
@@ -24,8 +32,6 @@
     <Project Path="MTGArchitectServices.ApiService.Tests/MTGArchitectServices.ApiService.Tests.csproj" />
   </Folder>
   <Project Path="MTGArchitect.Data/MTGArchitect.Data.csproj" />
-  <Project Path="MTGArchitectServices.ApiService/MTGArchitect.Api.csproj" />
   <Project Path="MTGArchitectServices.AppHost/MTGArchitect.AppHost.csproj" />
-  <Project Path="MTGArchitectServices.AuthApiService/MTGArchitect.Auth.Api.csproj" />
   <Project Path="MTGArchitectServices.ServiceDefaults/MTGArchitect.ServiceDefaults.csproj" />
 </Solution>
