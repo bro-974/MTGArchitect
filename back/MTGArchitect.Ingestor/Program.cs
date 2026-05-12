@@ -15,9 +15,7 @@ var host = Host.CreateDefaultBuilder(args)
             ?? throw new InvalidOperationException("LmStudioUri configuration is missing.");
 
         services.AddRagData(ragConnectionString);
-        services.AddHttpClient();
-        services.AddSingleton(sp =>
-            new EmbeddingService(sp.GetRequiredService<IHttpClientFactory>().CreateClient(), lmStudioUri));
+        services.AddAgent(lmStudioUri);
         services.AddScoped<CardIngestionService>();
     })
     .Build();

@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using Pgvector;
 
-namespace MTGArchitect.Ingestor.Services;
+namespace MTGArchitect.RAG.Data.Services;
 
 public sealed class EmbeddingService(HttpClient http, string lmStudioUri)
 {

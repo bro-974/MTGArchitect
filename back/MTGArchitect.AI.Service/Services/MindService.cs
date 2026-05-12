@@ -1,11 +1,12 @@
 using Grpc.Core;
+using MTGArchitect.RAG.Data.Services;
 using OpenAI.Chat;
 using System.ClientModel.Primitives;
 using System.Text.Json;
 
 namespace MTGArchitect.AI.Service.Services;
 
-public class MindServiceHandler(ChatClient chatClient, IConfiguration configuration) : MindService.MindServiceBase
+public class MindServiceHandler(ChatClient chatClient, IConfiguration configuration, ICardSearchService cardSearchService) : MindService.MindServiceBase
 {
     public override async Task Chat(
         ChatRequest request,
@@ -24,6 +25,17 @@ public class MindServiceHandler(ChatClient chatClient, IConfiguration configurat
         if (!string.IsNullOrEmpty(request.DeckContext))
         {
             messages.Add(new SystemChatMessage($"The user is playing the following deck:\n{request.DeckContext}"));
+        }
+
+        // 2.5. RAG: inject relevant cards found from the database
+        var ragCards = await cardSearchService.GetSimilarCardsAsync(request.Prompt, limit: 5, context.CancellationToken);
+        if (ragCards.Count > 0)
+        {
+            var cardContext = string.Join("\n\n", ragCards.Select(c =>
+                $"**{c.Name}** ({c.TypeLine}) — {string.Join("", c.Colors)} — CMC {c.ManaValue}\nOracle: {c.OracleText}"));
+            messages.Add(new SystemChatMessage(
+                $"The following cards are suggestions found in the database based on your query, " +
+                $"they are NOT necessarily in the user's current deck:\n{cardContext}"));
         }
 
         // 3. Conversation history

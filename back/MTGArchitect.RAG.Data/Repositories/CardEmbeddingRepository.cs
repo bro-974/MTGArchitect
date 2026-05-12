@@ -44,9 +44,10 @@ public class CardEmbeddingRepository(RagDbContext db, ILogger<CardEmbeddingRepos
         }
     }
 
-    public async Task<List<CardEmbedding>> SearchByVectorAsync(Vector queryVector, int topK = 10, CancellationToken cancellationToken = default)
+    public async Task<List<CardEmbedding>> SearchByVectorAsync(Vector queryVector, int topK = 10, float maxDistance = float.MaxValue, CancellationToken cancellationToken = default)
     {
         return await db.CardEmbeddings
+            .Where(x => x.Embedding!.L2Distance(queryVector) <= maxDistance)
             .OrderBy(x => x.Embedding!.L2Distance(queryVector))
             .Take(topK)
             .ToListAsync(cancellationToken);
@@ -54,11 +55,9 @@ public class CardEmbeddingRepository(RagDbContext db, ILogger<CardEmbeddingRepos
 
     public async Task<List<CardEmbedding>> SearchByTextAsync(string query, int topK = 10, CancellationToken cancellationToken = default)
     {
-        var tsQuery = EF.Functions.ToTsQuery("english", query);
-
         return await db.CardEmbeddings
-            .Where(x => x.SearchVector!.Matches(tsQuery))
-            .OrderByDescending(x => x.SearchVector!.RankCoverDensity(tsQuery))
+            .Where(x => x.SearchVector != null && x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery("english", query)))
+            .OrderByDescending(x => x.SearchVector!.Rank(EF.Functions.WebSearchToTsQuery("english", query)))
             .Take(topK)
             .ToListAsync(cancellationToken);
     }

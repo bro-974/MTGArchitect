@@ -28,6 +28,7 @@ var ragConnectionString = builder.Configuration.GetConnectionString("ragdb")
     ?? throw new InvalidOperationException("Connection string 'ragdb' is missing.");
 
 builder.Services.AddRagData(ragConnectionString);
+builder.Services.AddAgent(lmStudioUri);
 
 var app = builder.Build();
 

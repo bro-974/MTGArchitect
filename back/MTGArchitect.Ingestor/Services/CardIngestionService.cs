@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using MTGArchitect.Ingestor.Models;
 using MTGArchitect.RAG.Data.Models;
 using MTGArchitect.RAG.Data.Repositories;
+using MTGArchitect.RAG.Data.Services;
 
 namespace MTGArchitect.Ingestor.Services;
 
