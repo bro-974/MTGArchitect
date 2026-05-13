@@ -11,7 +11,6 @@ public class MindServices(
     IMindClient mindClient,
     IChatMessageClient chatMessageClient,
     IDeckRepository deckRepository,
-    IDeckContextFormatter deckFormatter,
     IConfiguration configuration)
 {
     public async Task StreamChatAsync(
@@ -30,15 +29,16 @@ public class MindServices(
             .ToList();
 
         string? format = null;
-        string? deckContext = null;
+        List<DeckCardInput>? deckCards = null;
         if (deckId.HasValue)
         {
             var deck = await deckRepository.GetByIdWithDetailsAsync(deckId.Value, userId, asNoTracking: true, cancellationToken: ct);
             if (deck is not null)
             {
                 format = deck.Type;
-                var cards = deck.Cards.Select(c => new DeckCardInput(c.CardName, c.Quantity, c.IsSideBoard));
-                deckContext = deckFormatter.Format(new DeckContextInput(deck.Type, cards));
+                deckCards = deck.Cards
+                    .Select(c => new DeckCardInput(c.CardName, c.Quantity, c.IsSideBoard, c.ScryFallId))
+                    .ToList();
             }
         }
 
@@ -48,7 +48,7 @@ public class MindServices(
 
         var answerBuilder = new StringBuilder();
 
-        await foreach (var chunk in mindClient.StreamChatAsync(prompt, history, format, deckContext, ct))
+        await foreach (var chunk in mindClient.StreamChatAsync(prompt, history, format, deckCards, ct))
         {
             if (string.IsNullOrEmpty(chunk.Content)) continue;
 

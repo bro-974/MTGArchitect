@@ -61,4 +61,12 @@ public class CardEmbeddingRepository(RagDbContext db, ILogger<CardEmbeddingRepos
             .Take(topK)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<CardEmbedding>> GetByIdsAsync(IEnumerable<Guid> scryfallIds, CancellationToken cancellationToken = default)
+    {
+        var ids = scryfallIds.ToList();
+        return await db.CardEmbeddings
+            .Where(x => ids.Contains(x.ScryfallId))
+            .ToListAsync(cancellationToken);
+    }
 }

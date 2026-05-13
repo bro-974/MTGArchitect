@@ -10,7 +10,7 @@ public interface IMindClient
         string prompt,
         IEnumerable<ChatHistoryTurn>? history = null,
         string? format = null,
-        string? deckContext = null,
+        IEnumerable<DeckCardInput>? deckCards = null,
         CancellationToken ct = default);
 }
 
@@ -20,7 +20,7 @@ public class MindClient(MTGArchitect.AI.Service.MindService.MindServiceClient gr
         string prompt,
         IEnumerable<ChatHistoryTurn>? history = null,
         string? format = null,
-        string? deckContext = null,
+        IEnumerable<DeckCardInput>? deckCards = null,
         [EnumeratorCancellation] CancellationToken ct = default)
     {
         var request = new MTGArchitect.AI.Service.ChatRequest { Prompt = prompt };
@@ -32,8 +32,17 @@ public class MindClient(MTGArchitect.AI.Service.MindService.MindServiceClient gr
                 Answer = t.Answer
             }));
         }
-        if (!string.IsNullOrEmpty(format))      request.Format = format;
-        if (!string.IsNullOrEmpty(deckContext)) request.DeckContext = deckContext;
+        if (!string.IsNullOrEmpty(format)) request.Format = format;
+        if (deckCards is not null)
+        {
+            request.DeckCards.AddRange(deckCards.Select(c => new MTGArchitect.AI.Service.DeckCard
+            {
+                ScryfallId = c.ScryfallId ?? string.Empty,
+                Name = c.Name,
+                Quantity = c.Quantity,
+                IsSideBoard = c.IsSideBoard
+            }));
+        }
 
         using var call = grpcClient.Chat(request);
         await foreach (var chunk in call.ResponseStream.ReadAllAsync(ct))

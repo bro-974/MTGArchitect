@@ -1,12 +1,18 @@
 using Grpc.Core;
+using MTGArchitect.RAG.Data.Repositories;
 using MTGArchitect.RAG.Data.Services;
 using OpenAI.Chat;
 using System.ClientModel.Primitives;
+using System.Text;
 using System.Text.Json;
 
 namespace MTGArchitect.AI.Service.Services;
 
-public class MindServiceHandler(ChatClient chatClient, IConfiguration configuration, ICardSearchService cardSearchService) : MindService.MindServiceBase
+public class MindServiceHandler(
+    ChatClient chatClient,
+    IConfiguration configuration,
+    ICardSearchService cardSearchService,
+    ICardEmbeddingRepository cardEmbeddingRepository) : MindService.MindServiceBase
 {
     public override async Task Chat(
         ChatRequest request,
@@ -21,10 +27,41 @@ public class MindServiceHandler(ChatClient chatClient, IConfiguration configurat
         var systemPrompt = systemPromptTemplate.Replace("{{format}}", format);
         messages.Add(new SystemChatMessage(systemPrompt));
 
-        // 2. Deck context (optional)
-        if (!string.IsNullOrEmpty(request.DeckContext))
+        // 2. Deck context — batch-fetch embeddings by ScryfallId for enriched card lines
+        if (request.DeckCards.Count > 0)
         {
-            messages.Add(new SystemChatMessage($"The user is playing the following deck:\n{request.DeckContext}"));
+            var ids = request.DeckCards
+                .Where(c => Guid.TryParse(c.ScryfallId, out _))
+                .Select(c => Guid.Parse(c.ScryfallId))
+                .ToList();
+
+            var embeddings = await cardEmbeddingRepository.GetByIdsAsync(ids, context.CancellationToken);
+            var embeddingMap = embeddings.ToDictionary(e => e.ScryfallId);
+
+            var mainLines = new List<string>();
+            var sideLines = new List<string>();
+
+            foreach (var card in request.DeckCards)
+            {
+                string line;
+                if (Guid.TryParse(card.ScryfallId, out var guid) && embeddingMap.TryGetValue(guid, out var emb))
+                    line = $"{card.Quantity}x {emb.Name} ({emb.TypeLine}) {string.Join("", emb.Colors)} — CMC {emb.ManaValue} | {emb.OracleText}";
+                else
+                    line = $"{card.Quantity}x {card.Name}";
+
+                if (card.IsSideBoard) sideLines.Add(line);
+                else mainLines.Add(line);
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendJoin('\n', mainLines);
+            if (sideLines.Count > 0)
+            {
+                sb.Append("\n---Sideboard---\n");
+                sb.AppendJoin('\n', sideLines);
+            }
+
+            messages.Add(new SystemChatMessage($"The user is playing the following deck:\n{sb}"));
         }
 
         // 2.5. RAG: inject relevant cards found from the database

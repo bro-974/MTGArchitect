@@ -13,11 +13,18 @@ message ChatTurn {
   string answer = 2;
 }
 
+message DeckCard {
+  string scryfall_id = 1;
+  string name = 2;
+  int32 quantity = 3;
+  bool is_side_board = 4;
+}
+
 message ChatRequest {
   string prompt = 1;
   repeated ChatTurn history = 2;
   string format = 3;
-  string deck_context = 4;
+  repeated DeckCard deck_cards = 4;
 }
 
 message ChatResponseStream {
