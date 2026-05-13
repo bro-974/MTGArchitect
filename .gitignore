@@ -1,2 +1,5 @@
 .vs/*
-MCP/mcp-blueprint/.vs/MCP-Blueprint.slnx/FileContentIndex/*.vsidx
+
+MCP/mcp-blueprint/.vs/MCP-Blueprint.slnx/FileContentIndex/*
+MCP/mcp-blueprint/.vs/MCP-Blueprint.slnx/*
+MCP/mcp-blueprint/.vs/*
