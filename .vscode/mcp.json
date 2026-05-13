@@ -3,6 +3,12 @@
     "angular-cli": {
       "command": "npx",
       "args": ["-y", "@angular/cli", "mcp"]
+    },
+    "mcp-blueprint": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["run", "--project", "${workspaceFolder}/MCP/mcp-blueprint/MCP-Blueprint.csproj", "--no-launch-profile"],
+      "cwd": "${workspaceFolder}/MCP/mcp-blueprint"
     }
   }
 }

@@ -17,7 +17,8 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Repository\\\\bro974\\\\MTGArchitect\\\\back\\\\MTGArchitect.Api.Integration.Tests\\\\\" -Recurse -File | Select-Object FullName)",
       "Bash(Get-ChildItem -Path \"c:\\\\Repository\\\\bro974\\\\MTGArchitect\\\\front\\\\src\\\\app\\\\feature\" -Recurse -Directory)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Sort-Object)"
+      "Bash(Sort-Object)",
+      "Read(//c/Repository/bro974/MCP-Blueprint/**)"
     ]
   }
 }

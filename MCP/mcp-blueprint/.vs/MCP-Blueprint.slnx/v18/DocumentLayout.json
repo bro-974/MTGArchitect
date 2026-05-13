@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Repository\\bro974\\MTGArchitect\\MCP\\mcp-blueprint\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B4193C9C-1439-3AA4-2EB0-D8A7B3AD2DFC}|MCP-Blueprint.csproj|c:\\repository\\bro974\\mtgarchitect\\mcp\\mcp-blueprint\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B4193C9C-1439-3AA4-2EB0-D8A7B3AD2DFC}|MCP-Blueprint.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Repository\\bro974\\MTGArchitect\\MCP\\mcp-blueprint\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Repository\\bro974\\MTGArchitect\\MCP\\mcp-blueprint\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-13T08:08:17.122Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

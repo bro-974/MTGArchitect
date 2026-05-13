@@ -32,6 +32,10 @@ Start the whole stack from the repo root with:
 dotnet run --project .\back\MTGArchitectServices.AppHost\MTGArchitectServices.AppHost.csproj
 ```
 
+## MCP Servers
+
+- **mcp-blueprint** — scaffolds project files from Scriban templates. Source lives in `MCP/mcp-blueprint/`. Tools: `list_templates`, `apply_template`, `upsert_template_file`. Templates live in `MCP/mcp-blueprint/Templates/`.
+
 ## graphify
 
 This project has a graphify knowledge graph at graphify-out/.

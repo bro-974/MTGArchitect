@@ -1,0 +1,51 @@
+{
+  "id": "webapi",
+  "description": "Minimal ASP.NET Core Web API project with one sample controller.",
+  "parameters": [
+    {
+      "name": "project_name",
+      "type": "string",
+      "description": "Name of the project (used for folder, .csproj, and namespace)",
+      "required": true
+    },
+    {
+      "name": "namespace",
+      "type": "string",
+      "description": "Root namespace (defaults to project_name)",
+      "required": false
+    },
+    {
+      "name": "solution_path",
+      "type": "string",
+      "description": "Path to the .sln or .slnx file to add the project to (optional)",
+      "required": false
+    }
+  ],
+  "files": [
+    {
+      "template": "Program.cs.scriban",
+      "output": "{{ project_name }}/Program.cs"
+    },
+    {
+      "template": "Project.csproj.scriban",
+      "output": "{{ project_name }}/{{ project_name }}.csproj"
+    },
+    {
+      "template": "WeatherForecastController.cs.scriban",
+      "output": "{{ project_name }}/Controllers/WeatherForecastController.cs"
+    },
+    {
+      "template": "WeatherForecast.cs.scriban",
+      "output": "{{ project_name }}/WeatherForecast.cs"
+    }
+  ],
+  "postActions": [
+    {
+      "type": "addToSolution",
+      "parameters": {
+        "solutionPath": "{{ solution_path }}",
+        "projectPath": "{{ project_name }}/{{ project_name }}.csproj"
+      }
+    }
+  ]
+}
