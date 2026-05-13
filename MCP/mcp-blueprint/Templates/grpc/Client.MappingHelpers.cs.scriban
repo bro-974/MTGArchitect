@@ -1,0 +1,10 @@
+using MTGArchitect.{{ service_name }}.Contracts;
+using MTGArchitect.{{ service_name }}.Service.Contracts;
+
+namespace MTGArchitect.{{ service_name }}.Client;
+
+internal static class MappingHelpers
+{
+    public static IEnumerable<{{ service_name }}Item> MapItems(IEnumerable<{{ grpc_service_name }}Item> items)
+        => items.Select(i => new {{ service_name }}Item { Id = i.Id, Name = i.Name });
+}

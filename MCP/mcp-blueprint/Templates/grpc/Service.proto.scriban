@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "MTGArchitect.{{ service_name }}.Service.Contracts";
+
+package {{ service_name | string.downcase }};
+
+service {{ grpc_service_name }} {
+  rpc Search(SearchRequest) returns (SearchReply);
+}
+
+message SearchRequest {
+  string query = 1;
+  int32 page_size = 2;
+}
+
+message SearchReply {
+  repeated {{ grpc_service_name }}Item items = 1;
+  int32 total_count = 2;
+}
+
+message {{ grpc_service_name }}Item {
+  string id = 1;
+  string name = 2;
+}

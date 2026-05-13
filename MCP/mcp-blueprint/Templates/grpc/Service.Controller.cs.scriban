@@ -1,0 +1,13 @@
+using MTGArchitect.{{ service_name }}.Contracts;
+
+namespace MTGArchitect.{{ service_name }}.Service;
+
+public class {{ service_name }}Controller: I{{ service_name }}Controller
+{
+    public async Task<IEnumerable<{{ service_name }}Item>> SearchAsync(string query, int pageSize, CancellationToken cancellationToken)
+    {
+        // TODO: implement logic
+        await Task.CompletedTask;
+        return [];
+    }
+}

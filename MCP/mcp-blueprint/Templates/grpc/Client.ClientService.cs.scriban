@@ -1,0 +1,31 @@
+using Grpc.Core;
+using MTGArchitect.{{ service_name }}.Contracts;
+using MTGArchitect.{{ service_name }}.Service.Contracts;
+
+namespace MTGArchitect.{{ service_name }}.Client.Services;
+
+public interface I{{ service_name }}Client
+{
+    Task<IEnumerable<{{ service_name }}Item>> SearchAsync(string query, int? pageSize, CancellationToken cancellationToken);
+}
+
+public class {{ service_name }}Client : I{{ service_name }}Client
+{
+    private readonly {{ grpc_service_name }}.{{ grpc_service_name }}Client client;
+
+    public {{ service_name }}Client({{ grpc_service_name }}.{{ grpc_service_name }}Client client)
+    {
+        this.client = client;
+    }
+
+    public async Task<IEnumerable<{{ service_name }}Item>> SearchAsync(string query, int? pageSize, CancellationToken cancellationToken)
+    {
+        var reply = await client.SearchAsync(new SearchRequest
+        {
+            Query = query,
+            PageSize = pageSize.GetValueOrDefault(20)
+        }, cancellationToken: cancellationToken);
+
+        return MappingHelpers.MapItems(reply.Items);
+    }
+}

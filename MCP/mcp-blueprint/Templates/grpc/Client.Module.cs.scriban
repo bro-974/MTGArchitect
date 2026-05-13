@@ -1,0 +1,18 @@
+using Microsoft.Extensions.DependencyInjection;
+using MTGArchitect.{{ service_name }}.Client.Services;
+using MTGArchitect.{{ service_name }}.Service.Contracts;
+
+namespace MTGArchitect.{{ service_name }}.Client;
+
+public static class Module
+{
+    public static IServiceCollection Add{{ service_name }}Client(this IServiceCollection services, Uri serviceUri)
+    {
+        services.AddGrpcClient<{{ grpc_service_name }}.{{ grpc_service_name }}Client>(options =>
+        {
+            options.Address = serviceUri;
+        });
+        services.AddScoped<I{{ service_name }}Client, {{ service_name }}Client>();
+        return services;
+    }
+}

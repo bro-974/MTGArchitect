@@ -1,0 +1,17 @@
+using Grpc.Core;
+using MTGArchitect.{{ service_name }}.Service.Contracts;
+using MTGArchitect.{{ service_name }}.Service.Core;
+
+namespace MTGArchitect.{{ service_name }}.Service.Services;
+
+public class {{ service_name }}Service(
+    I{{ service_name }}Controller controller,
+    ILogger<{{ service_name }}Service> logger) : {{ grpc_service_name }}.{{ grpc_service_name }}Base
+{
+    public override async Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
+    {
+        logger.LogInformation("Received Search request: Query={Query}, PageSize={PageSize}", request.Query, request.PageSize);
+        var result = await controller.SearchAsync(request.Query, request.PageSize, context.CancellationToken);
+        return MappingHelpers.ToReply(result);
+    }
+}

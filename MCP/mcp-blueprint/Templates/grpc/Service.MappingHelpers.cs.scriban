@@ -1,0 +1,19 @@
+using MTGArchitect.{{ service_name }}.Contracts;
+using MTGArchitect.{{ service_name }}.Service.Contracts;
+
+namespace MTGArchitect.{{ service_name }}.Service.Core;
+
+public static class MappingHelpers
+{
+    public static SearchReply ToReply(IEnumerable<{{ service_name }}Item> items)
+    {
+        var reply = new SearchReply();
+        reply.Items.AddRange(items.Select(i => new {{ grpc_service_name }}Item
+        {
+            Id = i.Id,
+            Name = i.Name
+        }));
+        reply.TotalCount = reply.Items.Count;
+        return reply;
+    }
+}

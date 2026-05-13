@@ -1,0 +1,101 @@
+{
+  "id": "grpc",
+  "description": "Full gRPC service scaffold: .Service, .Client, and .Contracts projects following the Scryfall pattern.",
+  "parameters": [
+    {
+      "name": "service_name",
+      "type": "string",
+      "description": "Short domain name (e.g. 'Deck') — generates MTGArchitect.{service_name}.* projects",
+      "required": true
+    },
+    {
+      "name": "grpc_service_name",
+      "type": "string",
+      "description": "Proto service name (e.g. 'DeckSearch') — used as the gRPC service class name in the proto file",
+      "required": true
+    },
+    {
+      "name": "solution_path",
+      "type": "string",
+      "description": "Path to .sln/.slnx file to add all 3 projects to (optional)",
+      "required": false
+    }
+  ],
+  "files": [
+    {
+      "template": "Contracts.csproj.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Contracts/MTGArchitect.{{ service_name }}.Contracts.csproj"
+    },
+    {
+      "template": "ContractsItem.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Contracts/{{ service_name }}Item.cs"
+    },
+    {
+      "template": "Service.csproj.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/MTGArchitect.{{ service_name }}.Service.csproj"
+    },
+    {
+      "template": "Service.Program.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Program.cs"
+    },
+    {
+      "template": "Service.proto.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Protos/{{ service_name }}.proto"
+    },
+    {
+      "template": "Service.GrpcService.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Services/{{ service_name }}Service.cs"
+    },
+    {
+      "template": "Service.IController.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Controllers/I{{ service_name }}Controller.cs"
+    },
+    {
+      "template": "Service.Controller.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Controllers/{{ service_name }}Controller.cs"
+    },
+    {
+      "template": "Service.MappingHelpers.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Service/Core/MappingHelpers.cs"
+    },
+    {
+      "template": "Client.csproj.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Client/MTGArchitect.{{ service_name }}.Client.csproj"
+    },
+    {
+      "template": "Client.Module.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Client/Module.cs"
+    },
+    {
+      "template": "Client.ClientService.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Client/Services/{{ service_name }}Client.cs"
+    },
+    {
+      "template": "Client.MappingHelpers.cs.scriban",
+      "output": "MTGArchitect.{{ service_name }}.Client/MappingHelpers.cs"
+    }
+  ],
+  "postActions": [
+    {
+      "type": "addToSolution",
+      "parameters": {
+        "solutionPath": "{{ solution_path }}",
+        "projectPath": "MTGArchitect.{{ service_name }}.Contracts/MTGArchitect.{{ service_name }}.Contracts.csproj"
+      }
+    },
+    {
+      "type": "addToSolution",
+      "parameters": {
+        "solutionPath": "{{ solution_path }}",
+        "projectPath": "MTGArchitect.{{ service_name }}.Service/MTGArchitect.{{ service_name }}.Service.csproj"
+      }
+    },
+    {
+      "type": "addToSolution",
+      "parameters": {
+        "solutionPath": "{{ solution_path }}",
+        "projectPath": "MTGArchitect.{{ service_name }}.Client/MTGArchitect.{{ service_name }}.Client.csproj"
+      }
+    }
+  ]
+}
