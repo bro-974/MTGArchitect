@@ -24,21 +24,28 @@ public sealed class CardSearchService(
 
         var textResults = await textTask;
         var vector = await vectorTask;
-        var vectorResults = new List<CardEmbedding>();
+        List<CardEmbedding> vectorResults = [];
 
         if (vector != null)
         {
             vectorResults = await repository.SearchByVectorAsync(vector, limit * 2, Threshold, ct);
         }
 
-        // 2. Fusion et Intersection (Reciprocal Rank Fusion simplifiée)
-        // On donne la priorité au texte, mais on complète avec le vecteur
+        // 2. Fusion (simplified RRF): text results first, supplemented by vector
         var combined = textResults
             .Concat(vectorResults)
             .DistinctBy(x => x.Name)
-            .Take(limit)
             .ToList();
 
-        return combined;
+        // Exact name match always wins position 0
+        var exactMatch = combined.FirstOrDefault(x =>
+            string.Equals(x.Name, userQuery, StringComparison.OrdinalIgnoreCase));
+        if (exactMatch is not null)
+        {
+            combined.Remove(exactMatch);
+            combined.Insert(0, exactMatch);
+        }
+
+        return combined.Take(limit).ToList();
     }
 }
